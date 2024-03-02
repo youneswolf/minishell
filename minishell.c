@@ -6,45 +6,45 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/02 15:28:49 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:03:39 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_line	*ft_lstnew(char *str)
-{
-	t_line	*new;
+// t_line	*ft_lstnew(char *str)
+// {
+// 	t_line	*new;
 
-	new = (t_line *)malloc(sizeof(t_line));
-    new->str = strdup(str);
-	if (!new)
-		return (NULL);
-	new->next = NULL;
-	return (new);
-}
+// 	new = (t_line *)malloc(sizeof(t_line));
+//     new->str = strdup(str);
+// 	if (!new)
+// 		return (NULL);
+// 	new->next = NULL;
+// 	return (new);
+// }
 
-void	add_list(t_line **lst, char *str)
-{
-	t_line	*new;
-	t_line	*temp;
+// void	add_list(t_line **lst, char *str)
+// {
+// 	t_line	*new;
+// 	t_line	*temp;
 
-	new = ft_lstnew(str);
-	if (*lst == NULL)
-	{
-		*lst = new;
-		new->next = NULL;
-	}
-	else
-	{
-		temp = *lst;
-		while (temp->next != NULL)
-		{
-			temp = temp->next;
-		}
-		temp->next = new;
-	}
-}
+// 	new = ft_lstnew(str);
+// 	if (*lst == NULL)
+// 	{
+// 		*lst = new;
+// 		new->next = NULL;
+// 	}
+// 	else
+// 	{
+// 		temp = *lst;
+// 		while (temp->next != NULL)
+// 		{
+// 			temp = temp->next;
+// 		}
+// 		temp->next = new;
+// 	}
+// }
 
 int is_there_exit(char *str)
 {
@@ -120,25 +120,6 @@ char    *ft_add_space_to_command(char *str)
     return (new_line);
 }
 
-t_line    *ft_element_in_node(char **str)
-{
-    int i;
-    t_line  *head;
-
-    i = 0;
-    while (str[i])
-    {
-        add_list(&head, str[i]);
-        i++;
-    }
-    return (head);
-}
-
-void    ft_token(t_line *head)
-{
-    
-}
-
 int main()
 {
     t_line *str;
@@ -155,10 +136,12 @@ int main()
         if (ft_strlen(line) > 0)
             add_history(line);
         line = ft_add_space_to_command(line);
-        holder = ft_split(line, ' ');
-        if (holder == NULL)
-            return (perror("malloc failed"), 0);
-            free(line);
-            str = ft_element_in_node(holder);
+        str = ft_put(line);
+        while (str)
+        {
+            printf("=%s=\n", str->str);
+            str = str->next;
+        }
+        free(line);
     }
 }

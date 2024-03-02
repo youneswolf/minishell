@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/02 14:38:10 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:24:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ size_t	ft_strlen(char *s);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(char *s);
 char	*ft_strjoin(char *s1, char *s2);
-int	count(const char *s, char c);
-char	*word(const char *str, char c);
+int	count(char *s, char c);
+char	*word(char *str, char c);
 int	ft_free(char **array, const char *str, char c, int a);
 char	**alloc(int l);
-char	**ft_split(const char *str, char c);
+char	**ft_split(char *str, char c);
 int    ft_cd(char *str);
+t_line    *ft_put(char *line);
 #endif

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:54:59 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/02 14:36:18 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:56:51 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (s1 = NULL, str);
 }
 
-int	count(const char *s, char c)
+int	count(char *s, char c)
 {
 	int	i;
 	int	count;
@@ -68,7 +68,7 @@ int	count(const char *s, char c)
 	return (count);
 }
 
-char	*word(const char *str, char c)
+char	*word(char *str, char c)
 {
 	int		i;
 	char	*p;
@@ -125,7 +125,30 @@ char	**alloc(int l)
 	return (array);
 }
 
-char	**ft_split(const char *str, char c)
+void	ft_put_point(char *str)
+{
+	int	i;
+	int	flag;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"' || str[i] == '\'')
+		{
+			flag = str[i];
+			i++;
+			while (str[i] && str[i] != flag)
+			{
+				if (str[i] == ' ')
+					str[i] = '*';
+				i++;
+			}
+		}
+		i++;
+	}
+}
+
+char	**ft_split(char *str, char c)
 {
 	int		j;
 	int		l;
@@ -134,6 +157,7 @@ char	**ft_split(const char *str, char c)
 	j = 0;
 	if (str == NULL)
 		return (NULL);
+	ft_put_point(str);
 	l = count(str, c);
 	array = alloc(l);
 	if (!array)
