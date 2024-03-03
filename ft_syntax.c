@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 15:43:45 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:54:31 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void    ft_syntax_quote(char *str)
     }
     if (count % 2 != 0)
     {
-        perror("syntax error double or single quote");
+        write(2, "syntax error double or single quote\n", 36);
         return ;
     }
 }
