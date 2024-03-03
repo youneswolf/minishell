@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 14:54:28 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:51:38 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,8 @@ int main()
                 printf("[%s]", "APPEND");
             else if (str->token == DELIMITER)
                 printf("[%s]", "DELIMITER");
-            // printf("=%s=%d\n", str->str, str->token);
+            else
+                printf("=%s=\n", str->str);
             str = str->next;
         }
         printf("\n");
