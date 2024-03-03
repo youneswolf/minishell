@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/02 19:03:39 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/03 12:49:21 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,35 @@ int main()
             add_history(line);
         line = ft_add_space_to_command(line);
         str = ft_put(line);
+        ft_give_token(str);
         while (str)
         {
-            printf("=%s=\n", str->str);
+            if (str->token == CMD)   
+                printf("[%s]", "CMD");
+            else if (str->token == ARGS)
+                printf("[%s]", "ARGS");
+            else if (str->token == PIPE)
+                printf("[%s]", "PIPE");
+            else if (str->token == IN_REDIR)
+                printf("[%s]", "IN_REDIR");
+            else if (str->token == OUT_REDIR)
+                printf("[%s]", "OUT_REDIR");
+            else if (str->token == HERDOC)
+                printf("[%s]", "HERDOC");
+            else if (str->token == OUT_FILE)
+                printf("[%s]", "OUT_FILE");
+            else if (str->token == IN_FILE)
+                printf("[%s]", "IN_FILE");
+            else if (str->token == FILE)
+                printf("[%s]", "FILE");
+            else if (str->token == APPEND)
+                printf("[%s]", "APPEND");
+            else if (str->token == DELIMITER)
+                printf("[%s]", "DELIMITER");
+            // printf("=%s=%d\n", str->str, str->token);
             str = str->next;
         }
+        printf("\n");
         free(line);
     }
 }
