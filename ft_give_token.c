@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 13:22:20 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/03 17:45:23 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,13 @@ void    ft_give_token(t_line *head)
     t_line  *tmp;
 
     tmp = head;
+    int flag1;
+
+    flag1 = 0;
     while (tmp)
     {
         if (ft_strcmp(tmp->str, "|"))
-            tmp->token = PIPE;
+            (tmp->token = PIPE, flag1 = 0);
         else if (ft_strcmp(tmp->str, ">"))
         {
             tmp->token = OUT_REDIR;
@@ -55,6 +58,7 @@ void    ft_give_token(t_line *head)
         }
         else if (ft_strcmp(tmp->str, "<<"))
         {
+            flag1 = 0;
             tmp->token = HERDOC;
             if (tmp->next != NULL)
                 tmp->next->token = DELIMITER;
@@ -64,13 +68,19 @@ void    ft_give_token(t_line *head)
             if (tmp->token == ARGS || tmp->token == FILE || tmp->token == DELIMITER 
             || tmp->token == IN_FILE || tmp->token == OUT_FILE)
             {
-                if (tmp->next && tmp->token != ARGS)
+                if ((tmp->token == IN_FILE || tmp->token == OUT_FILE ) && tmp->next && flag1 == 1)
+                {
+                    tmp->next->token = ARGS;
+                    flag1 = 0;
+                }
+                if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
                     tmp->next->token = CMD;
                 else if (tmp->next && tmp->token == ARGS)
                     tmp->next->token = ARGS;
             }
             else
             {
+                flag1 = 1;
                 tmp->token = CMD;
                 if (tmp->next != NULL)
                     tmp->next->token = ARGS;

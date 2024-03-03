@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 15:49:45 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:07:33 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char    *ft_alloc_for_quote(char *str, int i, char flag)
         return (NULL);
     i = 1;
     new[0] = flag;
-    while (str[j] && str[j] != flag)
+    while (str[j] != '\0' && str[j] != flag)
     {
         new[i] = str[j];
         i++;
@@ -48,16 +48,16 @@ char    *ft_alloc_string(char *str, int i)
 
     j = i;
     k = 0;
-    while (str[i] && str[i] != ' ')
+    while (str[i] != '\0' && str[i] != ' ')
     {
         i++;
         k++;
     }
-    new = malloc(k + 1);
+    new = malloc((k + 1) * sizeof(char));
     if (!new)
         return (NULL);
     i = 0;
-    while (str[j] && str[j] != ' ')
+    while (str[j] != '\0' && str[j] != ' ')
     {
         new[i] = str[j];
         i++;
@@ -116,7 +116,9 @@ t_line    *ft_put(char *line)
     {
         while (line[i] && line[i] == ' ')
             i++;
-        if (line && (line[i] == '\"' || line[i] == '\''))
+        if (line[i] == '\0')
+            break;
+        if (line[i] != '\0' && (line[i] == '\"' || line[i] == '\''))
         {
             flag = line[i];
             i++;
@@ -124,12 +126,14 @@ t_line    *ft_put(char *line)
             while (line[i] && line[i] != flag)
                 i++;
         }
-        else if (line[i] && (line[i] != '\"' || line[i] != '\''))
+        else if (line[i] != '\0' && line[i] != '\"' && line[i] != '\'')
         {
             add_list(&head, line, ' ', i);
             while (line[i] && line[i] != ' ')
                 i++;
         }
+        if (line[i] == '\0')
+            break;
         i++;
     }
     return (head);

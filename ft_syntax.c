@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 15:54:31 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:01:49 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 //     return (0);
 // }
 
-void    ft_syntax_quote(char *str)
+int    ft_syntax_quote(char *str)
 {
     int i;
     int count;
@@ -44,9 +44,10 @@ void    ft_syntax_quote(char *str)
     }
     if (count % 2 != 0)
     {
-        write(2, "syntax error double or single quote\n", 36);
-        return ;
+        write(2, "syntax error: double or single quote\n", 36);
+        return (0);
     }
+    return (1);
 }
 
 void    ft_syntax(t_line *head)
@@ -61,7 +62,8 @@ void    ft_syntax(t_line *head)
     tmp = head;
     while (tmp)
     {
-        ft_syntax_quote(tmp->str);
+        if (!ft_syntax_quote(tmp->str))
+            return ;
         flag = tmp->token;
         if (tmp->next && flag == tmp->next->token && flag != ARGS)
         {

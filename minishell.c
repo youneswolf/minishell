@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 15:51:38 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/03 17:49:40 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int main()
     str = NULL;
     while (1)
     {
-        line = readline("minishell$ ");
+        line = readline(RED"minishell$ "RESET);
         if (line == NULL || is_there_exit(line))
             exit(0);
         if (ft_strlen(line) > 0)
@@ -139,31 +139,32 @@ int main()
         str = ft_put(line);
         ft_give_token(str);
         ft_syntax(str);
+        // ft_red_args(str);
         while (str)
         {
             if (str->token == CMD)   
-                printf("[%s]", "CMD");
+                printf(BLUE"[%s]"RESET, "CMD");
             else if (str->token == ARGS)
-                printf("[%s]", "ARGS");
+                printf(YELLOW"[%s]"RESET, "ARGS");
             else if (str->token == PIPE)
-                printf("[%s]", "PIPE");
+                printf(MAGENTA"[%s]"RESET, "PIPE");
             else if (str->token == IN_REDIR)
-                printf("[%s]", "IN_REDIR");
+                printf(CYAN"[%s]"RESET, "IN_REDIR");
             else if (str->token == OUT_REDIR)
-                printf("[%s]", "OUT_REDIR");
+                printf(WHT"[%s]"RESET, "OUT_REDIR");
             else if (str->token == HERDOC)
-                printf("[%s]", "HERDOC");
+                printf(GREEN"[%s]"RESET, "HERDOC");
             else if (str->token == OUT_FILE)
-                printf("[%s]", "OUT_FILE");
+                printf(MAGENTA"[%s]"RESET, "OUT_FILE");
             else if (str->token == IN_FILE)
-                printf("[%s]", "IN_FILE");
+                printf(YELLOW"[%s]"RESET, "IN_FILE");
             else if (str->token == FILE)
-                printf("[%s]", "FILE");
+                printf(YELLOW"[%s]"RESET, "FILE");
             else if (str->token == APPEND)
-                printf("[%s]", "APPEND");
+                printf(YELLOW"[%s]"RESET, "APPEND");
             else if (str->token == DELIMITER)
-                printf("[%s]", "DELIMITER");
-            else
+                printf(YELLOW"[%s]"RESET, "DELIMITER");
+            // else
                 printf("=%s=\n", str->str);
             str = str->next;
         }
