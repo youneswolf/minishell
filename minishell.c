@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 12:49:21 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:54:28 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int main()
         line = ft_add_space_to_command(line);
         str = ft_put(line);
         ft_give_token(str);
+        ft_syntax(str);
         while (str)
         {
             if (str->token == CMD)   
