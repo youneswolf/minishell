@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 17:49:40 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:45:22 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 // 	}
 // }
 
+
 int is_there_exit(char *str)
 {
     int i, j;
@@ -82,11 +83,12 @@ char    *ft_add_space_to_command(char *str)
     i = 0;
     count = 0;
     j = 0;
-    while (str[i++])
+    while (str[i] != '\0')
     {
         if (str[i] == '|' || str[i] == '>' || str[i] == '<'
         || (str[i] == '<' && str[i + 1] == '<') || (str[i] == '>' && str[i + 1] == '>'))
              count++;
+        i++;
     }
     new_line = malloc(i + 1 + count * 2);
     if (!new_line)
@@ -94,15 +96,7 @@ char    *ft_add_space_to_command(char *str)
     i = 0;
     while (str[i])
     {
-        if (str[i] == '|' || (str[i] == '>' && str[i + 1] != '>' && str[i - 1] != '>' && i != 0)
-        || (str[i] == '<' && str[i + 1] != '<' && str[i - 1] != '<' && i != 0))
-        {
-            new_line[j] = ' ';
-            new_line[j + 1] = str[i];
-            new_line[j + 2] = ' ';
-            j = j + 2;
-        }
-        else if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
+        if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
         {
             new_line[j] = ' ';
             new_line[j + 1] = str[i];
@@ -110,6 +104,13 @@ char    *ft_add_space_to_command(char *str)
             new_line[j + 3] = ' ';
             j = j + 3;
             i++;
+        }
+        else if (str[i] == '|' || str[i] == '>' || str[i] == '<')
+        {
+            new_line[j] = ' ';
+            new_line[j + 1] = str[i];
+            new_line[j + 2] = ' ';
+            j = j + 2;
         }
         else
             new_line[j] = str[i];
@@ -120,26 +121,41 @@ char    *ft_add_space_to_command(char *str)
     return (new_line);
 }
 
+void    ft_ctr(int sig)
+{
+    (void)sig;
+    printf(RED"\nminishell$ "RESET);
+    return ;
+}
+
 int main()
 {
+    struct sigaction sa;
+    struct sigaction sa1;
     t_line *str;
     int     i = 0;
     char    *line;
     char    **holder;
 
     str = NULL;
+    sa.sa_handler = ft_ctr_c;
+    sa1.sa_handler = ft_ctr;
+    sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGQUIT, &sa1, NULL);
     while (1)
     {
         line = readline(RED"minishell$ "RESET);
-        if (line == NULL || is_there_exit(line))
-            exit(0);
+        if (!SIGQUIT || line == NULL || is_there_exit(line))
+        {
+            if (line == NULL)
+                (printf("exit!\n"), exit(0));
+        }
         if (ft_strlen(line) > 0)
             add_history(line);
         line = ft_add_space_to_command(line);
         str = ft_put(line);
         ft_give_token(str);
         ft_syntax(str);
-        // ft_red_args(str);
         while (str)
         {
             if (str->token == CMD)   
@@ -164,8 +180,7 @@ int main()
                 printf(YELLOW"[%s]"RESET, "APPEND");
             else if (str->token == DELIMITER)
                 printf(YELLOW"[%s]"RESET, "DELIMITER");
-            // else
-                printf("=%s=\n", str->str);
+                printf("--%s--", str->str);
             str = str->next;
         }
         printf("\n");

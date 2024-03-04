@@ -6,21 +6,11 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 16:01:49 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:59:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// static int ft_strlen(char *str)
-// {
-//     int i;
-
-//     i = 0;
-//     while (str && str[i])
-//         i++;
-//     return (0);
-// }
 
 int    ft_syntax_quote(char *str)
 {
@@ -60,6 +50,11 @@ void    ft_syntax(t_line *head)
     i = 0;
     count = 0;
     tmp = head;
+    if (tmp->token == PIPE)
+    {
+        perror("parse error");
+            return ;
+    }
     while (tmp)
     {
         if (!ft_syntax_quote(tmp->str))

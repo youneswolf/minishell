@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 18:07:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:45:15 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ char    *ft_alloc_for_quote(char *str, int i, char flag)
         i++;
         k++;
     }
+    // if (k == 0)
+    // {
+        
+    // }
     new = malloc(k + 3);
     if (!new)
         return (NULL);
