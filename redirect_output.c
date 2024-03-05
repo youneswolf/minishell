@@ -6,7 +6,7 @@ void    redirect_output(t_line **line)
 	int	i;
 
 	file_name = *line;
-	fd = open (file_name->str, O_RDWR | O_APPEND | O_CREAT, 0666);
+	fd = open (file_name->str, O_RDWR | O_CREAT, 0666);
 	if (fd == -1)
 	{
 		perror("Error opening file");
