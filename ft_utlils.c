@@ -6,13 +6,13 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:54:59 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/02 16:56:51 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/06 19:26:04 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	ft_strlen(char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
@@ -89,7 +89,7 @@ char	*word(char *str, char c)
 	return (p);
 }
 
-int	ft_free(char **array, const char *str, char c, int a)
+int	fti_free(char **array, const char *str, char c, int a)
 {
 	int	i;
 	int	j;
@@ -164,15 +164,15 @@ char	**ft_split(char *str, char c)
 		return (NULL);
 	while (j < l)
 	{
-		str += ft_free(array, str, c, 0);
+		str += fti_free(array, str, c, 0);
 		if (*str != c && *str)
 		{
 			array[j] = word(str, c);
-			if (!array[j] && !ft_free(array, str, c, 3))
+			if (!array[j] && !fti_free(array, str, c, 3))
 				return (NULL);
 			j++;
 		}
-		str += ft_free(array, str, c, 1);
+		str += fti_free(array, str, c, 1);
 	}
 	array[j] = NULL;
 	return (array);

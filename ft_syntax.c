@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/04 15:59:10 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:52:24 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void    ft_syntax(t_line *head)
     i = 0;
     count = 0;
     tmp = head;
-    if (tmp->token == PIPE)
+    if (tmp && tmp->token == PIPE)
     {
         perror("parse error");
             return ;

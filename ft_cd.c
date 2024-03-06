@@ -6,13 +6,13 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/02 12:55:26 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:49:37 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int    ft_cd(char *str)
+int    ft_cd(char *str, t_env *mini_env)
 {
     char buf[PATH_MAX];
 
@@ -20,6 +20,12 @@ int    ft_cd(char *str)
     static char lastdir[PATH_MAX];
     char path[PATH_MAX];
 
+    int i = 0;
+    while (mini_env)
+    {
+        printf("%s\n", mini_env->env);
+        mini_env = mini_env->next;
+    }
     if (getcwd(curdir, sizeof curdir)) {
         /* current directory might be unreachable: not an error */
         *curdir = '\0';

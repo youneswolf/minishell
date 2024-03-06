@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/04 18:45:22 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/06 20:11:16 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ char    *ft_add_space_to_command(char *str)
     i = 0;
     count = 0;
     j = 0;
+    
     while (str[i] != '\0')
     {
         if (str[i] == '|' || str[i] == '>' || str[i] == '<'
@@ -128,20 +129,17 @@ void    ft_ctr(int sig)
     return ;
 }
 
-int main()
+int main(int    ac, char **av, char **env)
 {
-    struct sigaction sa;
-    struct sigaction sa1;
     t_line *str;
     int     i = 0;
     char    *line;
+    char    *exp;
     char    **holder;
 
     str = NULL;
-    sa.sa_handler = ft_ctr_c;
-    sa1.sa_handler = ft_ctr;
-    sigaction(SIGINT, &sa, NULL);
-    sigaction(SIGQUIT, &sa1, NULL);
+    // t_envi  *mini_env;
+    t_env *mini_env = ft_get_env(env);
     while (1)
     {
         line = readline(RED"minishell$ "RESET);
@@ -156,6 +154,9 @@ int main()
         str = ft_put(line);
         ft_give_token(str);
         ft_syntax(str);
+        ft_expand_argument(mini_env, &str);
+        // create_cmd_node(str);
+        // ft_execute_cmd(str);
         while (str)
         {
             if (str->token == CMD)   
@@ -180,7 +181,7 @@ int main()
                 printf(YELLOW"[%s]"RESET, "APPEND");
             else if (str->token == DELIMITER)
                 printf(YELLOW"[%s]"RESET, "DELIMITER");
-                printf("--%s--", str->str);
+            printf("--%s--", str->str);
             str = str->next;
         }
         printf("\n");

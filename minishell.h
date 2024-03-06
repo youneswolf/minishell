@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/04 18:39:49 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/06 19:45:09 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,64 @@ typedef struct s_line
     int token;
     struct s_line *next;
 }t_line;
+typedef struct s_start_end
+{
+    int    start;
+    int    end;
+}        t_stend;
+
+typedef struct s_expand
+{
+    int        quote;
+    char    *expa;
+    char    *new_str;
+    char    *s;
+}            t_expand;
+
 typedef struct s_env
 {
-    char *env;
-    struct s_env *next;
-}t_env;
+    char            *value;
+    struct s_env    *next;
+}                    t_env;
+
+typedef struct s_cmd
+{
+    char    *cmd;
+    char    **arg;
+    char    *infile;
+    int     in_or_out;
+    char    *outfile;
+    struct s_cmd *next;
+}t_cmd;
+
 void    ft_pwd();
+void    ft_execute_cmd(t_line *head);
 void    ft_give_token(t_line *head);
-static int ft_strcmp(char *str, char *str1);
-size_t	ft_strlen(char *s);
+char	*ft_strdup(char *s1);
 char	*ft_strjoin(char *s1, char *s2);
-size_t	ft_strlen(char *s);
+size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char *s2);
 int	count(char *s, char c);
 char	*word(char *str, char c);
-int	ft_free(char **array, const char *str, char c, int a);
 void    ft_syntax(t_line *head);
 char	**alloc(int l);
 char	**ft_split(char *str, char c);
-int    ft_cd(char *str);
+int    ft_cd(char *str, t_env *mini_env);
 t_line    *ft_put(char *line);
-void    ft_ctr_c(int sig);
 void    ft_red_args(t_line *head);
-int     ft_syntax_pipe(char *str);
+void	ft_expand_argument(t_env *env, t_line **linked_list);
+char	*ft_handle_expand(t_env *env, char *arg);
+void	ft_append_char(char **str, int c);
+int	ft_surpass_chars(char *var);
+char	*ft_arg_is_exist(t_env *env, char *var);
+char	*ft_allocate_for_var(int flag, char *str, int i);
+t_env    *ft_get_env(char **env);
+static t_env    *ft_create_new_env(void);
+int	ft_t_env_len(t_env *head);
+static t_env	*ft_last_node(t_env *top);
+static t_env	*ft_new_node(char *value);
+int	ft_push_value(char *value, t_env **head);
+void	ft_free_env(t_env **head);
+
+//======================================================================
 #endif
