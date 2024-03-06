@@ -4,46 +4,27 @@ char *expand(t_line **line, t_env **env)
 {
 	t_env *tmp;
 	t_line *line_tmp;
-	char special[1024];
-	special[0] = '\0';
+	char *special = NULL;
 	int i;
 	char *var;
 	char *sub;
-	int j = 0;
 	tmp = *env;
 	line_tmp = *line;
 	i = 0;
 	if (line_tmp->str[0] == 34)
 	{
 		sub = ft_strtrim(line_tmp->str, "\"", 1);
+		sub = ft_substr(sub, 1, (ft_strlen(sub) - 1));
 	}
 	else
-		sub = ft_substr(line_tmp->str, 1, ft_strlen(line_tmp->str));
-	while (sub[i])
+		sub = ft_substr(line_tmp->str, 1, ft_strlen(line_tmp->str) - 1);
+	while (sub && sub[i])
 	{
-		if (sub[i] == '.')
+		if (sub[i] == '.' || sub[i] == ',' || sub[i] == '/' || sub[i] == '-' || sub[i] == ':')
 		{
-			special[j] = '.';
-			sub = ft_strtrim(sub, ".", 0);
-			j++;
-		}
-		else if (sub[i] == ',')
-		{
-			special[j] = ',';
-			sub = ft_strtrim(sub, ",", 0);
-			j++;
-		}
-		else if (sub[i] == '/')
-		{
-			special[j] = '/';
-			sub = ft_strtrim(sub, "/", 0);
-			j++;
-		}
-		else if (sub[i] == '-')
-		{
-			special[j] = '-';
-			sub = ft_strtrim(sub, "-", 0);
-			j++;
+			special = ft_substr(sub, i, ft_strlen(sub) - i);
+			sub = ft_substr(sub, 0, ft_strlen(sub) - ft_strlen(special));
+			break;
 		}
 		i++;
 	}
@@ -67,13 +48,13 @@ char *expand(t_line **line, t_env **env)
 void sub_echo(char *str)
 {
 	t_line *tmp;
-	char to_skip;
-	int sglquote;
-	int dblquote;
+	char to_skip = '\0';
+	int sglquote = 0;
+	int dblquote = 0;
 	int i;
 
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		if (to_skip == str[i])
 		{
@@ -102,6 +83,7 @@ void sub_echo(char *str)
 		i++;
 		}
 }
+
 void exec_echo(t_line **line, t_env **env)
 {
 	char *sub;
@@ -122,6 +104,10 @@ void exec_echo(t_line **line, t_env **env)
 				tmp = tmp->next;
 				if (tmp->str[0] == '$')
 					sub_echo(expand(&tmp, env));
+				else if (tmp->str[0] == 34 && tmp->str[1] == '$')
+				{
+					sub_echo(expand(&tmp, env));
+				}
 				else
 				{
 					sub_echo(tmp->str);
@@ -129,6 +115,11 @@ void exec_echo(t_line **line, t_env **env)
 			}
 	}
 	else if (tmp->str[0] == '$')
+	{
+		sub_echo(expand(line, env));
+		write(1, "\n", 1);
+	}
+	else if (tmp->str[0] == 34 && tmp->str[1] == '$')
 	{
 		sub_echo(expand(line, env));
 		write(1, "\n", 1);
