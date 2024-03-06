@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <readline/readline.h>
-#include "minishell.h"
 char	*ft_free(char **str)
 {
 	free(*str);
@@ -244,7 +243,6 @@ char	*ft_strtrim(char *s1, char *set, int arg)
 		free(s1);
 	return (result);
 }
-
 char *expand(t_line **line, t_env **env)
 {
 	t_env *tmp;
@@ -259,6 +257,7 @@ char *expand(t_line **line, t_env **env)
 	if (line_tmp->str[0] == 34)
 	{
 		sub = ft_strtrim(line_tmp->str, "\"", 1);
+		sub = ft_substr(sub, 1, (ft_strlen(sub) - 1));
 	}
 	else
 		sub = ft_substr(line_tmp->str, 1, ft_strlen(line_tmp->str) - 1);
@@ -288,6 +287,7 @@ char *expand(t_line **line, t_env **env)
 	}
 	return (NULL);
 }
+
 
 void fill_null_env(t_env **mini_env)
 {
