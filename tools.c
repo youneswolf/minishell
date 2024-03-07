@@ -58,7 +58,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		{
 			return (0);
 		}
-		if ((unsigned char)s1[i] != (unsigned char)s2[i])
+		if ((s1 && s2 ) && (unsigned char)s1[i] != (unsigned char)s2[i])
 		{
 			res = (unsigned char)s1[i] - (unsigned char)s2[i];
 			return (res);
@@ -248,6 +248,7 @@ char	*ft_strtrim(char *s1, char *set, int arg)
 char * handle_expand(t_line **line, t_env **env)
 {
 	t_line *line_tmp = *line;
+
 	int i = 0;
 	while (line_tmp)
 	{
@@ -313,7 +314,7 @@ char *expand(t_line **line, t_env **env)
 		{
 			i = 0;
 			var = ft_strjoin(tmp->env,special);
-			while (var[i] != '=')
+			while (var && var[i] != '=')
 				i++;
 			var = ft_substr(var, i + 1, ft_strlen(var) - i - 1);
 			return (var);
