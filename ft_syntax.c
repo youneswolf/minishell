@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/05 17:52:24 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/13 17:18:29 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,39 @@ int    ft_syntax_quote(char *str)
 
     i = 0;
     count = 0;
-    if (str[0] == '\''|| str[0] == '\"')
+    // if (str[0] == '\''|| str[0] == '\"')
+    // {
+    //     if (str[ft_strlen(str) - 1] == '\'' || str[ft_strlen(str) - 1] == '\"')
+    //         flag = str[ft_strlen(str) - 1];
+    //     flag = str[0];
+    // }
+    // while (str[i])
+    // {
+    //     if (str[i] == flag)
+    //         count++;
+    //     i++;
+    // }
+    while (str && str[i])
     {
-        if (str[ft_strlen(str) - 1] == '\'' || str[ft_strlen(str) - 1] == '\"')
-            flag = str[ft_strlen(str) - 1];
-        flag = str[0];
-    }
-    while (str[i])
-    {
-        if (str[i] == flag)
+        if (str[i] == '\"' || str[i] == '\'')
+        {
+            flag = str[i];
             count++;
-        i++;
+            i++;
+            while (str[i])
+            {
+                if (str[i] == flag)
+                {
+                    count++;
+                    flag = 0;
+                    break;
+                }
+                if (str[i])
+                    i++;
+            }
+        }
+        if (str[i])
+            i++;
     }
     if (count % 2 != 0)
     {
@@ -53,7 +75,7 @@ void    ft_syntax(t_line *head)
     if (tmp && tmp->token == PIPE)
     {
         perror("parse error");
-            return ;
+        return ;
     }
     while (tmp)
     {

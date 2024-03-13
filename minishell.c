@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/06 20:11:16 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:07:13 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void    ft_ctr(int sig)
 
 int main(int    ac, char **av, char **env)
 {
-    t_line *str;
+    t_line  *str;
     int     i = 0;
     char    *line;
     char    *exp;
@@ -150,16 +150,20 @@ int main(int    ac, char **av, char **env)
         }
         if (ft_strlen(line) > 0)
             add_history(line);
-        line = ft_add_space_to_command(line);
-        str = ft_put(line);
-        ft_give_token(str);
-        ft_syntax(str);
-        ft_expand_argument(mini_env, &str);
-        // create_cmd_node(str);
-        // ft_execute_cmd(str);
+        line = ft_add_space_to_command(line); //add space between special carahcteres like | >< ...
+        str = ft_put(line); //create linked list 
+        ft_give_token(str); //give token to each node
+        ft_syntax(str);  //check the syntax
+        // ft_remove_quote(&str); //removing quotes for command and args
+        // ft_expand_argument(mini_env, &str); //expand nta3 ismail
+        // t_holder* tmp = ft_create_holder_node(str);
+        // while (tmp)
+        // {
+        //     printf();
+        // }
         while (str)
         {
-            if (str->token == CMD)   
+            if (str->token == CMD)
                 printf(BLUE"[%s]"RESET, "CMD");
             else if (str->token == ARGS)
                 printf(YELLOW"[%s]"RESET, "ARGS");

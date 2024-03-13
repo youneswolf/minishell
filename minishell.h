@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/06 19:45:09 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:19:31 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,20 @@ typedef struct s_cmd
     struct s_cmd *next;
 }t_cmd;
 
+typedef struct s_holder
+{
+    char    *cmd;
+    char    **args;
+    char    **file_in;
+    char    **file_out;
+    char    **append;
+    struct s_holder *next;
+}   t_holder;
+
+t_holder    *ft_create_holder_node(t_line *node);
+int     ft_count_pipe(t_line *head);
+void	add_list_holder(t_holder **lst, t_holder *new);
+t_holder	*ft_lstnew_holder(void);
 void    ft_pwd();
 void    ft_execute_cmd(t_line *head);
 void    ft_give_token(t_line *head);
@@ -102,6 +116,8 @@ static t_env	*ft_last_node(t_env *top);
 static t_env	*ft_new_node(char *value);
 int	ft_push_value(char *value, t_env **head);
 void	ft_free_env(t_env **head);
+void    ft_remove_quote(t_line **str);
+char    *ft_remove(t_line *tmp);
 
 //======================================================================
 #endif
