@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/13 16:19:31 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/14 17:37:35 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <string.h>
 #include <Kernel/sys/syslimits.h>
 #include <signal.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -81,12 +82,15 @@ typedef struct s_holder
     char    **file_in;
     char    **file_out;
     char    **append;
+    int     *in;
+    int     *out;
+    int     *ap;
     struct s_holder *next;
 }   t_holder;
 
 t_holder    *ft_create_holder_node(t_line *node);
 int     ft_count_pipe(t_line *head);
-void	add_list_holder(t_holder **lst, t_holder *new);
+t_holder	*add_list_holder(t_holder **lst);
 t_holder	*ft_lstnew_holder(void);
 void    ft_pwd();
 void    ft_execute_cmd(t_line *head);
@@ -118,6 +122,7 @@ int	ft_push_value(char *value, t_env **head);
 void	ft_free_env(t_env **head);
 void    ft_remove_quote(t_line **str);
 char    *ft_remove(t_line *tmp);
+void    ft_checking_files(t_holder *node);
 
 //======================================================================
 #endif

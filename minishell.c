@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/13 18:07:13 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/14 17:06:28 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,10 @@ int main(int    ac, char **av, char **env)
     int     i = 0;
     char    *line;
     char    *exp;
-    char    **holder;
+    t_holder* tmp;
 
     str = NULL;
+    tmp = NULL;
     // t_envi  *mini_env;
     t_env *mini_env = ft_get_env(env);
     while (1)
@@ -154,13 +155,10 @@ int main(int    ac, char **av, char **env)
         str = ft_put(line); //create linked list 
         ft_give_token(str); //give token to each node
         ft_syntax(str);  //check the syntax
-        // ft_remove_quote(&str); //removing quotes for command and args
+        ft_remove_quote(&str); //removing quotes for command and args
         // ft_expand_argument(mini_env, &str); //expand nta3 ismail
-        // t_holder* tmp = ft_create_holder_node(str);
-        // while (tmp)
-        // {
-        //     printf();
-        // }
+        tmp = ft_create_holder_node(str);
+        ft_checking_files(tmp);
         while (str)
         {
             if (str->token == CMD)
