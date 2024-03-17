@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/14 17:06:28 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/17 18:00:28 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,10 +155,10 @@ int main(int    ac, char **av, char **env)
         str = ft_put(line); //create linked list 
         ft_give_token(str); //give token to each node
         ft_syntax(str);  //check the syntax
-        ft_remove_quote(&str); //removing quotes for command and args
         // ft_expand_argument(mini_env, &str); //expand nta3 ismail
-        tmp = ft_create_holder_node(str);
-        ft_checking_files(tmp);
+        ft_remove_quote(&str); //removing quotes for command and args
+        // tmp = ft_create_holder_node(str);
+        // ft_checking_files(tmp);
         while (str)
         {
             if (str->token == CMD)
@@ -183,7 +183,7 @@ int main(int    ac, char **av, char **env)
                 printf(YELLOW"[%s]"RESET, "APPEND");
             else if (str->token == DELIMITER)
                 printf(YELLOW"[%s]"RESET, "DELIMITER");
-            printf("--%s--", str->str);
+            // printf("--%s--", str->str);
             str = str->next;
         }
         printf("\n");

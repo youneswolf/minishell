@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_tools.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/06 09:43:00 by ybellakr          #+#    #+#             */
+/*   Updated: 2024/03/06 19:42:46 by ybellakr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <Kernel/sys/syslimits.h>
@@ -6,34 +20,30 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <readline/readline.h>
-#include "minishell.h"
-char	*ft_free1(char **str)
+void fill_null_env(t_envi **mini_env);
+void fill_second_null_env(t_envi **mini_env);
+char *expand(t_line **line, t_envi **env);
+void	ft_free_nodes(t_envi **a);
+void exec_echo(t_line **line, t_envi **env);
+void fiLL_env(t_envi **mini_env, char **env);
+void exec_unset(t_envi **mini_env, t_line **line);
+void exec_env(t_envi **mini_env, char *str);
+void	env_list(t_envi **mini_env, char *line);
+char	*ft_free(char **str)
 {
 	free(*str);
 	*str = NULL;
 	return (NULL);
 }
-
-t_line	*get_last_l(t_line **a)
+size_t	ft_strlen(const char *s)
 {
-	t_line	*tmp;
+	size_t	i;
 
-	tmp = *a;
-	while (tmp && tmp->next)
-		tmp = tmp->next;
-	return (tmp);
+	i = 0;
+	while (s && s[i])
+		i++;
+	return (i);
 }
-
-t_env	*get_last(t_env **a)
-{
-	t_env	*tmp;
-
-	tmp = *a;
-	while (tmp && tmp->next)
-		tmp = tmp->next;
-	return (tmp);
-}
-
 char	*ft_strjoin(char *static_str, char *buff)
 {
 	size_t	i;
@@ -50,7 +60,7 @@ char	*ft_strjoin(char *static_str, char *buff)
 	len = ft_strlen(static_str);
 	str = malloc(sizeof(char) * (len + ft_strlen(buff)) + 1);
 	if (!str)
-		return (ft_free1(&static_str));
+		return (ft_free(&static_str));
 	i = 0;
 	j = 0;
 	while (static_str && static_str[i] != '\0')
@@ -74,11 +84,11 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		if (s1[i] == '\0' && s2[i] == '\0')
+		if (s1 && s2 && s1[i] == '\0' && s2[i] == '\0')
 		{
 			return (0);
 		}
-		if ((s1 && s2 ) && (unsigned char)s1[i] != (unsigned char)s2[i])
+		if (s1 && s2 && (unsigned char)s1[i] != (unsigned char)s2[i])
 		{
 			res = (unsigned char)s1[i] - (unsigned char)s2[i];
 			return (res);
@@ -87,15 +97,15 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (res);
 }
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
+// int	ft_strcmp(char *s1, char *s2)
+// {
+// 	int	i;
 
-	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
-		++i;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
+// 	i = 0;
+// 	while (s1[i] && s2[i] && s1[i] == s2[i])
+// 		++i;
+// 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+// }
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -142,18 +152,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	}
 	return (len);
 }
-size_t	ft_strlen(const char *str)
-{
-	if (!str)
-		return (0);
-	size_t	i;
-	i = 0;
-	while (str[i])
-	{
-		i++;
-	}
-	return (i);
-}
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
@@ -265,111 +264,24 @@ char	*ft_strtrim(char *s1, char *set, int arg)
 		free(s1);
 	return (result);
 }
-t_line *ft_lst_new(char *str)
+char *expand(t_line **line, t_envi **env)
 {
-	t_line *line;
-	
-	line = malloc(sizeof(t_line));
-	if (!line)
-		exit(0);
-	line->str = str;
-	line->next = NULL;
-	return (line);
-}
-int	if_dollar(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		if (str[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-char *  handle_expand(t_line **line, t_env **env)
-{
-	t_line *line_tmp = *line;
-	t_line *split = NULL;
-	t_line *node;
-	char *join = NULL;
-	char **str;
-	int i = 0;
-	int j = 0;
-	while (line_tmp)
-	{
-		while (line_tmp->str && line_tmp->str[i])
-		{
-			if (line_tmp->str[i] == '$')
-			{
-				str = ft_split(line_tmp->str, ' ');
-				while (str[j])
-				{
-					if (!split)
-						split = ft_lst_new(str[j]);
-					else
-					{
-						node = get_last_l(&split);
-						node->next = ft_lst_new(str[j]);
-					}
-					j++;
-				}
-			}
-			i++;
-		}
-		line_tmp = line_tmp->next;
-	}
-	while (split)
-	{
-		join = ft_strjoin(join, expand(&split, env));
-		join = ft_strjoin(join," ");
-		split = split->next;
-		// printf("1");
-	}
-	if (!join)
-		return ("");
-	return (join);
-}
-char *expand(t_line **line, t_env **env)
-{
-	t_env *tmp;
+	t_envi *tmp;
 	t_line *line_tmp;
 	char *special = NULL;
-	char *pre_special = NULL;
 	int i;
 	char *var;
 	char *sub;
 	tmp = *env;
 	line_tmp = *line;
 	i = 0;
-	if ( line_tmp && (line_tmp->str[0] == 34 || line_tmp->str[ft_strlen(line_tmp->str) - 1] == 34))
+	if (line_tmp && line_tmp->str[0] == 34)
 	{
 		sub = ft_strtrim(line_tmp->str, "\"", 1);
-		while (sub && sub[i] != '$')
-			i++;
-		if (i && i != ft_strlen(line_tmp->str))
-		{
-			pre_special = ft_substr(sub, 0, i);
-		}
-		if (line_tmp && line_tmp->str[0] == 34)
-			sub = ft_substr(line_tmp->str, i+2, (ft_strlen(line_tmp->str) - i - 1));
-		else 
-			sub = ft_substr(line_tmp->str, i+1, (ft_strlen(line_tmp->str) - i - 1));
-		sub = ft_strtrim(sub, "\"", 1);
+		sub = ft_substr(sub, 1, (ft_strlen(sub) - 1));
 	}
 	else
-	{
-		while (line_tmp && line_tmp->str[i] != '$')
-			i++;
-		if (i && i != ft_strlen(line_tmp->str))
-		{
-			pre_special = ft_substr(line_tmp->str, 0, i);
-		}
-		sub = ft_substr(line_tmp->str, i+1, (ft_strlen(line_tmp->str) - i -1));
-	}
-	i = 0;
+		sub = ft_substr(line_tmp->str, 1, ft_strlen(line_tmp->str) - 1);
 	while (sub && sub[i])
 	{
 		if (sub[i] == '.' || sub[i] == ',' || sub[i] == '/' || sub[i] == '-' || sub[i] == ':' || sub[i] == '_')
@@ -381,8 +293,7 @@ char *expand(t_line **line, t_env **env)
 		i++;
 	}
 	var = ft_strjoin(sub, "=");
-	// printf("%s\n",var);
-	while (tmp && sub)
+	while (tmp)
 	{
 		if (!ft_strncmp(var, tmp->env, ft_strlen(var)))
 		{
@@ -391,31 +302,24 @@ char *expand(t_line **line, t_env **env)
 			while (var && var[i] != '=')
 				i++;
 			var = ft_substr(var, i + 1, ft_strlen(var) - i - 1);
-			var = ft_strjoin(pre_special,var);
 			return (var);
 		}
 		tmp = tmp->next;
 	}
-	if (!if_dollar(line_tmp->str))
-	{
-		sub = ft_strtrim(line_tmp->str, "\"", 1);
-		sub = ft_strtrim(sub, "\'", 1);
-		return (sub);
-	}
-	return (pre_special);
+	return (NULL);
 }
 
 
-void fill_null_env(t_env **mini_env)
+void fill_null_env(t_envi **mini_env)
 {
-	t_env *node;
+	t_envi *node;
 	char *line;
 	int len;
 	int i;
 
 	i = 0;
 	char first[1024] = "PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.";
-	node = malloc(sizeof(t_env));
+	node = malloc(sizeof(t_envi));
 	if (!node)
 		(ft_free_nodes(mini_env), exit(1));
 	line = malloc(sizeof(char) * ft_strlen(first) + 1);
@@ -433,18 +337,18 @@ void fill_null_env(t_env **mini_env)
 	fill_second_null_env(mini_env);
 }
 
-void fill_second_null_env(t_env **mini_env)
+void fill_second_null_env(t_envi **mini_env)
 {
 	char	buf[1024];
 	char	var[5] = "PWD=";
-	t_env *node;
+	t_envi *node;
 	char *line;
 	int i;
 
 	i = 0;
 	if (getcwd(buf, sizeof(buf)) == NULL)
         (perror("getcwd"), exit(EXIT_FAILURE));
-	node = malloc(sizeof(t_env));
+	node = malloc(sizeof(t_envi));
 	if (!node)
 		(ft_free_nodes(mini_env), exit(1));
 	line = malloc(sizeof(char) * ft_strlen(buf) + 5);
@@ -467,10 +371,10 @@ void fill_second_null_env(t_env **mini_env)
 	(*mini_env)->next = node;
 }
 
-void	ft_free_nodes(t_env **a)
+void	ft_free_nodes(t_envi **a)
 {
-	t_env	*head;
-	t_env	*tobefreed;
+	t_envi	*head;
+	t_envi	*tobefreed;
 
 	head = *a;
 	while (head != NULL)
@@ -482,7 +386,17 @@ void	ft_free_nodes(t_env **a)
 	*a = NULL;
 }
 
-void fiLL_env(t_env **mini_env, char **env)
+t_envi	*get_last(t_envi **a)
+{
+	t_envi	*tmp;
+
+	tmp = *a;
+	while (tmp && tmp->next)
+		tmp = tmp->next;
+	return (tmp);
+}
+
+void fiLL_env(t_envi **mini_env, char **env)
 {
 	char *line;
 	int	i;
@@ -507,12 +421,12 @@ void fiLL_env(t_env **mini_env, char **env)
 	}
 }
 
-void	env_list(t_env **mini_env, char *line)
+void	env_list(t_envi **mini_env, char *line)
 {
-	t_env	*node;
-	t_env	*last_node;
+	t_envi	*node;
+	t_envi	*last_node;
 
-	node = malloc(sizeof(t_env));
+	node = malloc(sizeof(t_envi));
 	if (!node)
 		(ft_free_nodes(mini_env), exit(1));
 	node->env = line;

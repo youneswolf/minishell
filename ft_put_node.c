@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/13 20:24:32 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/14 22:53:36 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char    *ft_alloc_string(char *str, int i)
 			i++;
 			k++;
 		}
-		if (str[i] == '\'' || str[i] == '\"')
+		if (str[i] == '\'' || str[i] == '\"' || str[i])
 		{
 			flag = str[i];
 			while (str[i] && str[i] != ' ')

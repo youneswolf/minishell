@@ -36,7 +36,7 @@ char    *ft_alloc_string(char *str, int i)
 			i++;
 			k++;
 		}
-		if (str[i] == '\'' || str[i] == '\"')
+		if (str[i] == '\'' || str[i] == '\"' || str[i])
 		{
 			flag = str[i];
 			while (str[i] && str[i] != ' ')
@@ -121,5 +121,5 @@ void	ft_putnode(char *str)
 }
 int main()
 {
-    ft_putnode("ls -al | grep \"\"\'\'\"\' test");
+    ft_putnode("a's;'s;a");
 }

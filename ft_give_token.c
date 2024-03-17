@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/03 17:45:23 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/17 17:59:21 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void    ft_give_token(t_line *head)
                 if ((tmp->token == IN_FILE || tmp->token == OUT_FILE ) && tmp->next && flag1 == 1)
                 {
                     tmp->next->token = ARGS;
-                    flag1 = 0;
+                    // flag1 = 0;
                 }
                 if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
                     tmp->next->token = CMD;
