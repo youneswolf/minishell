@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/18 00:45:31 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/18 01:07:59 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ char    *ft_add_space_to_command(char *str)
 	{
 		if (str[i] == '\'' || str[i] == '\"')
 			(1) && (flag = 1, quote = str[i]);
-		if (flag == 0 && (str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
+		if (flag == 0 && ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<')))
 		{
 			new_line[j] = ' ';
 			new_line[j + 1] = str[i];
