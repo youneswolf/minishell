@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/13 17:20:05 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/17 22:03:20 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,5 @@ void    ft_remove_quote(t_line **str)
             tmp->str = ft_remove(tmp);
         tmp = tmp->next;
     }
+    // printf("test1\n");
 }

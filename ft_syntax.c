@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/13 17:18:29 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/17 22:19:02 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int    ft_syntax_quote(char *str)
     return (1);
 }
 
-void    ft_syntax(t_line *head)
+int    ft_syntax(t_line *head)
 {
     int i;
     int flag;
@@ -74,25 +74,26 @@ void    ft_syntax(t_line *head)
     tmp = head;
     if (tmp && tmp->token == PIPE)
     {
-        perror("parse error");
-        return ;
+        printf("error near `%s'", tmp->str);
+        return (0);
     }
     while (tmp)
     {
         if (!ft_syntax_quote(tmp->str))
-            return ;
+            return (0);
         flag = tmp->token;
         if (tmp->next && flag == tmp->next->token && flag != ARGS)
         {
-            perror("parse error");
-            return ;
+            printf("error near `%s'", tmp->str);
+            return (0);
         }
         else if ((tmp->token == PIPE || tmp->token == HERDOC || tmp->token == IN_REDIR 
         || tmp->token == OUT_REDIR || tmp->token == APPEND) && !tmp->next)
         {
-            perror("parse error");
-            return ;
+            printf("error near `%s'", tmp->str);
+            return (0);
         }
         tmp = tmp->next;
     }
+    return (1);
 }

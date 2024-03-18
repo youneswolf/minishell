@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/14 17:37:35 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/17 22:08:34 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char *s2);
 int	count(char *s, char c);
 char	*word(char *str, char c);
-void    ft_syntax(t_line *head);
+int    ft_syntax(t_line *head);
 char	**alloc(int l);
 char	**ft_split(char *str, char c);
 int    ft_cd(char *str, t_env *mini_env);

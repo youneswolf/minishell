@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/14 17:37:44 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/17 22:32:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_holder	*ft_lstnew_holder(void)
 
     int i = 0;
 	new = (t_holder *)malloc(sizeof(t_holder));
-    new->cmd = NULL;
+    new->cmd = NULL; 
     new->args = malloc(sizeof(char *) * 1024);
     new->file_in = malloc(sizeof(char *) * 1024);
     new->file_out = malloc(sizeof(char *) * 1024);
@@ -95,7 +95,7 @@ int     ft_count_pipe(t_line *head)
 t_holder    *ft_create_holder_node(t_line *node)
 {
     t_holder    *holder= NULL;
-    t_holder    *new;
+    t_holder    *new = NULL;
     t_line      *tmp;
     t_line      *tmp1;
 
@@ -107,29 +107,38 @@ t_holder    *ft_create_holder_node(t_line *node)
     while (i <= c)
     {
         new = add_list_holder(&holder);
+        if (!new)
+        {
+            printf("failed \n");
+            return (holder);
+        }
         while (tmp)
         {
-            if (tmp->str[0] == '|')
+            if (tmp->next && tmp->str[0] == '|')
             {
                 tmp = tmp->next;
                 break;
             }
-            if (tmp->token == CMD)
+            if (tmp->token == CMD && j < 1024)
             {
                 new->cmd = tmp->str;
                 new->args[j++] = tmp->str;
             }
-            else if (tmp->token == ARGS)
+            else if (tmp->token == ARGS && j < 1024)
                 new->args[j++] = tmp->str;
-            else if (tmp->token == OUT_FILE)
+            else if (tmp->token == OUT_FILE && k < 1024)
                 new->file_out[k++] = tmp->str;
-            else if (tmp->token == OUT_FILE)
-                 new->file_out[w++] = tmp->str;
-            else if (tmp->token == IN_FILE)
-                 new->file_in[n++] = tmp->str;
-            else if (tmp->token == APPEND)
-                 new->append[a++] = tmp->str;
-            tmp = tmp->next;
+            else if (tmp->token == OUT_FILE && w < 1024)
+                new->file_out[w++] = tmp->str;
+            else if (tmp->token == IN_FILE && n < 1024)
+                new->file_in[n++] = tmp->str;
+            else if (tmp->token == APPEND && a < 1024)
+            {
+                if (tmp->next)
+                    new->append[a++] = tmp->next->str;
+            }
+            // if (tmp->next)
+                tmp = tmp->next;
         }
         i++;
     }
