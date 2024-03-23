@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/17 22:08:34 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:32:26 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,10 @@ typedef struct s_holder
     struct s_holder *next;
 }   t_holder;
 
-t_holder    *ft_create_holder_node(t_line *node);
+t_holder    *ft_create_holder_node(t_line *node, char *line);
 int     ft_count_pipe(t_line *head);
-t_holder	*add_list_holder(t_holder **lst);
-t_holder	*ft_lstnew_holder(void);
+t_holder	*add_list_holder(t_holder **lst, char *line);
+t_holder	*ft_lstnew_holder(char *line);
 void    ft_pwd();
 void    ft_execute_cmd(t_line *head);
 void    ft_give_token(t_line *head);
@@ -120,8 +120,8 @@ static t_env	*ft_last_node(t_env *top);
 static t_env	*ft_new_node(char *value);
 int	ft_push_value(char *value, t_env **head);
 void	ft_free_env(t_env **head);
-void    ft_remove_quote(t_line **str);
-char    *ft_remove(t_line *tmp);
+void    ft_remove_quote(t_line **str, char *line);
+char    *ft_remove(t_line *tmp, char *line);
 void    ft_checking_files(t_holder *node);
 
 //======================================================================

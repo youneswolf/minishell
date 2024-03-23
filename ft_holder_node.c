@@ -6,17 +6,18 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/17 22:32:10 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:37:42 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_holder	*ft_lstnew_holder(void)
+t_holder	*ft_lstnew_holder(char *line)
 {
 	t_holder	*new;
+    int         i;
 
-    int i = 0;
+    i = -1;
 	new = (t_holder *)malloc(sizeof(t_holder));
     new->cmd = NULL; 
     new->args = malloc(sizeof(char *) * 1024);
@@ -26,21 +27,16 @@ t_holder	*ft_lstnew_holder(void)
     new->ap = malloc(sizeof(int ) * 1024);
     new->out = malloc(sizeof(int ) * 1024);
     new->in = malloc(sizeof(int ) * 1024);
-    while (i < 1024)
+    if (!new->cmd || !new->args || !new->file_in || !new->file_out || !new->append || !new->ap
+        || new->out || new->out)
+        return (free(line), NULL);
+    while (++i < 1024)
     {
         new->args[i] = NULL;
         new->file_in[i] = NULL;
-        new->file_out[i] = NULL;
-        new->append[i] = NULL;
-        new->ap[i] = 0;
-        new->in[i] = 0;
+        (1) && (new->file_out[i] = NULL, new->append[i] = NULL);
+        (1) && (new->ap[i] = 0, new->in[i] = 0);
         new->out[i] = 0;
-        i++;
-    }
-	if (!new)
-    {
-		printf("failed\n");
-        return (NULL);
     }
 	new->next = NULL;
 	return (new);
@@ -55,9 +51,9 @@ t_holder *last_node(t_holder *head)
     return (head);
 }
 
-t_holder	*add_list_holder(t_holder **lst)
+t_holder	*add_list_holder(t_holder **lst, char *line)
 {
-    t_holder *new = ft_lstnew_holder();
+    t_holder *new = ft_lstnew_holder(line);
 	t_holder	*temp = NULL;
 
 	if (*lst == NULL)
@@ -92,7 +88,7 @@ int     ft_count_pipe(t_line *head)
     return (i);
 }
 
-t_holder    *ft_create_holder_node(t_line *node)
+t_holder    *ft_create_holder_node(t_line *node, char *line)
 {
     t_holder    *holder= NULL;
     t_holder    *new = NULL;
@@ -106,12 +102,9 @@ t_holder    *ft_create_holder_node(t_line *node)
     tmp1 = tmp;
     while (i <= c)
     {
-        new = add_list_holder(&holder);
+        new = add_list_holder(&holder, line);
         if (!new)
-        {
-            printf("failed \n");
             return (holder);
-        }
         while (tmp)
         {
             if (tmp->next && tmp->str[0] == '|')

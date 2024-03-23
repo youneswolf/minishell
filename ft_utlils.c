@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:54:59 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/06 19:26:04 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/20 17:20:01 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ char	**ft_split(char *str, char c)
 	array = alloc(l);
 	if (!array)
 		return (NULL);
-	while (j < l)
+	while (j++ < l)
 	{
 		str += fti_free(array, str, c, 0);
 		if (*str != c && *str)
@@ -174,6 +174,5 @@ char	**ft_split(char *str, char c)
 		}
 		str += fti_free(array, str, c, 1);
 	}
-	array[j] = NULL;
-	return (array);
+	return (array[j] = NULL, array);
 }

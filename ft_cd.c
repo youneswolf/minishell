@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/05 11:49:37 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/21 00:24:19 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,10 @@ int    ft_cd(char *str, t_env *mini_env)
     }
     if (str == NULL)
         str = getenv("HOME");
-    else {
-        /* this should be done on all words during the parse phase */
-        if (*str == '~') {
-            if (str[1] == '/' || str[1] == '\0') {
-                str = ft_strjoin(getenv("HOME"), str + 1);
-            } else {
-                /* ~name should expand to the home directory of user with login `name` 
-                   this can be implemented with getpwent() */
-                printf("syntax not supported:\n");
-                return 1;
-            }
-        }
+    else 
+    {
+            printf("syntax not supported:\n");
+            return 1;
     }
     if (chdir(str) == 0)
     {

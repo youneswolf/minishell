@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/14 22:53:36 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:15:28 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char    *ft_alloc_string(char *str, int i)
 		k++;
     new = malloc((k + 1) * sizeof(char));
     if (!new)
-        return (NULL);
+        return (free(str), NULL);
     i = 0;
 	while (str && str[j] != '\0' && str[j] != ' ')
 	{
@@ -115,7 +115,7 @@ t_line	*ft_lstnew(char *str, int i, char flag)
 
 	new = (t_line *)malloc(sizeof(t_line));
 	if (!new)
-		return (NULL);
+		return (free(str), NULL);
     new->str = ft_alloc_string(str, i);
 	new->next = NULL;
 	return (new);
@@ -150,7 +150,7 @@ t_line	*ft_put(char *str)
 	char *str1 = NULL;
     t_line  *head = NULL;
 
-	while (str[i])
+	while (str && str[i])
 	{
         while (str[i] && str[i] == ' ')
 			i++;

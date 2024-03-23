@@ -6,46 +6,11 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/18 01:07:59 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:38:11 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// t_line	*ft_lstnew(char *str)
-// {
-// 	t_line	*new;
-
-// 	new = (t_line *)malloc(sizeof(t_line));
-//     new->str = strdup(str);
-// 	if (!new)
-// 		return (NULL);
-// 	new->next = NULL;
-// 	return (new);
-// }
-
-// void	add_list(t_line **lst, char *str)
-// {
-// 	t_line	*new;
-// 	t_line	*temp;
-
-// 	new = ft_lstnew(str);
-// 	if (*lst == NULL)
-// 	{
-// 		*lst = new;
-// 		new->next = NULL;
-// 	}
-// 	else
-// 	{
-// 		temp = *lst;
-// 		while (temp->next != NULL)
-// 		{
-// 			temp = temp->next;
-// 		}
-// 		temp->next = new;
-// 	}
-// }
-
 
 int is_there_exit(char *str)
 {
@@ -75,15 +40,42 @@ int ft_strcmp(char *str, char *str1)
 	return (1);
 }
 
+char	*ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
+{
+	int	flag;
+
+	flag = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+			(1) && (flag = 1, quote = str[i]);
+		if (flag == 0 && ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<')))
+		{
+			(1) && ( new_line[j] = ' ', new_line[j + 1] = str[i]);
+			(1) && (new_line[j + 2] = str[i], new_line[j + 3] = ' ');
+			(1) && (j = j + 3, i++);
+		}
+		else if (flag == 0 && (str[i] == '|' || str[i] == '>' || str[i] == '<'))
+		{
+			(1) && (new_line[j] = ' ', new_line[j + 1] = str[i]);
+			(1) && (new_line[j + 2] = ' ', j = j + 2);
+		}
+		else
+			new_line[j] = str[i];
+		(1) && (i++, j++);
+		if (str[i] && str[i] == quote)
+			(1) && (new_line[j] = str[i], i++, j++, flag = 0, quote = 0);
+	}
+	return (new_line[j] = '\0', new_line);
+}
+
 char    *ft_add_space_to_command(char *str)
 {
-	int i, count, j, flag = 0, a = 0;
+	int i, count, quote = 0;
 	char *new_line;
 
 	i = 0;
 	count = 0;
-	j = 0;
-	
 	while (str[i] != '\0')
 	{
 		if (str[i] == '|' || str[i] == '>' || str[i] == '<'
@@ -93,38 +85,10 @@ char    *ft_add_space_to_command(char *str)
 	}
 	new_line = malloc(i + 1 + count * 2);
 	if (!new_line)
-		return (perror("malloc"), NULL);
+		return (free(str), perror("malloc"), NULL);
 	i = 0;
-	int k = 0;
-	int quote = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' || str[i] == '\"')
-			(1) && (flag = 1, quote = str[i]);
-		if (flag == 0 && ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<')))
-		{
-			new_line[j] = ' ';
-			new_line[j + 1] = str[i];
-			new_line[j + 2] = str[i];
-			new_line[j + 3] = ' ';
-			j = j + 3;
-			i++;
-		}
-		else if (flag == 0 && (str[i] == '|' || str[i] == '>' || str[i] == '<'))
-		{
-			new_line[j] = ' ';
-			new_line[j + 1] = str[i];
-			new_line[j + 2] = ' ';
-			j = j + 2;
-		}
-		else
-			new_line[j] = str[i];
-		j++;
-		i++;
-		if (str[i] && str[i] == quote)
-			(1) && (new_line[j] = str[i], i++, j++, flag = 0, quote = 0);
-	}
-	new_line[j] = '\0';
+	count = 0;
+	new_line = ft_add_space_utils(new_line, str, quote, i, count);
 	return (new_line);
 }
 
@@ -134,11 +98,6 @@ void    ft_ctr(int sig)
 	printf(RED"\nminishell$ "RESET);
 	return ;
 }
-
-// void    main1()
-// {
-	
-// }
 
 int main(int    ac, char **av, char **env)
 {
@@ -168,8 +127,19 @@ int main(int    ac, char **av, char **env)
 		if (!ft_syntax(str))
 			printf("failed\n");
 		// ft_expand_argument(mini_env, &str);
-		ft_remove_quote(&str);
-		tmp = ft_create_holder_node(str);
+		ft_remove_quote(&str, line);
+		tmp = ft_create_holder_node(str, line);
+		// int k = 0;
+		// while (tmp)
+		// {
+		// 	while (tmp->args[k])
+		// 	{
+		// 		printf("args = %s\n", tmp->args[k]);
+		// 		k++;
+		// 	}
+		// 	printf("%s\n", tmp->cmd);
+		// 	tmp = tmp->next;
+		// }
 		// ft_checking_files(tmp);
 		while (str)
 		{
@@ -199,6 +169,6 @@ int main(int    ac, char **av, char **env)
 			str = str->next;
 		}
 		printf("\n");
-		free(line);
+		// free(line);
 	}
 }
