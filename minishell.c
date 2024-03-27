@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/19 16:16:50 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/03/27 21:06:16 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,13 +232,22 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 	char *path;
 	// if (pipe(pipe_fd) == -1)
 	// 	perror("pipe");
-	if (holder->in[i] != -42 && holder->in[i] != -1)
-	{
-		redirect_input(holder->in[i]);
-	}
 	if (holder->out[j] != -42 && holder->out[j] != -1)
 	{
 		redirect_output(holder->out[j]);
+		printf("enter\n");
+		
+	}
+	if (holder->in[i] != -42 && holder->in[i] != -1)
+	{
+		redirect_input(holder->in[i]);
+		printf("enter\n");
+
+	}
+	else if (holder->in[44] != -1)
+	{
+		printf("enter\n");
+		exit(1);
 	}
 	// else if (holder->ap[k] != -42 && holder->ap[k] != -1)
 	// {
@@ -273,6 +282,7 @@ void execution(t_holder **holder ,t_env **env)
 	int pid;
 	tmp = *holder;
 	int origin_in = dup(STDIN_FILENO);
+	tmp = *holder;
 	while (tmp)
 	{
 		if (tmp->cmd)
@@ -287,7 +297,7 @@ void execution(t_holder **holder ,t_env **env)
 			pid = fork();
 			if (!pid)
 			{
-				// printf("%s\n",tmp->args[0]);
+				// printf("args : %s\n",tmp->args[0]);
 				exec_cmd(tmp, *env, pipe_fd,i-1,j-1,k-1);
 			}
 			else if(pid > 0)
