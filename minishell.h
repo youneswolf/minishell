@@ -6,13 +6,16 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/28 23:52:00 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/29 22:09:17 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 #define MINISHELL_H
 #include <stdio.h>
+#include <signal.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <string.h>
 #include <Kernel/sys/syslimits.h>
 #include <signal.h>
@@ -126,5 +129,6 @@ char    *ft_remove(t_line *tmp, char *line);
 void    ft_checking_files(t_holder *node);
 int     f_strcmp(char *str1, char *str2);
 int		ft_cmp_built_in(char *str);
+void    ft_handler_ctrl_c(int signum);
 //======================================================================
 #endif

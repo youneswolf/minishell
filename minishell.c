@@ -6,11 +6,12 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/29 00:10:04 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/29 22:08:54 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <signal.h>
 
 int is_there_exit(char *str)
 {
@@ -134,15 +135,19 @@ int main(int    ac, char **av, char **env)
 	str = NULL;
 	tmp = NULL;
 	// t_envi  *mini_env;
+	rl_catch_signals = 0;
+    if (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR ||
+		signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+	{
+        perror("signal");
+        return 1;
+    }
 	t_env *mini_env = ft_get_env(env);
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
 		if (!SIGQUIT || line == NULL || is_there_exit(line))
-		{
-			if (line == NULL)
 				(printf("exit!\n"), exit(0));
-		}
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line); //add space between special carahcteres like | >< ...
@@ -153,7 +158,7 @@ int main(int    ac, char **av, char **env)
 		// ft_expand_argument(mini_env, &str);
 		ft_remove_quote(&str, line);
 		// ft_cd(line , mini_env);
-		tmp = ft_create_holder_node(str, line);
+		// tmp = ft_create_holder_node(str, line);
 		// ft_exec_built_ins(*tmp, mini_env);
 		// int k = 0;
 		// while (tmp)
@@ -191,7 +196,7 @@ int main(int    ac, char **av, char **env)
 				printf(YELLOW"[%s]"RESET, "APPEND");
 			else if (str->token == DELIMITER)
 				printf(YELLOW"[%s]"RESET, "DELIMITER");
-			printf("--%d--", str->is_it_built_in);
+			printf("--%s--", str->str);
 			str = str->next;
 		}
 		printf("\n");
