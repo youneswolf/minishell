@@ -6,48 +6,76 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/21 00:24:19 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/29 00:03:39 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int f_strcmp(char *str1, char *str2)
+{
+    int i;
+
+    i = 0;
+    while (str1 && str2 && str2[i] != '\0' && str1[i] != '\0')
+    {
+        if (str1[i] != str2[i])
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
 int    ft_cd(char *str, t_env *mini_env)
 {
     char buf[PATH_MAX];
-
+    char    *str1;
     char curdir[PATH_MAX];
     static char lastdir[PATH_MAX];
     char path[PATH_MAX];
 
     int i = 0;
-    while (mini_env)
-    {
-        printf("%s\n", mini_env->env);
-        mini_env = mini_env->next;
-    }
     if (getcwd(curdir, sizeof curdir)) {
         /* current directory might be unreachable: not an error */
         *curdir = '\0';
     }
-    if (str == NULL)
+    if (str == NULL || str[0] == '\0')
         str = getenv("HOME");
-    else 
-    {
-            printf("syntax not supported:\n");
-            return 1;
-    }
-    if (chdir(str) == 0)
+    else if (chdir(str) == 0)
     {
         // Get the current working directory
-        if (getcwd(buf, sizeof(buf)) != NULL) {
+        if (getcwd(buf, sizeof(buf)) != NULL)
+        {
+            while (mini_env)
+            {
+                if (f_strcmp(mini_env->value, "PWD"))
+                {
+                    str1 = ft_strjoin(mini_env->value, "/");
+                    str1 = ft_strjoin(str1, str);
+                    mini_env->value = ft_strdup(str1);
+                    free(str1);
+                    break;
+                }
+                mini_env = mini_env->next;
+            }
             printf("Current working directory:%s\n", buf);
         } else {
-            perror("getcwd");
-            exit(EXIT_FAILURE);
+            while(mini_env)
+            {
+                if (f_strcmp(mini_env->value, "PWD"))
+                {
+                    str1 = ft_strjoin(mini_env->value, "/");
+                    str1 = ft_strjoin(str1, str);
+                    mini_env->value = ft_strdup(str1);
+                    printf("%s\n", mini_env->value);
+                    free(str1);
+                    break;
+                }
+                mini_env = mini_env->next;
+            }
         }
     }
-    else 
+    else
         perror("directory not found");
     strcpy(lastdir, curdir);
     return(1);

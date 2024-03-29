@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/23 17:37:42 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/28 19:37:33 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ t_holder	*ft_lstnew_holder(char *line)
     new->args = malloc(sizeof(char *) * 1024);
     new->file_in = malloc(sizeof(char *) * 1024);
     new->file_out = malloc(sizeof(char *) * 1024);
-    new->append = malloc(sizeof(char *) * 1024);
+    new->her_doc = malloc(sizeof(char *) * 1024);
     new->ap = malloc(sizeof(int ) * 1024);
     new->out = malloc(sizeof(int ) * 1024);
     new->in = malloc(sizeof(int ) * 1024);
-    if (!new->cmd || !new->args || !new->file_in || !new->file_out || !new->append || !new->ap
+    if (!new->cmd || !new->args || !new->file_in || !new->file_out || !new->her_doc || !new->ap
         || new->out || new->out)
         return (free(line), NULL);
     while (++i < 1024)
     {
         new->args[i] = NULL;
         new->file_in[i] = NULL;
-        (1) && (new->file_out[i] = NULL, new->append[i] = NULL);
+        (1) && (new->file_out[i] = NULL, new->her_doc[i] = NULL);
         (1) && (new->ap[i] = 0, new->in[i] = 0);
         new->out[i] = 0;
     }
@@ -125,10 +125,10 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
                 new->file_out[w++] = tmp->str;
             else if (tmp->token == IN_FILE && n < 1024)
                 new->file_in[n++] = tmp->str;
-            else if (tmp->token == APPEND && a < 1024)
+            else if (tmp->token == HERDOC && a < 1024)
             {
                 if (tmp->next)
-                    new->append[a++] = tmp->next->str;
+                    new->her_doc[a++] = tmp->next->str;
             }
             // if (tmp->next)
                 tmp = tmp->next;

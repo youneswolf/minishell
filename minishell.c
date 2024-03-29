@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/23 17:38:11 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/29 00:10:04 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,30 @@ void    ft_ctr(int sig)
 	return ;
 }
 
+int		ft_cmp_built_in(char *str)
+{
+	int	i;
+	char **checker;
+
+	checker = malloc(8 * sizeof(char *));
+	checker[0] = ft_strdup("echo");
+	checker[1] = ft_strdup("cd");
+	checker[2] = ft_strdup("pwd");
+	checker[3] = ft_strdup("export");
+	checker[4] = ft_strdup("unset");
+	checker[5] = ft_strdup("env");
+	checker[6] = ft_strdup("exit");
+	checker[7] = NULL;
+	i = 0;
+	while (checker[i])
+	{
+		if (f_strcmp(checker[i], str))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int main(int    ac, char **av, char **env)
 {
 	t_line  *str;
@@ -128,7 +152,9 @@ int main(int    ac, char **av, char **env)
 			printf("failed\n");
 		// ft_expand_argument(mini_env, &str);
 		ft_remove_quote(&str, line);
+		// ft_cd(line , mini_env);
 		tmp = ft_create_holder_node(str, line);
+		// ft_exec_built_ins(*tmp, mini_env);
 		// int k = 0;
 		// while (tmp)
 		// {
@@ -165,7 +191,7 @@ int main(int    ac, char **av, char **env)
 				printf(YELLOW"[%s]"RESET, "APPEND");
 			else if (str->token == DELIMITER)
 				printf(YELLOW"[%s]"RESET, "DELIMITER");
-			printf("--%s--", str->str);
+			printf("--%d--", str->is_it_built_in);
 			str = str->next;
 		}
 		printf("\n");

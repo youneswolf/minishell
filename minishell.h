@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/23 17:32:26 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/28 23:52:00 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_line
 {
     char *str;
     int token;
+    int is_it_built_in;
     struct s_line *next;
 }t_line;
 typedef struct s_start_end
@@ -81,7 +82,7 @@ typedef struct s_holder
     char    **args;
     char    **file_in;
     char    **file_out;
-    char    **append;
+    char    **her_doc;
     int     *in;
     int     *out;
     int     *ap;
@@ -123,6 +124,7 @@ void	ft_free_env(t_env **head);
 void    ft_remove_quote(t_line **str, char *line);
 char    *ft_remove(t_line *tmp, char *line);
 void    ft_checking_files(t_holder *node);
-
+int     f_strcmp(char *str1, char *str2);
+int		ft_cmp_built_in(char *str);
 //======================================================================
 #endif

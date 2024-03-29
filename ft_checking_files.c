@@ -6,11 +6,12 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/15 21:01:30 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/28 19:43:27 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <sys/fcntl.h>
 
 void    ft_checking_files(t_holder *node)
 {
@@ -23,25 +24,11 @@ void    ft_checking_files(t_holder *node)
     k = 0;
     while (tmp)
     {
-        if (tmp->file_in[i])
+        if (tmp->her_doc[k])
         {
-            tmp->in[i] = open(tmp->file_in[i], O_RDONLY);
-            if (tmp->in[i] == -1)
-                write(2, "No such file or directory\n", 26);
-            i++;
-        }
-        else if (tmp->file_out[j])
-        {
-            tmp->out[j] = open(tmp->file_out[j], O_RDONLY);
-            if (tmp->out[j] == -1)
-                write(2, "No such file or directory\n", 26);
-            j++;
-        }
-        else if (tmp->append[k])
-        {
-            tmp->ap[k] = open(tmp->append[k], O_RDONLY);
+            tmp->ap[k] = open(tmp->her_doc[k], O_CREAT | O_WRONLY | O_TRUNC, 0644);
             if (tmp->ap[k] == -1)
-                write(2, "No such file or directory\n", 26);
+                write(2, "error in oppening the file\n", 26);
             k++;
         }
         tmp = tmp->next;
