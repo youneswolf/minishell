@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/16 00:32:31 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/03/29 20:51:42 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <readline/readline.h>
+#include "get_next_line/get_next_line_bonus.h"
 #define CMD 0
 #define PIPE 1
 #define ARGS 2
@@ -82,6 +83,7 @@ typedef struct s_holder
     char    **file_in;
     char    **file_out;
     char    **append;
+    char    **her_doc;
     int     *in;
     int     *out;
     int     *ap;

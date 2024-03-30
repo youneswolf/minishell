@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/27 21:06:16 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/03/30 16:51:09 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,31 +230,26 @@ char	*get_path(t_env *env, char *cmd)
 void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k)
 {
 	char *path;
+
 	// if (pipe(pipe_fd) == -1)
 	// 	perror("pipe");
-	if (holder->out[j] != -42 && holder->out[j] != -1)
+	if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
 	{
 		redirect_output(holder->out[j]);
-		printf("enter\n");
-		
 	}
-	if (holder->in[i] != -42 && holder->in[i] != -1)
+	if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
 	{
 		redirect_input(holder->in[i]);
-		printf("enter\n");
-
 	}
-	else if (holder->in[44] != -1)
-	{
-		printf("enter\n");
-		exit(1);
-	}
-	// else if (holder->ap[k] != -42 && holder->ap[k] != -1)
+	// else if(i == -1 && holder->in[i + 1] == -42)
 	// {
-	// 	printf("aaaaaaaa%d\n",holder->ap[k]);
+	// 	exit(1);
+	// }
+	// if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
+	// {
 	// 	redirect_append(holder->ap[k]);
 	// }
-	else if (holder->next)
+	if (holder->next)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[0]);
@@ -269,47 +264,139 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 		path = holder->args[0];
 	else
 		path = get_path(env, holder->cmd);
+	// printf("args : %s\n",path);
 	execve(path, holder->args, NULL);
 	perror("execve error");
 	exit(1);
 }
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+	int		res;
+
+	res = 0;
+	i = 0;
+	while (i < n)
+	{
+		if (s1 && s1[i] == '\0' && s2[i] == '\0')
+		{
+			return (0);
+		}
+		if ( s1 && s2 && (unsigned char)s1[i] != (unsigned char)s2[i])
+		{
+			res = (unsigned char)s1[i] - (unsigned char)s2[i];
+			return (res);
+		}
+		i++;
+	}
+	return (res);
+}
+void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp)
+{
+	char	*line;
+	char	*str;
+	int		i = 1;
+	write(1, "here_doc> ", 11);
+	line = readline("");
+	while (ft_strncmp(lim, line, ft_strlen(line))
+		|| ft_strlen(line) != ft_strlen(lim))
+	{
+		write(1, "here_doc> ", 11);
+		write(pipe_fd[1], line, ft_strlen(line));
+		free(line);
+			line = readline("");
+		if (!line)
+			break ;
+	}
+	close (pipe_fd[1]);
+	if (tmp->cmd)
+	{
+	free (line);
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+		(perror("dup2"));
+	close(pipe_fd[0]);
+	}
+	else
+	{
+		pipe(pipe_fd);
+		close(pipe_fd[1]);
+		dup2(pipe_fd[0], STDIN_FILENO);
+	}
+}
+
 void execution(t_holder **holder ,t_env **env)
 {
 	t_holder *tmp;
 	int pipe_fd[2];
-	int i ,j , k;
-	(i = 0, j = 0, k = 0);
+	int i ,j , k, n;
+	(i = 0, j = 0, k = 0, n = 0);
 	int pid;
 	tmp = *holder;
 	int origin_in = dup(STDIN_FILENO);
 	tmp = *holder;
+	t_holder *doc_tmp = NULL;
+	// while (tmp)
+	// {
+	// 	if (tmp->her_doc[n])
+	// 	{
+	// 		doc_tmp = tmp;
+	// 	}
+	// 	tmp = tmp->next;
+	// }
+	// if (!doc_tmp)
+	// {
+	// 	tmp = *holder;
+	// }
+	// else
+	// 	tmp = doc_tmp;
 	while (tmp)
 	{
-		if (tmp->cmd)
+		pipe(pipe_fd);
+		if (tmp->her_doc[n])
+		{
+			dup2(origin_in, STDIN_FILENO);
+			ft_here_doc(tmp->her_doc[n], pipe_fd, tmp);
+ 		}
+		if (tmp->cmd || tmp->file_out[j])
 		{
 			if (tmp->in[i] != -42 && tmp->in[i] != -1)
 				i++;
-			if (tmp->out[j] != -42 && tmp->out[i] != -1)
+			if (tmp->out[j] != -42 && tmp->out[j] != -1)
 				j++;
-			if (tmp->ap[k] != -42 && tmp->ap[i] != -1)
+			if (tmp->ap[k] != -42 && tmp->ap[k] != -1)
 				k++;
-			pipe(pipe_fd);
+			// pipe(pipe_fd);
+			// if (tmp->her_doc[n])
+			// {
+			// 	ft_here_doc(tmp->her_doc[n], pipe_fd, tmp);
+			// 	tmp = tmp->next;
+			// }
+			// else
+			// {
 			pid = fork();
 			if (!pid)
 			{
 				// printf("args : %s\n",tmp->args[0]);
 				exec_cmd(tmp, *env, pipe_fd,i-1,j-1,k-1);
 			}
-			else if(pid > 0)
-			{
-				close (pipe_fd[1]);
-				close (tmp->out[j - 1]);
-				close (tmp->in[i - 1]);
-				close (tmp->ap[k - 1]);
-				dup2 (pipe_fd[0], STDIN_FILENO);
-				close(pipe_fd[0]);
-			}
+			// else if(pid > 0)
+			// {
+			// 	close (pipe_fd[1]);
+			// 	// close (tmp->out[j - 1]);
+			// 	// close (tmp->in[i - 1]);
+			// 	// close (tmp->ap[k - 1]);
+			// 	dup2 (pipe_fd[0], STDIN_FILENO);
+			// 	close(pipe_fd[0]);
+			// }
+			// }
 		}
+		close (pipe_fd[1]);
+				// close (tmp->out[j - 1]);
+				// close (tmp->in[i - 1]);
+				// close (tmp->ap[k - 1]);
+		dup2 (pipe_fd[0], STDIN_FILENO);
+		close(pipe_fd[0]);
 		tmp = tmp->next;
 	}
 	// char a[1024];
