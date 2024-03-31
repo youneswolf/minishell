@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/29 20:51:42 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/03/31 22:39:36 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_expand
 
 typedef struct s_env
 {
-    char            *value;
+    char            *env;
     struct s_env    *next;
 }                    t_env;
 
@@ -92,6 +92,24 @@ typedef struct s_holder
 void    redirect_append(int fd);
 void    redirect_output(int fd);
 void    redirect_input(int fd);
+t_line *ft_lst_new(char *str);
+int	if_dollar(char *str);
+char *handle_expand(t_line **line, t_env **env);
+void	env_list(t_env **mini_env, char *line);
+void fiLL_env(t_env **mini_env, char **env);
+t_env	*get_last(t_env **a);
+void	ft_free_nodes(t_env **a);
+// char *expand(t_line **line, t_env **env);
+void fill_second_null_env(t_env **mini_env);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
+void fill_null_env(t_env **mini_env);
+char *expand(t_line **line, t_env **env);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+static	int	end_finder(char *s1, char *set);
+char	*ft_strdup(char *s1);
+static	int	start_finder(char *s1, char *set);
+char	*ft_strtrim(char *s1, char *set, int arg);
 t_holder    *ft_create_holder_node(t_line *node);
 int     ft_count_pipe(t_line *head);
 t_holder	*add_list_holder(t_holder **lst);

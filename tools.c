@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <readline/readline.h>
+#include "minishell.h"
 char	*ft_free(char **str)
 {
 	free(*str);
@@ -43,28 +44,28 @@ char	*ft_strjoin(char *static_str, char *buff)
 	return (str);
 }
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
-	int		res;
+// int	ft_strncmp(const char *s1, const char *s2, size_t n)
+// {
+// 	size_t	i;
+// 	int		res;
 
-	res = 0;
-	i = 0;
-	while (i < n)
-	{
-		if (s1[i] == '\0' && s2[i] == '\0')
-		{
-			return (0);
-		}
-		if ((unsigned char)s1[i] != (unsigned char)s2[i])
-		{
-			res = (unsigned char)s1[i] - (unsigned char)s2[i];
-			return (res);
-		}
-		i++;
-	}
-	return (res);
-}
+// 	res = 0;
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		if (s1[i] == '\0' && s2[i] == '\0')
+// 		{
+// 			return (0);
+// 		}
+// 		if ((unsigned char)s1[i] != (unsigned char)s2[i])
+// 		{
+// 			res = (unsigned char)s1[i] - (unsigned char)s2[i];
+// 			return (res);
+// 		}
+// 		i++;
+// 	}
+// 	return (res);
+// }
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
@@ -120,18 +121,18 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	}
 	return (len);
 }
-size_t	ft_strlen(const char *str)
-{
-	if (!str)
-		return (0);
-	size_t	i;
-	i = 0;
-	while (str[i])
-	{
-		i++;
-	}
-	return (i);
-}
+// size_t	ft_strlen(const char *str)
+// {
+// 	if (!str)
+// 		return (0);
+// 	size_t	i;
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		i++;
+// 	}
+// 	return (i);
+// }
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
@@ -368,7 +369,8 @@ void	ft_free_nodes(t_env **a)
 t_env	*get_last(t_env **a)
 {
 	t_env	*tmp;
-
+	if (!(*a)->next)
+		return (*a);
 	tmp = *a;
 	while (tmp && tmp->next)
 		tmp = tmp->next;
@@ -404,12 +406,13 @@ void	env_list(t_env **mini_env, char *line)
 {
 	t_env	*node;
 	t_env	*last_node;
-
+	t_env *next;
 	node = malloc(sizeof(t_env));
 	if (!node)
 		(ft_free_nodes(mini_env), exit(1));
 	node->env = line;
-	node->next = NULL;
+	next = NULL;
+	node->next = next;
 	if (!(*mini_env))
 	{
 		*mini_env = node;

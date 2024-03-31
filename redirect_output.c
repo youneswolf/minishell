@@ -8,7 +8,6 @@ void    redirect_output(int fd)
 		perror("Error opening file");
 	}
 	
-	fprintf(stderr,"my outfile %d\n", fd);
 	i = dup2(fd, STDOUT_FILENO);
 	close(fd);
 	if (i == -1)

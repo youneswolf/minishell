@@ -38,8 +38,6 @@ r
 redirect_append.c
 redirect_input.c
 redirect_output.c
-rr
-rr1
 t
 t.txt
 test.txt

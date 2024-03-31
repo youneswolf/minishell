@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/30 16:51:09 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/03/31 23:03:24 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,66 +61,72 @@ int is_there_exit(char *str)
 	return (0);
 }
 
-int ft_strcmp(char *str, char *str1)
-{
-	int i;
+// int ft_strcmp(char *str, char *str1)
+// {
+// 	int i;
 
-	i = 0;
-	while (str[i] && str1[i])
+// 	i = 0;
+// 	while (str[i] && str1[i])
+// 	{
+// 		if (str[i] != str1[i])
+// 			return (0);
+// 		i++;
+// 	}
+// 	return (1);
+// }
+
+char	*ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
+{
+	int	flag;
+
+	flag = 0;
+	while (str[i])
 	{
-		if (str[i] != str1[i])
-			return (0);
-		i++;
+		if (str[i] == '\'' || str[i] == '\"')
+			(1) && (flag = 1, quote = str[i]);
+		if (flag == 0 && ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<')))
+		{
+			(1) && ( new_line[j] = ' ', new_line[j + 1] = str[i]);
+			(1) && (new_line[j + 2] = str[i], new_line[j + 3] = ' ');
+			(1) && (j = j + 3, i++);
+		}
+		else if (flag == 0 && (str[i] == '|' || str[i] == '>' || str[i] == '<'))
+		{
+			(1) && (new_line[j] = ' ', new_line[j + 1] = str[i]);
+			(1) && (new_line[j + 2] = ' ', j = j + 2);
+		}
+		else
+			new_line[j] = str[i];
+		(1) && (i++, j++);
+		if (str[i] && str[i] == quote)
+			(1) && (new_line[j] = str[i], i++, j++, flag = 0, quote = 0);
 	}
-	return (1);
+	return (new_line[j] = '\0', new_line);
 }
 
 char    *ft_add_space_to_command(char *str)
 {
-	int i, count, j;
+	int i, count, quote = 0;
 	char *new_line;
 
 	i = 0;
 	count = 0;
-	j = 0;
-	
 	while (str[i] != '\0')
 	{
 		if (str[i] == '|' || str[i] == '>' || str[i] == '<'
 		|| (str[i] == '<' && str[i + 1] == '<') || (str[i] == '>' && str[i + 1] == '>'))
-			 count++;
-		i++;
+				count++;
+			i++;
 	}
 	new_line = malloc(i + 1 + count * 2);
 	if (!new_line)
-		return (perror("malloc"), NULL);
+		return (free(str), perror("malloc"), NULL);
 	i = 0;
-	while (str[i])
-	{
-		if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
-		{
-			new_line[j] = ' ';
-			new_line[j + 1] = str[i];
-			new_line[j + 2] = str[i];
-			new_line[j + 3] = ' ';
-			j = j + 3;
-			i++;
-		}
-		else if (str[i] == '|' || str[i] == '>' || str[i] == '<')
-		{
-			new_line[j] = ' ';
-			new_line[j + 1] = str[i];
-			new_line[j + 2] = ' ';
-			j = j + 2;
-		}
-		else
-			new_line[j] = str[i];
-		j++;
-		i++;
-	}
-	new_line[j] = '\0';
+	count = 0;
+	new_line = ft_add_space_utils(new_line, str, quote, i, count);
 	return (new_line);
 }
+
 
 void    ft_ctr(int sig)
 {
@@ -138,7 +144,7 @@ char	*find_path(t_env *env)
 	dest = NULL;
 	while (!dest)
 	{
-		dest = strnstr(tmp->value, "PATH", 4);
+		dest = strnstr(tmp->env, "PATH=", 5);
 		tmp = tmp->next;
 	}
 	return (dest);
@@ -233,13 +239,21 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 
 	// if (pipe(pipe_fd) == -1)
 	// 	perror("pipe");
-	if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
-	{
-		redirect_output(holder->out[j]);
-	}
 	if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
 	{
 		redirect_input(holder->in[i]);
+	}
+	if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
+	{
+		while (holder->out[j] != -42)
+			j++;
+		redirect_output(holder->out[j-1]);
+	}
+	else if (holder->next)
+	{
+		dup2(pipe_fd[1], STDOUT_FILENO);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
 	}
 	// else if(i == -1 && holder->in[i + 1] == -42)
 	// {
@@ -249,22 +263,22 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 	// {
 	// 	redirect_append(holder->ap[k]);
 	// }
-	if (holder->next)
-	{
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-	}
 	// char a[1024];
 	// int ss = read (0 ,a, 100);
 	// printf("%d\n",ss);
 	// write(1,a,ss);
 	// printf("%s\n",holder->args[0]);
 	if (!access(holder->args[0], X_OK))
+	{
 		path = holder->args[0];
+	}
 	else
 		path = get_path(env, holder->cmd);
-	// printf("args : %s\n",path);
+	if (!path)
+	{
+		printf("bash: %s: command not found\n", holder->args[0]);
+		exit(127);
+	}
 	execve(path, holder->args, NULL);
 	perror("execve error");
 	exit(1);
@@ -304,6 +318,7 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp)
 	{
 		write(1, "here_doc> ", 11);
 		write(pipe_fd[1], line, ft_strlen(line));
+		write(pipe_fd[1], "\n", 1);
 		free(line);
 			line = readline("");
 		if (!line)
@@ -314,13 +329,13 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp)
 	{
 	free (line);
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-		(perror("dup2"));
+		(perror("dup2 doc"));
 	close(pipe_fd[0]);
 	}
 	else
 	{
 		pipe(pipe_fd);
-		close(pipe_fd[1]);
+		close(pipe_fd[ 1]);
 		dup2(pipe_fd[0], STDIN_FILENO);
 	}
 }
@@ -353,17 +368,26 @@ void execution(t_holder **holder ,t_env **env)
 	while (tmp)
 	{
 		pipe(pipe_fd);
+		// n = 0;
 		if (tmp->her_doc[n])
 		{
+			while (tmp->her_doc[n])
+			{
+			if (n > 0)
+				pipe(pipe_fd);
 			dup2(origin_in, STDIN_FILENO);
 			ft_here_doc(tmp->her_doc[n], pipe_fd, tmp);
+			n++;
+			}
  		}
 		if (tmp->cmd || tmp->file_out[j])
 		{
 			if (tmp->in[i] != -42 && tmp->in[i] != -1)
 				i++;
 			if (tmp->out[j] != -42 && tmp->out[j] != -1)
+			{
 				j++;
+			}
 			if (tmp->ap[k] != -42 && tmp->ap[k] != -1)
 				k++;
 			// pipe(pipe_fd);
@@ -413,18 +437,25 @@ void execution(t_holder **holder ,t_env **env)
 	if (pipe_fd[0])
 		close(pipe_fd[0]);
 }
+
 int main(int    ac, char **av, char **env)
 {
 	t_line  *str;
 	int     i = 0;
 	char    *line;
+	char *a;
 	char    *exp;
 	t_holder* tmp;
-
+	t_line *old;
+	t_env *mini_env = NULL;
 	str = NULL;
 	tmp = NULL;
 	// t_envi  *mini_env;
-	t_env *mini_env = ft_get_env(env);
+	// t_env *mini_env = ft_get_env(env);
+    if (env[0])
+        fiLL_env(&mini_env, env);
+    else
+        fill_null_env(&mini_env);
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
@@ -440,7 +471,18 @@ int main(int    ac, char **av, char **env)
 		ft_give_token(str); //give token to each node
 		ft_syntax(str);  //check the syntax
 		ft_remove_quote(&str); //removing quotes for command and args
+		old = str;
 		// ft_expand_argument(mini_env, &str); //expand nta3 ismail
+		while (str)
+		{
+			if (if_dollar(str->str))
+			{
+				str->str = handle_expand(&str, &mini_env);
+			}
+			str = str->next;
+		}
+		str = old;
+		printf("%s\n",str->str);
 		tmp = ft_create_holder_node(str);
 		ft_checking_files(tmp);
 		execution(&tmp, &mini_env);
