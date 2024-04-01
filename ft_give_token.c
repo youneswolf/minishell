@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/28 23:56:31 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/01 00:33:15 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int ft_strcmp(char *str, char *str1)
     int i;
 
     i = 0;
-    while (str[i] || str1[i])
+    while (str && str1 && (str[i] || str1[i]))
     {
         if (str[i] != str1[i])
             return (0);

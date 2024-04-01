@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/29 23:50:03 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/01 00:25:35 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,19 @@ int    ft_syntax_quote(char *str, int i, int count)
         return (write(2, "syntax error: double or single quote\n", 36), 0);
     return (1);
 }
+int     ft_her_doc(t_line *head)
+{
+    t_line *tmp;
+
+    tmp = head;
+    while (tmp->next)
+    {
+        if (tmp->token == HERDOC && tmp->next->token == HERDOC)
+            return (1);
+        tmp = tmp->next;
+    }
+    return (0);
+}
 
 int    ft_syntax(t_line *head)
 {
@@ -50,7 +63,7 @@ int    ft_syntax(t_line *head)
     i = 0;
     count = 0;
     tmp = head;
-    if (tmp && tmp->token == PIPE)  
+    if (tmp && tmp->token == PIPE || ft_her_doc(head))  
         return ( printf("error near `%s'", tmp->str), 0);
     while (tmp)
     {

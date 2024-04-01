@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/01 00:02:40 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/01 00:29:50 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ int main(int    ac, char **av, char **env)
 		if (!ft_syntax(str))
 			printf("failed\n");
 		// ft_expand_argument(mini_env, &str);
-		// ft_remove_quote(&str, line);
+		ft_remove_quote(&str, line);
 		// ft_cd(line , mini_env);
 		// tmp = ft_create_holder_node(str, line);
 		// int i = 0;
