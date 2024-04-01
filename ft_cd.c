@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/29 00:03:39 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/31 00:43:42 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int    ft_cd(char *str, t_env *mini_env)
                     str1 = ft_strjoin(mini_env->value, "/");
                     str1 = ft_strjoin(str1, str);
                     mini_env->value = ft_strdup(str1);
-                    free(str1);
+                    // free(str1);
                     break;
                 }
                 mini_env = mini_env->next;
@@ -68,7 +68,7 @@ int    ft_cd(char *str, t_env *mini_env)
                     str1 = ft_strjoin(str1, str);
                     mini_env->value = ft_strdup(str1);
                     printf("%s\n", mini_env->value);
-                    free(str1);
+                    // free(str1);
                     break;
                 }
                 mini_env = mini_env->next;

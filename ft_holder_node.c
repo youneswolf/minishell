@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/28 19:37:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/03/31 00:44:22 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ t_holder	*ft_lstnew_holder(char *line)
     new->in = malloc(sizeof(int ) * 1024);
     if (!new->cmd || !new->args || !new->file_in || !new->file_out || !new->her_doc || !new->ap
         || new->out || new->out)
-        return (free(line), NULL);
+        return (NULL);
+        // return (free(line), NULL);
     while (++i < 1024)
     {
         new->args[i] = NULL;
@@ -135,5 +136,6 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
         }
         i++;
     }
+   
     return (holder);
 }

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/29 22:08:54 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/01 00:02:40 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int ft_strcmp(char *str, char *str1)
 	return (1);
 }
 
-char	*ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
+void	ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
 {
 	int	flag;
 
@@ -67,7 +67,8 @@ char	*ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
 		if (str[i] && str[i] == quote)
 			(1) && (new_line[j] = str[i], i++, j++, flag = 0, quote = 0);
 	}
-	return (new_line[j] = '\0', new_line);
+	// return (new_line[j] = '\0', new_line);
+	new_line[j] = '\0';
 }
 
 char    *ft_add_space_to_command(char *str)
@@ -86,10 +87,12 @@ char    *ft_add_space_to_command(char *str)
 	}
 	new_line = malloc(i + 1 + count * 2);
 	if (!new_line)
-		return (free(str), perror("malloc"), NULL);
+		return (NULL);
+		// return (free(str), perror("malloc"), NULL);
 	i = 0;
 	count = 0;
-	new_line = ft_add_space_utils(new_line, str, quote, i, count);
+	ft_add_space_utils(new_line, str, quote, i, count);
+	// return (free(str), new_line);
 	return (new_line);
 }
 
@@ -106,6 +109,8 @@ int		ft_cmp_built_in(char *str)
 	char **checker;
 
 	checker = malloc(8 * sizeof(char *));
+	if (!checker)
+		return (perror("malloc"), 0);
 	checker[0] = ft_strdup("echo");
 	checker[1] = ft_strdup("cd");
 	checker[2] = ft_strdup("pwd");
@@ -119,9 +124,17 @@ int		ft_cmp_built_in(char *str)
 	{
 		if (f_strcmp(checker[i], str))
 			return (1);
+			// return (ft_free_2d(checker), 1);
 		i++;
 	}
 	return (0);
+}
+
+void leaks()
+{
+    fclose(gfp);
+    system("leaks minishell");
+    usleep(1000 * 100 *10000);
 }
 
 int main(int    ac, char **av, char **env)
@@ -131,6 +144,9 @@ int main(int    ac, char **av, char **env)
 	char    *line;
 	char    *exp;
 	t_holder* tmp;
+
+	gfp = fopen("leaks", "w");
+	atexit(leaks);
 
 	str = NULL;
 	tmp = NULL;
@@ -142,35 +158,32 @@ int main(int    ac, char **av, char **env)
         perror("signal");
         return 1;
     }
-	t_env *mini_env = ft_get_env(env);
+	// t_env *mini_env = ft_get_env(env);
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
 		if (!SIGQUIT || line == NULL || is_there_exit(line))
-				(printf("exit!\n"), exit(0));
+				(ft_free_list(str), free(line), printf("exit!\n"), exit(0));
 		if (ft_strlen(line) > 0)
 			add_history(line);
-		line = ft_add_space_to_command(line); //add space between special carahcteres like | >< ...
-		str = ft_put(line); //create linked list 
-		ft_give_token(str); //give token to each node
+		line = ft_add_space_to_command(line);
+		ft_put(line, &str);
+		ft_give_token(str);
 		if (!ft_syntax(str))
 			printf("failed\n");
 		// ft_expand_argument(mini_env, &str);
-		ft_remove_quote(&str, line);
+		// ft_remove_quote(&str, line);
 		// ft_cd(line , mini_env);
 		// tmp = ft_create_holder_node(str, line);
-		// ft_exec_built_ins(*tmp, mini_env);
-		// int k = 0;
+		// int i = 0;
 		// while (tmp)
 		// {
-		// 	while (tmp->args[k])
-		// 	{
-		// 		printf("args = %s\n", tmp->args[k]);
-		// 		k++;
-		// 	}
-		// 	printf("%s\n", tmp->cmd);
+		// 	printf("test\n");
+		// 	printf("%d\n", tmp->out[i]);
+		// 	i++;
 		// 	tmp = tmp->next;
 		// }
+		// ft_exec_built_ins(*tmp, mini_env);
 		// ft_checking_files(tmp);
 		while (str)
 		{

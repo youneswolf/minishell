@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/29 22:09:17 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/01 00:04:24 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,27 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <readline/readline.h>
+
+#include <libc.h>
+
+FILE*gfp;
+
+static void *__malloc(size_t size, int line, const char *file)
+{
+    void *ptr = malloc(size);
+    fprintf(gfp, "dct[%p] = ['malloc', '%p', %i, '%s']\n", ptr, ptr, line, file);fflush(gfp);
+    return (ptr);
+}
+
+
+static void __free(void *ptr, int line, const char *file)
+{
+    fprintf(gfp, "dct[%p] = ['free', '%p', %i, '%s']\n", ptr, ptr, line, file);fflush(gfp);
+    free(ptr);
+}
+#define malloc(x) __malloc(x, __LINE__, __FILE__)
+#define free(x) __free(x, __LINE__, __FILE__)
+
 #define CMD 0
 #define PIPE 1
 #define ARGS 2
@@ -86,6 +107,7 @@ typedef struct s_holder
     char    **file_in;
     char    **file_out;
     char    **her_doc;
+    char    **append;
     int     *in;
     int     *out;
     int     *ap;
@@ -109,7 +131,7 @@ int    ft_syntax(t_line *head);
 char	**alloc(int l);
 char	**ft_split(char *str, char c);
 int    ft_cd(char *str, t_env *mini_env);
-t_line    *ft_put(char *line);
+void    ft_put(char *str, t_line **head);
 void    ft_red_args(t_line *head);
 void	ft_expand_argument(t_env *env, t_line **linked_list);
 char	*ft_handle_expand(t_env *env, char *arg);
@@ -130,5 +152,7 @@ void    ft_checking_files(t_holder *node);
 int     f_strcmp(char *str1, char *str2);
 int		ft_cmp_built_in(char *str);
 void    ft_handler_ctrl_c(int signum);
+void	ft_free_2d(char **array);
+void    ft_free_list(t_line *str);
 //======================================================================
 #endif
