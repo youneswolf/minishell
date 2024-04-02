@@ -1,0 +1,54 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/29 23:57:13 by ybellakr          #+#    #+#             */
+/*   Updated: 2024/04/02 20:05:16 by asedoun          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+void	ft_free_2d(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+void    ft_free_list(t_line **str)
+{
+	t_line *to_be_free;
+	t_line	*prev;
+	to_be_free = *str;
+	while (to_be_free)
+	{
+		prev = to_be_free;
+		to_be_free = to_be_free->next;
+		free(prev->str);
+		free(prev);
+	}
+	// free(str);
+	// t_line *next;
+
+	// to_be_free = *str;
+	// while (to_be_free)
+	// {
+	// 	if (to_be_free->next)
+	// 		next = to_be_free->next;
+	// 	free(to_be_free->str);
+	// 	free(to_be_free);
+	// 	to_be_free = next;
+	// }
+	// // free(to_be_free);
+	// free(str);
+}
