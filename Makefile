@@ -37,11 +37,11 @@ all: $(NAME)
 READLINEDIR = $(shell brew --prefix readline)
 
 %.o: %.c $(SRC_HEADER)
-	@$(CC) -c $< -o $@ -I$(READLINEDIR)/include
+	@$(CC) -c $< -o $@  -g
 
 $(NAME): $(OBJS)
 	@echo "$(YELLOW)Compilation of the Objects files...$(RESET)"
-	@$(CC) $(LINKER) $^ -o $@ -L$(READLINEDIR)/lib
+	@$(CC) $(LINKER) $^ -lreadline -o $@ -L$(READLINEDIR)/lib
 	@echo "$(GREEN)[====Executable file Compiled Successfully!====]$(RESET)"
 
 clean:

@@ -40,7 +40,7 @@ t_line	*ft_lstnew(char *str, int start, int end)
 
 	new = (t_line *)malloc(sizeof(t_line));
 	if (!new)
-		return (free(str), NULL);
+		return (NULL);
     new->str = ft_substr(str, start, end - start);
 	new->next = NULL;
 	return (new);

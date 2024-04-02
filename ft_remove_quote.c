@@ -100,7 +100,7 @@ void    ft_remove_quote(t_line **str, char *line)
     {
         if (tmp && (tmp->token == CMD || tmp->token == ARGS))
         {
-            free(tmp->str);
+            // free(tmp->str);
             tmp->str = ft_remove(tmp, line);
         }
         tmp = tmp->next;

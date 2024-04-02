@@ -17,7 +17,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <string.h>
-#include <Kernel/sys/syslimits.h>
+// #include <Kernel/sys/syslimits.h>
+#define PATH_MAX 500
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
