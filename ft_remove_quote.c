@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 14:45:39 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:11:49 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char    *ft_remove(t_line *tmp, char *line)
     if (count > 0)
         str = malloc(count + 1 * sizeof(char));
     if (!str)
-        return (NULL);
+        return (tmp->status = 255, NULL);
         // return (free(str), ft_free_list(tmp), "");
     str = ft_remove_utils2(tmp, str, j, i);
     return (str);
@@ -99,10 +99,7 @@ void    ft_remove_quote(t_line **str, char *line)
     while (tmp)
     {
         if (tmp && (tmp->token == CMD || tmp->token == ARGS))
-        {
-            // free(tmp->str);
             tmp->str = ft_remove(tmp, line);
-        }
         tmp = tmp->next;
     }
 }

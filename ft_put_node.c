@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 14:46:11 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:09:36 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_line	*ft_lstnew(char *str, int start, int end)
 	if (!new)
 		return (NULL);
     new->str = ft_substr(str, start, end - start);
+	new->status = 0;
 	new->next = NULL;
 	return (new);
 }
@@ -54,6 +55,8 @@ void	add_list(t_line **lst, char *str, int start, int end)
 	t_line	*temp = NULL;
 
 	new = ft_lstnew(str, start, end);
+	if (!new)
+		(*lst)->status = 255;
 	if (*lst == NULL)
 	{
 		*lst = new;
@@ -70,6 +73,7 @@ void	add_list(t_line **lst, char *str, int start, int end)
 		temp->next = new;
 	}
 }
+
 static int		ft_strchr(char *str, char c)
 {
 	int	i;

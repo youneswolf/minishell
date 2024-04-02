@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 14:51:36 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:06:51 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,19 @@ void	ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
 		if (str[i] && str[i] == quote)
 			(1) && (new_line[j] = str[i], i++, j++, flag = 0, quote = 0);
 	}
-	// return (new_line[j] = '\0', new_line);
 	new_line[j] = '\0';
 }
 
 char    *ft_add_space_to_command(char *str)
 {
-	int i, count, quote = 0;
-	char *new_line;
+	int		i;
+	int		count;
+	int		quote;
+	char	*new_line;
 
 	i = 0;
 	count = 0;
+	quote = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '|' || str[i] == '>' || str[i] == '<'
@@ -88,12 +90,10 @@ char    *ft_add_space_to_command(char *str)
 	new_line = malloc(i + 1 + count * 2);
 	if (!new_line)
 		return (free(str), perror("malloc"), NULL);
-		// return (NULL);
 	i = 0;
 	count = 0;
 	ft_add_space_utils(new_line, str, quote, i, count);
 	return (free(str), new_line);
-	// return (new_line);
 }
 
 void    ft_ctr(int sig)
@@ -124,11 +124,9 @@ int		ft_cmp_built_in(char *str)
 	{
 		if (f_strcmp(checker[i], str))
 			return (ft_free_2d(checker), 1);
-			// return (1);
 		i++;
 	}
 	return (ft_free_2d(checker), 0);
-	// return (0);
 }
 
 // void leaks()
@@ -151,23 +149,25 @@ int main(int    ac, char **av, char **env)
 
 	str = NULL;
 	tmp = NULL;
+	// str->status = 0;
 	// t_envi  *mini_env;
 	rl_catch_signals = 0;
-    if (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR ||
-		signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-	{
-        perror("signal");
-        return 1;
-    }
+    if (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR
+		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+        return (perror("signal"), 1);
+	// else
+	// 	str->status = 131;
 	// t_env *mini_env = ft_get_env(env);
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
-		if (!SIGQUIT || line == NULL || is_there_exit(line))
+		if (!SIGQUIT || line == NULL || (is_there_exit(line) && ft_strlen(line) == 4))
 				(ft_free_list(&str), free(line), printf("exit!\n"), exit(0));
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line);
+		if (!line)
+			str->status = 255;
 		ft_put(line, &str);
 		ft_give_token(str);
 		if (ft_syntax(str))
@@ -192,29 +192,30 @@ int main(int    ac, char **av, char **env)
 		t_line *str1 = str;
 		while (str1)
 		{
-			if (str1->token == CMD)
+			if (str1->token == CMD && str1->str)
 				printf(BLUE"[%s]"RESET, "CMD");
-			else if (str1->token == ARGS)
+			else if (str1->token == ARGS && str1->str)
 				printf(YELLOW"[%s]"RESET, "ARGS");
-			else if (str1->token == PIPE)
+			else if (str1->token == PIPE && str1->str)
 				printf(MAGENTA"[%s]"RESET, "PIPE");
-			else if (str1->token == IN_REDIR)
+			else if (str1->token == IN_REDIR && str1->str)
 				printf(CYAN"[%s]"RESET, "IN_REDIR");
-			else if (str1->token == OUT_REDIR)
+			else if (str1->token == OUT_REDIR && str1->str)
 				printf(WHT"[%s]"RESET, "OUT_REDIR");
-			else if (str1->token == HERDOC)
+			else if (str1->token == HERDOC && str1->str)
 				printf(GREEN"[%s]"RESET, "HERDOC");
-			else if (str1->token == OUT_FILE)
+			else if (str1->token == OUT_FILE && str1->str)
 				printf(MAGENTA"[%s]"RESET, "OUT_FILE");
-			else if (str1->token == IN_FILE)
+			else if (str1->token == IN_FILE && str1->str)
 				printf(YELLOW"[%s]"RESET, "IN_FILE");
-			else if (str1->token == FILE)
+			else if (str1->token == FILE && str1->str)
 				printf(YELLOW"[%s]"RESET, "FILE");
-			else if (str1->token == APPEND)
+			else if (str1->token == APPEND && str1->str)
 				printf(YELLOW"[%s]"RESET, "APPEND");
-			else if (str1->token == DELIMITER)
+			else if (str1->token == DELIMITER && str1->str)
 				printf(YELLOW"[%s]"RESET, "DELIMITER");
-			printf("--%s--", str1->str);
+			// else
+				printf("--%s--", str1->str);
 			str1 = str1->next;
 		}
 		printf("\n");
