@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 13:37:46 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:47:05 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <readline/history.h>
 #include <string.h>
 #include <Kernel/sys/syslimits.h>
+// #define PATH_MAX 500
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>

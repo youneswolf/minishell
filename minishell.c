@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 13:38:10 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:51:36 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ int main(int    ac, char **av, char **env)
 	{
 		line = readline(RED"minishell$ "RESET);
 		if (!SIGQUIT || line == NULL || is_there_exit(line))
-				(ft_free_list(&str),free(str), free(line), printf("exit!\n"), exit(0));
+				(ft_free_list(&str), free(line), printf("exit!\n"), exit(0));
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line);
@@ -189,36 +189,38 @@ int main(int    ac, char **av, char **env)
 		// }
 		// ft_exec_built_ins(*tmp, mini_env);
 		// ft_checking_files(tmp);
-		while (str)
+		t_line *str1 = str;
+		while (str1)
 		{
-			if (str->token == CMD)
+			if (str1->token == CMD)
 				printf(BLUE"[%s]"RESET, "CMD");
-			else if (str->token == ARGS)
+			else if (str1->token == ARGS)
 				printf(YELLOW"[%s]"RESET, "ARGS");
-			else if (str->token == PIPE)
+			else if (str1->token == PIPE)
 				printf(MAGENTA"[%s]"RESET, "PIPE");
-			else if (str->token == IN_REDIR)
+			else if (str1->token == IN_REDIR)
 				printf(CYAN"[%s]"RESET, "IN_REDIR");
-			else if (str->token == OUT_REDIR)
+			else if (str1->token == OUT_REDIR)
 				printf(WHT"[%s]"RESET, "OUT_REDIR");
-			else if (str->token == HERDOC)
+			else if (str1->token == HERDOC)
 				printf(GREEN"[%s]"RESET, "HERDOC");
-			else if (str->token == OUT_FILE)
+			else if (str1->token == OUT_FILE)
 				printf(MAGENTA"[%s]"RESET, "OUT_FILE");
-			else if (str->token == IN_FILE)
+			else if (str1->token == IN_FILE)
 				printf(YELLOW"[%s]"RESET, "IN_FILE");
-			else if (str->token == FILE)
+			else if (str1->token == FILE)
 				printf(YELLOW"[%s]"RESET, "FILE");
-			else if (str->token == APPEND)
+			else if (str1->token == APPEND)
 				printf(YELLOW"[%s]"RESET, "APPEND");
-			else if (str->token == DELIMITER)
+			else if (str1->token == DELIMITER)
 				printf(YELLOW"[%s]"RESET, "DELIMITER");
-			printf("--%s--", str->str);
-			str = str->next;
+			printf("--%s--", str1->str);
+			str1 = str1->next;
 		}
 		printf("\n");
 		ft_free_list(&str);
-		free(str);
+		str = NULL;
 		free(line);
+	
 	}
 }

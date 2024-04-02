@@ -6,9 +6,11 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 13:12:06 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:46:11 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 #include "minishell.h"
 
@@ -40,7 +42,7 @@ t_line	*ft_lstnew(char *str, int start, int end)
 
 	new = (t_line *)malloc(sizeof(t_line));
 	if (!new)
-		return (free(str), NULL);
+		return (NULL);
     new->str = ft_substr(str, start, end - start);
 	new->next = NULL;
 	return (new);
