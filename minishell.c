@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/01 00:29:50 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:38:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,13 @@ char    *ft_add_space_to_command(char *str)
 	}
 	new_line = malloc(i + 1 + count * 2);
 	if (!new_line)
-		return (NULL);
-		// return (free(str), perror("malloc"), NULL);
+		return (free(str), perror("malloc"), NULL);
+		// return (NULL);
 	i = 0;
 	count = 0;
 	ft_add_space_utils(new_line, str, quote, i, count);
-	// return (free(str), new_line);
-	return (new_line);
+	return (free(str), new_line);
+	// return (new_line);
 }
 
 void    ft_ctr(int sig)
@@ -123,19 +123,20 @@ int		ft_cmp_built_in(char *str)
 	while (checker[i])
 	{
 		if (f_strcmp(checker[i], str))
-			return (1);
-			// return (ft_free_2d(checker), 1);
+			return (ft_free_2d(checker), 1);
+			// return (1);
 		i++;
 	}
-	return (0);
+	return (ft_free_2d(checker), 0);
+	// return (0);
 }
 
-void leaks()
-{
-    fclose(gfp);
-    system("leaks minishell");
-    usleep(1000 * 100 *10000);
-}
+// void leaks()
+// {
+//     fclose(gfp);
+//     system("leaks minishell");
+//     usleep(1000 * 100 *10000);
+// }
 
 int main(int    ac, char **av, char **env)
 {
@@ -145,8 +146,8 @@ int main(int    ac, char **av, char **env)
 	char    *exp;
 	t_holder* tmp;
 
-	gfp = fopen("leaks", "w");
-	atexit(leaks);
+	// gfp = fopen("leaks", "w");
+	// atexit(leaks);
 
 	str = NULL;
 	tmp = NULL;
@@ -163,18 +164,21 @@ int main(int    ac, char **av, char **env)
 	{
 		line = readline(RED"minishell$ "RESET);
 		if (!SIGQUIT || line == NULL || is_there_exit(line))
-				(ft_free_list(str), free(line), printf("exit!\n"), exit(0));
+				(ft_free_list(&str),free(str), free(line), printf("exit!\n"), exit(0));
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line);
 		ft_put(line, &str);
 		ft_give_token(str);
-		if (!ft_syntax(str))
-			printf("failed\n");
-		// ft_expand_argument(mini_env, &str);
-		ft_remove_quote(&str, line);
-		// ft_cd(line , mini_env);
-		// tmp = ft_create_holder_node(str, line);
+		if (ft_syntax(str))
+		{
+			// ft_expand_argument(mini_env, &str);
+			ft_remove_quote(&str, line);
+			// ft_cd(line , mini_env);
+			// tmp = ft_create_holder_node(str, line);
+		}
+		// else
+		// 	(ft_free_list(&str),free(str), free(line));
 		// int i = 0;
 		// while (tmp)
 		// {
@@ -213,6 +217,8 @@ int main(int    ac, char **av, char **env)
 			str = str->next;
 		}
 		printf("\n");
-		// free(line);
+		ft_free_list(&str);
+		free(str);
+		free(line);
 	}
 }

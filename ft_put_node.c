@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/01 00:10:34 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:12:06 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,14 +110,4 @@ void	ft_put(char *str, t_line **head)
         if (!str[i])
             break ;
     }
-}
-
-int	ft_strlen1(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-		i++;
-	return (i);
 }
