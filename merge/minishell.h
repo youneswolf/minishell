@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 22:58:24 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/03 22:35:05 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,55 +42,68 @@
 # define RESET        "\x1b[0m"
 typedef struct s_line
 {
-    char *str;
-    int token;
-    int status;
-    int is_it_built_in;
-    struct s_line *next;
+	char *str;
+	int delimiter_quote;
+	int token;
+	int status;
+	int is_it_built_in;
+	struct s_line *next;
 }t_line;
 typedef struct s_start_end
 {
-    int    start;
-    int    end;
+	int    start;
+	int    end;
 }        t_stend;
 
 typedef struct s_expand
 {
-    int        quote;
-    char    *expa;
-    char    *new_str;
-    char    *s;
+	int        quote;
+	char    *expa;
+	char    *new_str;
+	char    *s;
 }            t_expand;
 
 typedef struct s_env
 {
-    char            *env;
-    struct s_env    *next;
+	char            *env;
+	struct s_env    *next;
 }                    t_env;
 
 typedef struct s_cmd
 {
-    char    *cmd;
-    char    **arg;
-    char    *infile;
-    int     in_or_out;
-    char    *outfile;
-    struct s_cmd *next;
+	char    *cmd;
+	char    **arg;
+	char    *infile;
+	int     in_or_out;
+	char    *outfile;
+	struct s_cmd *next;
 }t_cmd;
 
+// typedef struct s_herdoc
+// {
+	
+// } t_herdoc;
 typedef struct s_holder
 {
-    char    *cmd;
-    char    **args;
-    char    **file_in;
-    char    **file_out;
-    char    **append;
-    char    **her_doc;
-    int     *in;
-    int     *out;
-    int     *ap;
-    struct s_holder *next;
+	char    *cmd;
+	char    **args;
+	char    **file_in;
+	char    **file_out;
+	char    **append;
+	char    **her_doc;
+	int     *in;
+	int     *out;
+	int     *ap;
+	struct s_holder *next;
 }   t_holder;
+
+
+
+// echo $USER << 1 cat
+// echo "''''""$USER.$"'"$$USER"'"'"
+// echo "$"
+
+char    *ft_remove_here(char *str);
 t_holder        *ft_create_holder_node(t_line *node);
 int             ft_count_pipe(t_line *head);
 // t_holder        *add_list_holder(t_holder **lst, char *line);
@@ -108,10 +121,11 @@ int             ft_syntax(t_line *head);
 char	        **alloc(int l);
 char	        **ft_split(char *str, char c);
 int             ft_cd(char *str, t_env *mini_env);
+int				count_dollar(char *str);
 void            ft_put(char *str, t_line **head);
 void            ft_red_args(t_line *head);
 void	        ft_expand_argument(t_env *env, t_line **linked_list);
-char	        *ft_handle_expand(t_env *env, char *arg);
+char	        *ft_handle_expand(char *line_str, char *arg);
 void	        ft_append_char(char **str, int c);
 int             ft_surpass_chars(char *var);
 char	        *ft_arg_is_exist(t_env *env, char *var);
@@ -136,7 +150,7 @@ void    redirect_output(int fd);
 void    redirect_input(int fd);
 t_line *ft_lst_new(char *str);
 int	if_dollar(char *str);
-char *handle_expand(t_line **line, t_env **env);
+char *handle_expand(char *line_str, t_env **env);
 void	env_list(t_env **mini_env, char *line);
 void fiLL_env(t_env **mini_env, char **env);
 t_env	*get_last(t_env **a);
@@ -173,7 +187,7 @@ int    ft_cd(char *str, t_env *mini_env);
 // t_line    *ft_put(char *line);
 void    ft_red_args(t_line *head);
 void	ft_expand_argument(t_env *env, t_line **linked_list);
-char	*ft_handle_expand(t_env *env, char *arg);
+// char	*ft_handle_expand(char *line_str, char *arg);
 void	ft_append_char(char **str, int c);
 int	ft_surpass_chars(char *var);
 char	*ft_arg_is_exist(t_env *env, char *var);
@@ -190,5 +204,7 @@ void	ft_free_env(t_env **head);
 void    ft_checking_files(t_holder *node);
 char *handle_expand_here(char *line_str, t_env **env);
 t_line	*get_last_l(t_line **a);
+char *expand_here(char *str, t_env **env);
+int count_sgl_quote(char *str);
 //======================================================================
 #endif

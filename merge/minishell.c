@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 22:59:18 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/03 22:34:19 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,6 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 		exit(127);
 	}
 	execve(path, holder->args, NULL);
-	perror("execve error");
 	exit(1);
 }
 
@@ -316,25 +315,41 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (res);
 }
+int is_quote(char *str)
+{
+	int i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == 39 || str[i] == 34)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env)
 {
 	char	*line;
 	char	*str;
-	int		i = 1;
-	write(1, "here_doc> ", 11);
-	line = readline("");
+	int		i = 42;
+	// write(1, "here_doc> ", 11);
+	line = readline("here_doc> ");
+	i = is_quote(lim);
+	if (i == 1)
+	{
+		lim = ft_remove_here(lim);
+	}
 	while (ft_strncmp(lim, line, ft_strlen(line))
 		|| ft_strlen(line) != ft_strlen(lim))
 	{
-		write(1, "here_doc> ", 11);
-		if (if_dollar(line) && !is_sgl_quote(line))
+		// write(1, "here_doc> ", 11);
+		if (if_dollar(line) && !i)
 		{
 			line = handle_expand_here(line, env);
 		}
 		write(pipe_fd[1], line, ft_strlen(line));
 		write(pipe_fd[1], "\n", 1);
 		free(line);
-			line = readline("");
+			line = readline("here_doc> ");
 		if (!line)
 			break ;
 	}
@@ -454,9 +469,9 @@ int main(int    ac, char **av, char **env)
 			// ft_expand_argument(mini_env, &str); //expand nta3 ismail
 			while (str)
 			{
-				if (if_dollar(str->str) && !is_sgl_quote(str->str))
+				if (if_dollar(str->str) && !is_sgl_quote(str->str) && str->token != DELIMITER)
 				{
-					str->str = handle_expand(&str, &mini_env);
+					str->str = handle_expand(str->str, &mini_env);
 				}
 				str = str->next;
 			}
@@ -466,6 +481,7 @@ int main(int    ac, char **av, char **env)
 			ft_checking_files(tmp);
 			execution(&tmp, &mini_env);	
 		}
+		printf("\n");
 		ft_free_list(&str);
 		str = NULL;
 		free(line);

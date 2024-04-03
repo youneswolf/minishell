@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 19:50:02 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/03 21:58:51 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ void    ft_remove_quote(t_line **str, char *line)
     {
         if (tmp && (tmp->token == CMD || tmp->token == ARGS))
         {
+            // if (tmp->token == DELIMITER)
+            //     tmp->delimiter_quote = 1;
             // free(tmp->str);
             tmp->str = ft_remove(tmp, line);
         }

@@ -303,23 +303,22 @@ int	if_dollar(char *str)
 	return (0);
 }
 
-char *handle_expand(t_line **line, t_env **env)
+char *handle_expand(char *line_str, t_env **env)
 {
-	t_line *line_tmp = *line;
 	t_line *split = NULL;
 	t_line *node;
+	char *dollar_str_space;
+	char *spaces;
 	char *join = NULL;
 	char **str = NULL;
-	char **dollar_str;
+	char **dollar_str = NULL;
 	int i = 0;
 	int j = 0;
-	while (line_tmp)
-	{
-		while (line_tmp && line_tmp->str && line_tmp->str[i])
+		while (line_str && line_str[i])
 		{
-			if (line_tmp->str[i] == '$')
+			if (line_str[i] == '$')
 			{
-				str = ft_split(line_tmp->str, 42);
+				str = ft_split(line_str, 42);
 				while (str[j])
 				{
 					if (!split)
@@ -334,14 +333,37 @@ char *handle_expand(t_line **line, t_env **env)
 			}
 			i++;
 		}
-		line_tmp = line_tmp->next;
-		printf("loop\n");
-	}
+	j = 0;
 	while (split)
 	{
-		join = ft_strjoin(join, expand(&split, env));
-		if (split->next)
-			join = ft_strjoin(join," ");
+		if (count_dollar(split->str) > 1)
+		{
+			i = 0;
+			dollar_str = ft_split(split->str, '$');
+			while(dollar_str[i])
+			{
+				j = 0;
+				// spaces = ft_substr(dollar_str[i], 0, ft_strlen(dollar_str[i] - j));
+				dollar_str_space = ft_strtrim(dollar_str[i], " ", 1);
+				dollar_str_space = ft_strjoin("$",dollar_str_space);
+				join = ft_strjoin(join, expand_here(dollar_str_space, env));
+				while (dollar_str[j] && dollar_str[i][j] == ' ')
+				{
+					join = ft_strjoin(join, " ");
+					j++;
+				}
+				i++;
+			}
+			// printf("%s\n",join);
+		}
+		else 
+		{
+			j = 0;
+			// printf("else\n");
+			join = ft_strjoin(join, expand_here(split->str, env));
+			if (split->next)
+				join = ft_strjoin(join," ");
+		}
 		split = split->next;
 	}
 
@@ -349,6 +371,7 @@ char *handle_expand(t_line **line, t_env **env)
 		return ("");
 	return (join);
 }
+
 char *expand(t_line **line, t_env **env)
 {
 	t_env *tmp;
