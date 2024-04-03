@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 20:27:37 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/02 22:58:24 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void	ft_free_env(t_env **head);
 // void    ft_remove_quote(t_line **str);
 // char    *ft_remove(t_line *tmp);
 void    ft_checking_files(t_holder *node);
-
+char *handle_expand_here(char *line_str, t_env **env);
+t_line	*get_last_l(t_line **a);
 //======================================================================
 #endif

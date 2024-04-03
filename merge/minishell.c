@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 20:36:21 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/02 22:59:18 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,7 +316,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (res);
 }
-void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp)
+void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env)
 {
 	char	*line;
 	char	*str;
@@ -327,6 +327,10 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp)
 		|| ft_strlen(line) != ft_strlen(lim))
 	{
 		write(1, "here_doc> ", 11);
+		if (if_dollar(line) && !is_sgl_quote(line))
+		{
+			line = handle_expand_here(line, env);
+		}
 		write(pipe_fd[1], line, ft_strlen(line));
 		write(pipe_fd[1], "\n", 1);
 		free(line);
@@ -371,7 +375,7 @@ void execution(t_holder **holder ,t_env **env)
 			if (n > 0)
 				pipe(pipe_fd);
 			dup2(origin_in, STDIN_FILENO);
-			ft_here_doc(tmp->her_doc[n], pipe_fd, tmp);
+			ft_here_doc(tmp->her_doc[n], pipe_fd, tmp, env);
 			n++;
 			}
  		}

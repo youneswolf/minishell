@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 20:01:59 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/02 20:54:34 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ char *ft_sub_str(char *str, int start, int len)
 	int		i;
 
 	i = 0;
-    if (str == NULL || start < 0 || len < 0)
-        return NULL;
+    // if (str == NULL || start < 0 || len < 0)
+    //     return NULL;
     int str_len = ft_strlen(str);
-    if (start >= str_len)
-        return NULL;
+    // if (start >= str_len)
+    //     return NULL;
     if (start + len > str_len)
         len = str_len - start;
     sub = (char *)malloc((len + 1) * sizeof(char));

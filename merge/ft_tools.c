@@ -302,6 +302,7 @@ int	if_dollar(char *str)
 	}
 	return (0);
 }
+
 char *handle_expand(t_line **line, t_env **env)
 {
 	t_line *line_tmp = *line;
@@ -312,7 +313,6 @@ char *handle_expand(t_line **line, t_env **env)
 	char **dollar_str;
 	int i = 0;
 	int j = 0;
-	printf("%s\n",line_tmp->str);
 	while (line_tmp)
 	{
 		while (line_tmp && line_tmp->str && line_tmp->str[i])
@@ -320,7 +320,6 @@ char *handle_expand(t_line **line, t_env **env)
 			if (line_tmp->str[i] == '$')
 			{
 				str = ft_split(line_tmp->str, 42);
-				// printf("%s\n",line_tmp->str);
 				while (str[j])
 				{
 					if (!split)
@@ -336,6 +335,7 @@ char *handle_expand(t_line **line, t_env **env)
 			i++;
 		}
 		line_tmp = line_tmp->next;
+		printf("loop\n");
 	}
 	while (split)
 	{
