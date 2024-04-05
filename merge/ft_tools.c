@@ -309,7 +309,7 @@ int	if_dollar(char *str)
 	i = 0;
 	while (str && str[i])
 	{
-		if (i != 0 &&str[i] == '$')
+		if (str[i] == '$' && str[i + 1])
 			return (1);
 		i++;
 	}

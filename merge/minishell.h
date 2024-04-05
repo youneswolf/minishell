@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/05 00:15:31 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/05 20:56:00 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ typedef struct s_holder
 	int     *in;
 	int     *out;
 	int     *ap;
+	char 	**args_built_in;
+	char	*cmd_built_in;
 	struct s_holder *next;
 }   t_holder;
 
@@ -105,7 +107,7 @@ typedef struct s_holder
 // echo "$"
 int     ft_isalnum_str(char *str);
 char    *ft_remove_here(char *str);
-t_holder        *ft_create_holder_node(t_line *node);
+t_holder    *ft_create_holder_node(t_line *node);
 int             ft_count_pipe(t_line *head);
 // t_holder        *add_list_holder(t_holder **lst, char *line);
 // t_holder	    *ft_lstnew_holder(char *line);
@@ -160,6 +162,7 @@ void	ft_free_nodes(t_env **a);
 void fill_second_null_env(t_env **mini_env);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 void fill_null_env(t_env **mini_env);
+int     ft_isalnum(int c);
 char *expand(char *str, t_env **env);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);

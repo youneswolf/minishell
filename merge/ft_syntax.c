@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/03 22:33:44 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/05 00:45:48 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ int    ft_syntax(t_line *head)
         if (!ft_syntax_quote(tmp->str, i, count))
             return (0);
         flag = tmp->token;
-        if (tmp->token == OUT_REDIR || tmp->token == IN_REDIR && !tmp->next)
-            return (printf("error near `%s'", tmp->str), 0);
+        if ((tmp->token == OUT_REDIR || tmp->token == IN_REDIR) && !tmp->next)
+            return (printf("error near `%s'\n", tmp->str), 0);
         if (tmp->next && flag == tmp->next->token && flag != ARGS)
-            return (printf("error near `%s'", tmp->str), 0);
+            return (printf("error near `%s'\n", tmp->str), 0);
         else if ((tmp->token == PIPE || tmp->token == HERDOC || tmp->token == IN_REDIR 
         || tmp->token == OUT_REDIR || tmp->token == APPEND) && !tmp->next)
-            return (printf("error near `%s'", tmp->str), 0);
+            return (printf("error near `%s'\n", tmp->str), 0);
         tmp = tmp->next;
     }
     return (1);

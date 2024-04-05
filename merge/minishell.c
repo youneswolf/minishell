@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/05 00:18:18 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/05 20:56:11 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,33 +116,33 @@ void    ft_ctr(int sig)
 	return ;
 }
 
-int		ft_cmp_built_in(char *str)
-{
-	int	i;
-	char **checker;
+// int		ft_cmp_built_in(char *str)
+// {
+// 	int	i;
+// 	char **checker;
 
-	checker = malloc(8 * sizeof(char *));
-	if (!checker)
-		return (perror("malloc"), 0);
-	checker[0] = ft_strdup("echo");
-	checker[1] = ft_strdup("cd");
-	checker[2] = ft_strdup("pwd");
-	checker[3] = ft_strdup("export");
-	checker[4] = ft_strdup("unset");
-	checker[5] = ft_strdup("env");
-	checker[6] = ft_strdup("exit");
-	checker[7] = NULL;
-	i = 0;
-	while (checker[i])
-	{
-		if (f_strcmp(checker[i], str))
-			return (ft_free_2d(checker), 1);
-			// return (1);
-		i++;
-	}
-	return (ft_free_2d(checker), 0);
-	// return (0);
-}
+// 	checker = malloc(8 * sizeof(char *));
+// 	if (!checker)
+// 		return (perror("malloc"), 0);
+// 	checker[0] = ft_strdup("echo");
+// 	checker[1] = ft_strdup("cd");
+// 	checker[2] = ft_strdup("pwd");
+// 	checker[3] = ft_strdup("export");
+// 	checker[4] = ft_strdup("unset");
+// 	checker[5] = ft_strdup("env");
+// 	checker[6] = ft_strdup("exit");
+// 	checker[7] = NULL;
+// 	i = 0;
+// 	while (checker[i])
+// 	{
+// 		if (f_strcmp(checker[i], str))
+// 			return (ft_free_2d(checker), 1);
+// 			// return (1);
+// 		i++;
+// 	}
+// 	return (ft_free_2d(checker), 0);
+// 	// return (0);
+// }
 
 
 char	*find_path(t_env *env)
@@ -388,6 +388,7 @@ void execution(t_holder **holder ,t_env **env)
 			n++;
 			}
  		}
+		
 		if (tmp && tmp->cmd || tmp->file_out[j] || tmp->args[0] && tmp->args[0][0])
 		{
 			if (tmp->in[i] != -42 && tmp->in[i] != -1)
@@ -401,7 +402,6 @@ void execution(t_holder **holder ,t_env **env)
 			pid = fork();
 			if (!pid)
 			{
-				// printf("args : %s\n",tmp->args[0]);
 				exec_cmd(tmp, *env, pipe_fd,i-1,j-1,k-1);
 			}
 		}
@@ -423,6 +423,32 @@ void execution(t_holder **holder ,t_env **env)
 	close(origin_in);
 	if (pipe_fd[0])
 		close(pipe_fd[0]);
+}
+
+int		ft_cmp_built_in(char *str)
+{
+	int	i;
+	char **checker;
+
+	checker = malloc(8 * sizeof(char *));
+	if (!checker)
+		return (perror("malloc"), 0);
+	checker[0] = ft_strdup("echo");
+	checker[1] = ft_strdup("cd");
+	checker[2] = ft_strdup("pwd");
+	checker[3] = ft_strdup("export");
+	checker[4] = ft_strdup("unset");
+	checker[5] = ft_strdup("env");
+	checker[6] = ft_strdup("exit");
+	checker[7] = NULL;
+	i = 0;
+	while (checker[i])
+	{
+		if (f_strcmp(checker[i], str))
+			return (ft_free_2d(checker), 1);
+		i++;
+	}
+	return (ft_free_2d(checker), 0);
 }
 
 int main(int    ac, char **av, char **env)
@@ -456,7 +482,7 @@ int main(int    ac, char **av, char **env)
 		if (!line)
 			str->status = 255;
 		ft_put(line, &str); //create linked list 
-		ft_give_token(str); //give token to each node
+			ft_give_token(str); //give token to each node
 		if (ft_syntax(str))  //check the syntax
 		{
 			old = str;
@@ -466,6 +492,9 @@ int main(int    ac, char **av, char **env)
 				if (if_dollar(str->str) && !is_sgl_quote(str->str) && str->token != DELIMITER)
 				{
 					str->str = handle_expand(str->str, &mini_env);
+					// ft_put(str->str, &str); //create linked list 
+					// printf("str = %s\n", str->str);
+					// ft_give_token(str); //give token to each node
 				}
 				str = str->next;
 			}
@@ -477,7 +506,7 @@ int main(int    ac, char **av, char **env)
 			ft_remove_quote(&str, line); //removing quotes for command and args
 			tmp = ft_create_holder_node(str);
 			ft_checking_files(tmp);
-			execution(&tmp, &mini_env);	
+			execution(&tmp, &mini_env);
 		}
 		// printf("\n");
 		ft_free_list(&str);
