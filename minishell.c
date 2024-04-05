@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 20:06:51 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/04 05:32:40 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,8 @@ int main(int    ac, char **av, char **env)
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line);
-		if (!line)
-			str->status = 255;
+		// if (!line)
+		// 	str->status = 255;
 		ft_put(line, &str);
 		ft_give_token(str);
 		if (ft_syntax(str))
@@ -214,8 +214,8 @@ int main(int    ac, char **av, char **env)
 				printf(YELLOW"[%s]"RESET, "APPEND");
 			else if (str1->token == DELIMITER && str1->str)
 				printf(YELLOW"[%s]"RESET, "DELIMITER");
-			// else
-				printf("--%s--", str1->str);
+			// if (str1->str)
+			// 	printf("--%s--", str1->str);
 			str1 = str1->next;
 		}
 		printf("\n");

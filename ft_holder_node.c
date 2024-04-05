@@ -6,21 +6,23 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/31 00:44:22 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/05 20:42:51 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_holder	*ft_lstnew_holder(char *line)
+t_holder	*ft_lstnew_holder1(char *line)
 {
 	t_holder	*new;
     int         i;
 
     i = -1;
 	new = (t_holder *)malloc(sizeof(t_holder));
-    new->cmd = NULL; 
+    new->cmd = NULL;
+    new->cmd_built_in = NULL;
     new->args = malloc(sizeof(char *) * 1024);
+    new->args_built_in = malloc(sizeof(char *) * 1024);
     new->file_in = malloc(sizeof(char *) * 1024);
     new->file_out = malloc(sizeof(char *) * 1024);
     new->her_doc = malloc(sizeof(char *) * 1024);
@@ -35,7 +37,7 @@ t_holder	*ft_lstnew_holder(char *line)
     {
         new->args[i] = NULL;
         new->file_in[i] = NULL;
-        (1) && (new->file_out[i] = NULL, new->her_doc[i] = NULL);
+        (1) && (new->file_out[i] = NULL, new->her_doc[i] = NULL, new->args_built_in[i] = NULL);
         (1) && (new->ap[i] = 0, new->in[i] = 0);
         new->out[i] = 0;
     }
@@ -89,7 +91,7 @@ int     ft_count_pipe(t_line *head)
     return (i);
 }
 
-t_holder    *ft_create_holder_node(t_line *node, char *line)
+t_holder    *ft_create_holder_node1(t_line *node, char *line)
 {
     t_holder    *holder= NULL;
     t_holder    *new = NULL;
@@ -98,7 +100,8 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 
     int c = ft_count_pipe(node);
     int i = 0;
-    int j = 0, k = 0, w = 0, a = 0, n = 0;
+    int flag = 0;
+    int j = 0, k = 0, w = 0, a = 0, n = 0, z = 0, b = 0;
     tmp = node;
     tmp1 = tmp;
     while (i <= c)
@@ -113,12 +116,21 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
                 tmp = tmp->next;
                 break;
             }
-            if (tmp->token == CMD && j < 1024)
+            if (tmp->token == CMD && tmp->is_it_built_in != 1 && j < 1024)
             {
                 new->cmd = tmp->str;
                 new->args[j++] = tmp->str;
+                flag = 0;
             }
-            else if (tmp->token == ARGS && j < 1024)
+            else if (tmp->token == CMD && tmp->is_it_built_in == 1 && j < 1024)
+            {
+               new->cmd_built_in = tmp->str;
+                new->args_built_in[z++] = tmp->str;
+                flag = 1;
+            }
+            else if (tmp->token == ARGS && j < 1024 && flag == 1)
+                new->args_built_in[b++] = tmp->str;
+            else if (tmp->token == ARGS && j < 1024 && flag == 0)
                 new->args[j++] = tmp->str;
             else if (tmp->token == OUT_FILE && k < 1024)
                 new->file_out[k++] = tmp->str;

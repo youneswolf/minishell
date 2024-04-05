@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 16:28:48 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/04 05:43:49 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void    ft_give_token(t_line *head)
         }
         else if (ft_strcmp(tmp->str, "<<"))
         {
-            flag1 = 0;
+            // flag1 = 0;
             tmp->token = HERDOC;
             if (tmp->next != NULL)
                 tmp->next->token = DELIMITER;
@@ -66,14 +66,14 @@ void    ft_give_token(t_line *head)
         else
         {
             if (tmp->token == ARGS || tmp->token == FILE || tmp->token == DELIMITER 
-            || tmp->token == IN_FILE || tmp->token == OUT_FILE)
+             || tmp->token == IN_FILE || tmp->token == OUT_FILE)
             {
-                if ((tmp->token == IN_FILE || tmp->token == OUT_FILE ) && tmp->next && flag1 == 1)
+                if ((tmp->token == IN_FILE || tmp->token == OUT_FILE
+                    || tmp->token == FILE || tmp->token == DELIMITER) && tmp->next && flag1 == 1)
                 {
                     tmp->next->token = ARGS;
-                    // flag1 = 0;
                 }
-                if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
+                else if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
                 {
                     tmp->next->token = CMD;
                     if (ft_cmp_built_in(tmp->next->str))
@@ -88,8 +88,8 @@ void    ft_give_token(t_line *head)
             {
                 flag1 = 1;
                 tmp->token = CMD;
-                 if (ft_cmp_built_in(tmp->str))
-                        tmp->is_it_built_in = 1;
+                if (ft_cmp_built_in(tmp->str))
+                    tmp->is_it_built_in = 1;
                 else
                     tmp->is_it_built_in = 0;
                 if (tmp->next != NULL)

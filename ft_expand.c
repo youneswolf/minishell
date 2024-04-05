@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 14:00:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/06 15:35:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/04 05:42:22 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int ft_check_if_chars_digit(char c)
     return ((c >= '0' && c <= '9')||(c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	char	x;
 	int		i;
