@@ -8,6 +8,19 @@
 #include <readline/readline.h>
 #include "minishell.h"
 
+int     ft_isalnum_str(char *str)
+{
+		int i = 0;
+		while (str && str[i])
+		{
+      	if (isalpha(str[i]) || isdigit(str[i]))
+        {
+                return (1);
+        }
+		i++;
+		}
+        return (0);
+}
 t_env	*get_last(t_env **a)
 {
 	t_env	*tmp;
@@ -296,12 +309,13 @@ int	if_dollar(char *str)
 	i = 0;
 	while (str && str[i])
 	{
-		if (str[i] == '$')
+		if (i != 0 &&str[i] == '$')
 			return (1);
 		i++;
 	}
 	return (0);
 }
+
 
 char *handle_expand(char *line_str, t_env **env)
 {
@@ -360,19 +374,18 @@ char *handle_expand(char *line_str, t_env **env)
 		{
 			j = 0;
 			// printf("else\n");
-			join = ft_strjoin(join, expand_here(split->str, env));
+			join = ft_strjoin(join, expand(split->str, env));
 			if (split->next)
 				join = ft_strjoin(join," ");
 		}
 		split = split->next;
 	}
-
 	if (!join)
 		return ("");
 	return (join);
 }
 
-char *expand(t_line **line, t_env **env)
+char *expand(char *str, t_env **env)
 {
 	t_env *tmp;
 	t_line *line_tmp;
@@ -383,38 +396,41 @@ char *expand(t_line **line, t_env **env)
 	char *sub;
 	char *pre_var = NULL;
 	tmp = *env;
-	line_tmp = *line;
 	i = 0;
 	int j = 0;
-	if ( line_tmp && (line_tmp->str[0] == 34 || line_tmp->str[ft_strlen(line_tmp->str) - 1] == 34))
-	{
-		sub = ft_strtrim(line_tmp->str, "\"", 1);
-		while (sub && sub[i] != '$')
+	// if ( str && (str[0] == 34 || str[ft_strlen(str) - 1] == 34))
+	// {
+	// 	// sub = ft_strtrim(str, "\"", 1);
+	// 	while (sub && sub[i] != '$')
+	// 		i++;
+	// 	if (i && i != ft_strlen(str))
+	// 	{
+	// 		pre_special = ft_substr(sub, 0, i);
+	// 	}
+	// 	if (str && str[0] == 34)
+	// 		sub = ft_substr(str, i+2, (ft_strlen(str) - i - 1));
+	// 	else 
+	// 		sub = ft_substr(str, i+1, (ft_strlen(str) - i - 1));
+	// 	sub = ft_strtrim(sub, "\"", 1);
+	// }
+	// else
+	// {
+		while (str && str[i] != '$')
 			i++;
-		if (i && i != ft_strlen(line_tmp->str))
+		if (i && i != ft_strlen(str))
 		{
-			pre_special = ft_substr(sub, 0, i);
+			pre_special = ft_substr(str, 0, i);
 		}
-		if (line_tmp && line_tmp->str[0] == 34)
-			sub = ft_substr(line_tmp->str, i+2, (ft_strlen(line_tmp->str) - i - 1));
-		else 
-			sub = ft_substr(line_tmp->str, i+1, (ft_strlen(line_tmp->str) - i - 1));
-		sub = ft_strtrim(sub, "\"", 1);
-	}
-	else
-	{
-		while (line_tmp && line_tmp->str[i] != '$')
-			i++;
-		if (i && i != ft_strlen(line_tmp->str))
-		{
-			pre_special = ft_substr(line_tmp->str, 0, i);
-		}
-		sub = ft_substr(line_tmp->str, i+1, (ft_strlen(line_tmp->str) - i -1));
-	}
+		sub = ft_substr(str, i+1, (ft_strlen(str) - i -1));
+	// }
 	i = 0;
+	// if (count_sgl_quote(pre_special) % 2 != 0)
+	// {
+	// 	return (str);
+	// }
 	while (sub && sub[i])
 	{
-		if (sub[i] == '.' || sub[i] == ',' || sub[i] == '/' || sub[i] == '-' || sub[i] == ':' || sub[i] == '_')
+		if (sub[i] == '.' || sub[i] == ',' || sub[i] == '/' || sub[i] == '-' || sub[i] == ':' || sub[i] == '_' || sub[i] == 34 || sub[i] == 39)
 		{
 			j = i;
 			while (sub [j] && sub[j] != '$')
@@ -429,7 +445,6 @@ char *expand(t_line **line, t_env **env)
 		var = ft_strjoin(pre_var, "=");
 	else
 		var = ft_strjoin(sub, "=");
-	// printf("%s\n",var);
 	while ((tmp && pre_var) || (tmp && var))
 	{
 		if (!ft_strncmp(var, tmp->env, ft_strlen(var)))
@@ -444,13 +459,32 @@ char *expand(t_line **line, t_env **env)
 		}
 		tmp = tmp->next;
 	}
-	if (!if_dollar(line_tmp->str))
-	{
-		pre_var = ft_strtrim(line_tmp->str, "\"", 1);
-		pre_var = ft_strtrim(pre_var, "\'", 1);
-		return (pre_var);
-	}
-	return (pre_special);
+	i = 0;
+	j = 42;
+	// 	printf("enter");
+	// if (if_dollar(str))
+	// {
+	// 	while (str[i] && str[i] != '$')
+	// 	{
+	// 		i++;
+	// 	}
+	// 	while (str[i])
+	// 	{
+	// 		if (ft_isalnum(str[i]) == 1)
+	// 		{
+	// 			return (pre_special);
+	// 		}
+	// 		else
+	// 			return (str);
+	// 	}
+	// 	return ("ee");
+	// }
+	// if (str && str[0] == '$')
+	// {
+	// 	pre_var = ft_strjoin(pre_special, special);
+	// 	return (ft_strjoin("$", pre_var));
+	// }
+	return (ft_strjoin(pre_special, special));
 }
 
 

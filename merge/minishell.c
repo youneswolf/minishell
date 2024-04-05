@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/03 22:34:19 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/05 00:18:18 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,31 +259,25 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 			j++;
 		redirect_output(holder->out[j-1]);
 	}
+	if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
+	{
+		while (holder->ap[k] != -42)
+			k++;
+		redirect_append(holder->ap[k-1]);
+	}
 	else if (holder->next)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 	}
-	// else if(i == -1 && holder->in[i + 1] == -42)
-	// {
-	// 	exit(1);
-	// }
-	// if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
-	// {
-	// 	redirect_append(holder->ap[k]);
-	// }
-	// char a[1024];
-	// int ss = read (0 ,a, 100);
-	// printf("%d\n",ss);
-	// write(1,a,ss);
-	// printf("%s\n",holder->args[0]);
+
 	if (!access(holder->args[0], X_OK))
 	{
 		path = holder->args[0];
 	}
 	else
-		path = get_path(env, holder->cmd);
+		path = get_path(env, holder->args[0]);
 	if (!path)
 	{
 		printf("bash: %s: command not found\n", holder->args[0]);
@@ -394,7 +388,7 @@ void execution(t_holder **holder ,t_env **env)
 			n++;
 			}
  		}
-		if (tmp->cmd || tmp->file_out[j])
+		if (tmp && tmp->cmd || tmp->file_out[j] || tmp->args[0] && tmp->args[0][0])
 		{
 			if (tmp->in[i] != -42 && tmp->in[i] != -1)
 				i++;
@@ -476,12 +470,16 @@ int main(int    ac, char **av, char **env)
 				str = str->next;
 			}
 			str = old;
+			while (str && !str->str[0])
+			{
+				str = str->next;
+			}
 			ft_remove_quote(&str, line); //removing quotes for command and args
 			tmp = ft_create_holder_node(str);
 			ft_checking_files(tmp);
 			execution(&tmp, &mini_env);	
 		}
-		printf("\n");
+		// printf("\n");
 		ft_free_list(&str);
 		str = NULL;
 		free(line);

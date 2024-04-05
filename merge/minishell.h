@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/03 22:35:05 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/05 00:15:31 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -81,7 +82,7 @@ typedef struct s_cmd
 
 // typedef struct s_herdoc
 // {
-	
+
 // } t_herdoc;
 typedef struct s_holder
 {
@@ -102,7 +103,7 @@ typedef struct s_holder
 // echo $USER << 1 cat
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
-
+int     ft_isalnum_str(char *str);
 char    *ft_remove_here(char *str);
 t_holder        *ft_create_holder_node(t_line *node);
 int             ft_count_pipe(t_line *head);
@@ -159,7 +160,7 @@ void	ft_free_nodes(t_env **a);
 void fill_second_null_env(t_env **mini_env);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 void fill_null_env(t_env **mini_env);
-char *expand(t_line **str, t_env **env);
+char *expand(char *str, t_env **env);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 static	int	end_finder(char *s1, char *set);

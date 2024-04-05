@@ -1,4 +1,30 @@
 #include "minishell.h"
+int	ft_isalpha(int c)
+{
+	if (((unsigned char )c >= 65 && (unsigned char )c <= 90)
+		|| ((unsigned char )c >= 97 && (unsigned char )c <= 122))
+	{
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_isdigit(int c)
+{
+	if ((char )c >= 48 && (char )c <= 57)
+	{
+		return (1);
+	}
+	return (0);
+}
+int     ft_isalnum(int c)
+{
+        if (ft_isalpha(c) || ft_isdigit(c))
+        {
+                return (1);
+        }
+        return (0);
+}
 int count_dollar(char *str)
 {
 	int i = 0;
@@ -164,6 +190,25 @@ char *expand_here(char *str, t_env **env)
 			return (var);
 		}
 		tmp = tmp->next;
+	}
+	i = 0;
+	j = 42;
+	if (if_dollar(str))
+	{
+		while (str[i] && str[i] != '$')
+		{
+			i++;
+		}
+		while (str[i])
+		{
+			if (ft_isalnum(str[i]) == 1)
+			{
+				return (pre_special);
+			}
+			else
+				return (str);
+		}
+		return ("ee");
 	}
 	if (str && str[0] == '$')
 	{
