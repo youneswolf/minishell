@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/04 05:43:49 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/05 21:03:23 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ void    ft_give_token(t_line *head)
                 else if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
                 {
                     tmp->next->token = CMD;
-                    if (ft_cmp_built_in(tmp->next->str))
-                        tmp->next->is_it_built_in = 1;
-                    else
-                        tmp->next->is_it_built_in = 0;
+                    // if (ft_cmp_built_in(tmp->next->str))
+                    //     tmp->next->is_it_built_in = 1;
+                    // else if (!ft_cmp_built_in(tmp->next->str))
+                    //     tmp->next->is_it_built_in = 0;
                 }
                 else if (tmp->next && tmp->token == ARGS)
                     tmp->next->token = ARGS;
@@ -88,10 +88,10 @@ void    ft_give_token(t_line *head)
             {
                 flag1 = 1;
                 tmp->token = CMD;
-                if (ft_cmp_built_in(tmp->str))
-                    tmp->is_it_built_in = 1;
-                else
-                    tmp->is_it_built_in = 0;
+                // if (ft_cmp_built_in(tmp->str))
+                //     tmp->is_it_built_in = 1;
+                // else if (!ft_cmp_built_in(tmp->str))
+                //     tmp->is_it_built_in = 0;
                 if (tmp->next != NULL)
                     tmp->next->token = ARGS;
             }

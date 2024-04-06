@@ -6,12 +6,13 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/02 14:47:05 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/06 00:42:50 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 #define MINISHELL_H
+// #include <filesystem>
 #include <stdio.h>
 #include <signal.h>
 #include <readline/readline.h>
@@ -64,13 +65,19 @@
 # define CYAN        "\x1b[36m"
 # define WHT        "\e[0;37m"
 # define RESET        "\x1b[0m"
+typedef struct s_status
+{
+    int status;
+}t_status;
+
 typedef struct s_line
 {
-    char *str;
-    int token;
-    int is_it_built_in;
-    struct s_line *next;
-}t_line;
+    char            *str;
+    int             token;
+    int             is_it_built_in;
+    struct s_status *status;
+    struct s_line   *next;
+}                   t_line;
 
 typedef struct s_start_end
 {
@@ -113,6 +120,8 @@ typedef struct s_holder
     int     *in;
     int     *out;
     int     *ap;
+    char    *cmd_built_in;
+    char    **args_built_in;
     struct s_holder *next;
 }   t_holder;
 
@@ -156,5 +165,7 @@ int		        ft_cmp_built_in(char *str);
 void            ft_handler_ctrl_c(int signum);
 void	        ft_free_2d(char **array);
 void            ft_free_list(t_line **str);
+char            *ft_strchr(char *s, int c);
+void            ft_is_buil(t_line *str);
 //======================================================================
 #endif

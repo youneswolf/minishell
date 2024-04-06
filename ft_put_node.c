@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/04 05:43:02 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/06 00:24:42 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ t_line	*ft_lstnew(char *str, int start, int end)
     new->str = ft_substr(str, start, end - start);
 	if (new->str == NULL)
 		printf("here\n");
-	new->status = 0;
 	new->next = NULL;
 	return (new);
 }
