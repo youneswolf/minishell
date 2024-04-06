@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/06 00:49:28 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/06 20:34:55 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 	{
 		j = 0;
 		new = add_list_holder(&holder, line);
+		flag = 42;
 		while (tmp)
 		{
 			if (tmp->next && tmp->str[0] == '|')
