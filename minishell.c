@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/06 20:25:00 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/07 20:46:22 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_print_tokens(t_line *node)
 			printf(YELLOW"[%s]"RESET, "APPEND");
 		else if (head->token == DELIMITER && head->str)
 			printf(YELLOW"[%s]"RESET, "DELIMITER");
-		printf("{%s}\n", head->str);
+		printf("{%s}{%d}\n", head->str, head->is_it_built_in);
 		head = head->next;
 	}
 	printf("\n");
@@ -221,34 +221,34 @@ int main(int    ac, char **av, char **env)
 		if (ft_syntax(str))
 		{
 			// ft_expand_argument(mini_env, &str);
-			ft_remove_quote(&str, line);
 			// ft_cd(line , mini_env);
+			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str, line);
 			int k = 0, z = 0;
-			while (tmp)
-			{
-				if (tmp->cmd_built_in)
-					printf("cmd built in {%s}\n", tmp->cmd_built_in);
-				if (tmp->args_built_in[k])
-				{
-					while (tmp->args_built_in[k])
-					{
-						printf("args built in (%s)\n", tmp->args_built_in[k]);
-						k++;
-					}
-				}
-				if (tmp->args[z])
-				{
-					while (tmp->args[z])
-					{
-						printf("args in (%s)\n", tmp->args[z]);
-						z++;
-					}
-				}
-				if (tmp->cmd)
-					printf("cmd %s\n", tmp->cmd);
-				tmp = tmp->next;
-			}
+			// while (tmp)
+			// {
+			// 	if (tmp->cmd_built_in)
+			// 		printf("cmd built in {%s}\n", tmp->cmd_built_in);
+			// 	if (tmp->args_built_in[k])
+			// 	{
+			// 		while (tmp->args_built_in[k])
+			// 		{
+			// 			printf("args built in (%s)\n", tmp->args_built_in[k]);
+			// 			k++;
+			// 		}
+			// 	}
+			// 	if (tmp->args[z])
+			// 	{
+			// 		while (tmp->args[z])
+			// 		{
+			// 			printf("args in (%s)\n", tmp->args[z]);
+			// 			z++;
+			// 		}
+			// 	}
+			// 	if (tmp->cmd)
+			// 		printf("cmd %s\n", tmp->cmd);
+			// 	tmp = tmp->next;
+			// }
 		}
 		// ft_print_tokens(str);
 		// else

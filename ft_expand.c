@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 14:00:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/04 05:42:22 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/07 20:03:58 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_strdup(char *s1)
 	if (!dest)
 		return (NULL);
 	i = 0;
-	while (s1[i])
+	while (s1 && s1[i])
 	{
 		dest[i] = s1[i];
 		i++;

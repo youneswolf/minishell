@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:54:59 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/20 17:20:01 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/07 20:23:31 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,31 +148,32 @@ void	ft_put_point(char *str)
 	}
 }
 
-char	**ft_split(char *str, char c)
-{
-	int		j;
-	int		l;
-	char	**array;
+// char	**ft_split(char *str, char c)
+// {
+// 	int		j;
+// 	int		l;
+// 	char	**array;
 
-	j = 0;
-	if (str == NULL)
-		return (NULL);
-	ft_put_point(str);
-	l = count(str, c);
-	array = alloc(l);
-	if (!array)
-		return (NULL);
-	while (j++ < l)
-	{
-		str += fti_free(array, str, c, 0);
-		if (*str != c && *str)
-		{
-			array[j] = word(str, c);
-			if (!array[j] && !fti_free(array, str, c, 3))
-				return (NULL);
-			j++;
-		}
-		str += fti_free(array, str, c, 1);
-	}
-	return (array[j] = NULL, array);
-}
+// 	j = 0;
+// 	if (str == NULL)
+// 		return (NULL);
+// 	ft_put_point(str);
+// 	l = count(str, c);
+// 	array = alloc(l);
+// 	if (!array)
+// 		return (NULL);
+// 	while (j++ < l)
+// 	{
+// 		str += fti_free(array, str, c, 0);
+// 		if (*str != c && *str)
+// 		{
+// 			array[j] = word(str, c);
+// 			printf("<<%s>>\n", array[j]);
+// 			if (!array[j] && !fti_free(array, str, c, 3))
+// 				return (NULL);
+// 			j++;
+// 		}
+// 		str += fti_free(array, str, c, 1);
+// 	}
+// 	return (array[j] = NULL, array);
+// }

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/06 20:34:55 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/07 20:45:13 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,19 @@ int     ft_count_pipe(t_line *head)
 	return (i);
 }
 
+int		ft_count_word(char *str)
+{
+	int i = 0, count = 0;
+
+	while (str && str[i])
+	{
+		if (str[i] >= 33 && str[i] <= 126 && (str[i + 1] == ' ' || str[i + 1] == '\0'))
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 t_holder    *ft_create_holder_node(t_line *node, char *line)
 {
 	t_holder    *holder= NULL;
@@ -107,11 +120,13 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 	int c = ft_count_pipe(node);
 	int i = 0;
 	int j = 0, k = 0, w = 0, a = 0, n = 0, l = 0, z = 0, zz = 0, flag = 1;
+	int	mm = 0;
 	tmp = node;
 	tmp1 = tmp;
 	while (i <= c)
 	{
 		j = 0;
+		tmp->flag = 1;
 		new = add_list_holder(&holder, line);
 		flag = 42;
 		while (tmp)
@@ -123,12 +138,46 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			}
 			if (tmp->token == CMD && tmp->is_it_built_in == 0)
 			{
-				new->cmd = tmp->str;
-				new->args[j++] = tmp->str;
-                flag = 0;
+				if (tmp->flag == 1)
+				{
+					zz = ft_count_word(tmp->str);
+					if (zz > 1)
+					{
+						char **array = ft_split1(tmp->str, ' ');
+						new->cmd = ft_strdup(array[0]);
+						while (array[mm])
+						{
+							new->args[j++] = ft_strdup(array[mm]);
+							mm++;
+						}
+					}
+					flag = 0;
+				}
+				else 
+				{	
+					new->cmd = tmp->str;
+					new->args[j++] = tmp->str;
+					flag = 0;
+				}
 			}
             else if (tmp->token == CMD && tmp->is_it_built_in == 1)
             {
+				if (tmp->flag == 1)
+				{
+					zz = ft_count_word(tmp->str);
+					if (zz > 1)
+					{
+						char **array = ft_split1(tmp->str, ' ');
+						mm = 0;
+						new->cmd_built_in = ft_strdup(array[0]);
+						while (array[mm])
+						{
+							new->args_built_in[zz++] = ft_strdup(array[mm]);
+							mm++;
+						}
+					}
+					flag = 1;
+				}
                 new->cmd_built_in = tmp->str;
                 new->args_built_in[z++] = tmp->str;
                 flag = 1;
