@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/07 20:45:13 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/08 19:57:34 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 	while (i <= c)
 	{
 		j = 0;
-		tmp->flag = 1;
+		// tmp->flag = 1;
 		new = add_list_holder(&holder, line);
 		flag = 42;
 		while (tmp)
@@ -138,7 +138,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			}
 			if (tmp->token == CMD && tmp->is_it_built_in == 0)
 			{
-				if (tmp->flag == 1)
+				if (tmp->flag == 1 && tmp->quote == 0)
 				{
 					zz = ft_count_word(tmp->str);
 					if (zz > 1)
@@ -150,6 +150,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							new->args[j++] = ft_strdup(array[mm]);
 							mm++;
 						}
+						ft_free_2d(array);
 					}
 					flag = 0;
 				}
@@ -157,12 +158,12 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				{	
 					new->cmd = tmp->str;
 					new->args[j++] = tmp->str;
-					flag = 0;
 				}
+				flag = 0;
 			}
             else if (tmp->token == CMD && tmp->is_it_built_in == 1)
             {
-				if (tmp->flag == 1)
+				if (tmp->flag == 1 && tmp->quote == 0)
 				{
 					zz = ft_count_word(tmp->str);
 					if (zz > 1)
@@ -175,11 +176,15 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							new->args_built_in[zz++] = ft_strdup(array[mm]);
 							mm++;
 						}
+						ft_free_2d(array);
 					}
 					flag = 1;
 				}
-                new->cmd_built_in = tmp->str;
-                new->args_built_in[z++] = tmp->str;
+				else 
+				{	
+                	new->args_built_in[z++] = tmp->str;
+                	new->cmd_built_in = tmp->str;
+				}
                 flag = 1;
             }
 			else if (tmp->token == ARGS && flag == 0)

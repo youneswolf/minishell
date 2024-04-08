@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/06 00:42:50 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/08 19:56:28 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ typedef struct s_line
 {
     char            *str;
     int             token;
+    int             quote;
+    int             flag;
     int             is_it_built_in;
     struct s_status *status;
     struct s_line   *next;
@@ -140,7 +142,7 @@ int	            count(char *s, char c);
 char	        *word(char *str, char c);
 int             ft_syntax(t_line *head);
 char	        **alloc(int l);
-char	        **ft_split(char *str, char c);
+// char	        **ft_split(char *str, char c);
 int             ft_cd(char *str, t_env *mini_env);
 void            ft_put(char *str, t_line **head);
 void            ft_red_args(t_line *head);
@@ -167,5 +169,6 @@ void	        ft_free_2d(char **array);
 void            ft_free_list(t_line **str);
 char            *ft_strchr(char *s, int c);
 void            ft_is_buil(t_line *str);
+char	        **ft_split1(const char *str, char c);
 //======================================================================
 #endif

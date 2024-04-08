@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/07 20:46:22 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/07 22:46:04 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,30 +225,30 @@ int main(int    ac, char **av, char **env)
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str, line);
 			int k = 0, z = 0;
-			// while (tmp)
-			// {
-			// 	if (tmp->cmd_built_in)
-			// 		printf("cmd built in {%s}\n", tmp->cmd_built_in);
-			// 	if (tmp->args_built_in[k])
-			// 	{
-			// 		while (tmp->args_built_in[k])
-			// 		{
-			// 			printf("args built in (%s)\n", tmp->args_built_in[k]);
-			// 			k++;
-			// 		}
-			// 	}
-			// 	if (tmp->args[z])
-			// 	{
-			// 		while (tmp->args[z])
-			// 		{
-			// 			printf("args in (%s)\n", tmp->args[z]);
-			// 			z++;
-			// 		}
-			// 	}
-			// 	if (tmp->cmd)
-			// 		printf("cmd %s\n", tmp->cmd);
-			// 	tmp = tmp->next;
-			// }
+			while (tmp)
+			{
+				if (tmp->cmd_built_in)
+					printf("cmd built in {%s}\n", tmp->cmd_built_in);
+				if (tmp->args_built_in[k])
+				{
+					while (tmp->args_built_in[k])
+					{
+						printf("args built in (%s)\n", tmp->args_built_in[k]);
+						k++;
+					}
+				}
+				if (tmp->args[z])
+				{
+					while (tmp->args[z])
+					{
+						printf("args in (%s)\n", tmp->args[z]);
+						z++;
+					}
+				}
+				if (tmp->cmd)
+					printf("cmd %s\n", tmp->cmd);
+				tmp = tmp->next;
+			}
 		}
 		// ft_print_tokens(str);
 		// else
