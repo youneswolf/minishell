@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/15 10:11:14 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:04:00 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,8 @@ int main(int    ac, char **av, char **env)
 		if (ft_syntax(str))
 		{
 			// ft_expand_argument(mini_env, &str);
-			ft_cd(line , mini_env);
+			ft_cd(line , mini_env, str);
+			printf("--%s--\n", str->status->lastdir);
 			ft_remove_quote(&str, line);
 		}
 		// 	tmp = ft_create_holder_node(str, line);

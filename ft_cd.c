@@ -6,12 +6,11 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/15 10:46:58 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:26:48 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <dirent.h>
 
 int f_strcmp(char *str1, char *str2)
 {
@@ -27,13 +26,13 @@ int f_strcmp(char *str1, char *str2)
     return (1);
 }
 
-int    ft_cd(char *str, t_env *mini_env)
+int    ft_cd(char *str, t_env *mini_env, t_line *head)
 {
     char buf[PATH_MAX];
     char    *str1;
     DIR    *dir;
     char curdir[PATH_MAX];
-    static char lastdir[PATH_MAX];
+    // static char lastdir[PATH_MAX];
     char path[PATH_MAX];
 
     int i = 0;
@@ -89,6 +88,6 @@ int    ft_cd(char *str, t_env *mini_env)
     }
     else
         perror("directory not found");
-    strcpy(lastdir, curdir);
+    head->status->lastdir = ft_strdup(buf);
     return(1);
 }

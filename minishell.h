@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/15 10:39:10 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:07:36 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,10 @@
 # define RESET        "\x1b[0m"
 typedef struct s_status
 {
-    int status;
-    int quote;
-}t_status;
+    int     status;
+    int     quote;
+    char    *lastdir;
+}           t_status;
 
 typedef struct s_line
 {
@@ -134,7 +135,7 @@ t_holder        *ft_create_holder_node(t_line *node, char *line);
 int             ft_count_pipe(t_line *head);
 t_holder        *add_list_holder(t_holder **lst, char *line);
 t_holder	    *ft_lstnew_holder(char *line);
-void            ft_pwd();
+void            ft_pwd(t_line *str);
 void            ft_execute_cmd(t_line *head);
 void            ft_give_token(t_line *head);
 char	        *ft_strdup(char *s1);
@@ -146,7 +147,7 @@ char	        *word(char *str, char c);
 int             ft_syntax(t_line *head);
 char	        **alloc(int l);
 // char	        **ft_split(char *str, char c);
-int             ft_cd(char *str, t_env *mini_env);
+int             ft_cd(char *str, t_env *mini_env, t_line *head);
 void            ft_put(char *str, t_line **head);
 void            ft_red_args(t_line *head);
 void	        ft_expand_argument(t_env *env, t_line **linked_list);
