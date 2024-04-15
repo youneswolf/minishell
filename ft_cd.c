@@ -6,11 +6,12 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/05 21:13:35 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/15 10:46:58 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <dirent.h>
 
 int f_strcmp(char *str1, char *str2)
 {
@@ -30,11 +31,18 @@ int    ft_cd(char *str, t_env *mini_env)
 {
     char buf[PATH_MAX];
     char    *str1;
+    DIR    *dir;
     char curdir[PATH_MAX];
     static char lastdir[PATH_MAX];
     char path[PATH_MAX];
 
     int i = 0;
+    dir = opendir(str);
+    if (dir == NULL)
+    {
+        perror("path not found");
+        return (0);
+    }
     if (getcwd(curdir, sizeof curdir)) {
         /* current directory might be unreachable: not an error */
         *curdir = '\0';
@@ -44,6 +52,7 @@ int    ft_cd(char *str, t_env *mini_env)
     else if (chdir(str) == 0)
     {
         // Get the current working directory
+        closedir(dir);
         if (getcwd(buf, sizeof(buf)) != NULL)
         {
             while (mini_env)
@@ -59,15 +68,18 @@ int    ft_cd(char *str, t_env *mini_env)
                 mini_env = mini_env->next;
             }
             printf("Current working directory:%s\n", buf);
-        } else {
+        }
+        else
+        {
             while(mini_env)
             {
                 if (f_strcmp(mini_env->value, "PWD"))
                 {
+                    perror("error retrieving current directory: getcwd: cannot access parent directories: ");
                     str1 = ft_strjoin(mini_env->value, "/");
                     str1 = ft_strjoin(str1, str);
                     mini_env->value = ft_strdup(str1);
-                    printf("%s\n", mini_env->value);
+                    // printf("%s\n", mini_env->value);
                     // free(str1);
                     break;
                 }

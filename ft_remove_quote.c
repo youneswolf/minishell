@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/08 19:56:43 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/15 08:51:20 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@ int ft_remove_utils(t_line *tmp)
     while (tmp && tmp->str[i])
     {
         tmp->quote = 0;
+        tmp->type_quote = 0;
         if (tmp->str[i] == '\"' || tmp->str[i] == '\'')
         {
+            tmp->type_quote = tmp->str[i];
             tmp->quote = 1;
             (1) && (flag = tmp->str[i], i++);
             while (tmp->str[i])

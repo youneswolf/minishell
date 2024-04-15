@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/08 19:56:28 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/15 10:39:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <dirent.h>
 #include <string.h>
 #include <Kernel/sys/syslimits.h>
 // #define PATH_MAX 500
@@ -68,6 +69,7 @@
 typedef struct s_status
 {
     int status;
+    int quote;
 }t_status;
 
 typedef struct s_line
@@ -75,6 +77,7 @@ typedef struct s_line
     char            *str;
     int             token;
     int             quote;
+    int             type_quote;
     int             flag;
     int             is_it_built_in;
     struct s_status *status;
