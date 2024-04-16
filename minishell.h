@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/15 14:07:36 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/16 12:19:35 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,9 @@ typedef struct s_holder
 }   t_holder;
 
 t_holder        *ft_create_holder_node(t_line *node, char *line);
+int             ft_is_there(char *str);
+char            **ft_does_it_matche(char *str);
+int             ft_is_there_in_the_dir(char *str, char *s1);
 int             ft_count_pipe(t_line *head);
 t_holder        *add_list_holder(t_holder **lst, char *line);
 t_holder	    *ft_lstnew_holder(char *line);
@@ -140,7 +143,7 @@ void            ft_execute_cmd(t_line *head);
 void            ft_give_token(t_line *head);
 char	        *ft_strdup(char *s1);
 char	        *ft_strjoin(char *s1, char *s2);
-size_t	        ft_strlen(const char *s);
+size_t	        ft_strlen(char *s);
 char	        *ft_strjoin(char *s1, char *s2);
 int	            count(char *s, char c);
 char	        *word(char *str, char c);

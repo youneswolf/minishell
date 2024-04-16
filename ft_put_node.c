@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/15 14:07:25 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/16 10:34:29 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,6 @@ void	ft_put(char *str, t_line **head)
 	t_status	*status;
 
     (1) && (i = 0, j = 0, flag = 0);
-	// status = malloc(sizeof(t_status));
-	// (*head)->status = status;
     while (str && str[i])
     {
         while (str[i] && ft_strchr1(" \t\n\v\f\r", str[i]))

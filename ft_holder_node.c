@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/08 19:57:34 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/16 14:45:23 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ t_holder	*ft_lstnew_holder(char *line)
 	new = (t_holder *)malloc(sizeof(t_holder));
 	new->cmd = NULL;
     new->cmd_built_in = NULL;
-	new->args = malloc(sizeof(char *) * 1024);
-    new->args_built_in = malloc(sizeof(char *) * 1024);
-	new->file_in = malloc(sizeof(char *) * 1024);
-	new->file_out = malloc(sizeof(char *) * 1024);
-	new->append = malloc(sizeof(char *) * 1024);
-	new->ap = malloc(sizeof(int ) * 1024);
-	new->out = malloc(sizeof(int ) * 1024);
-	new->in = malloc(sizeof(int ) * 1024);
-	new->her_doc = malloc(sizeof(char *) * 1024);
-	while (i < 1024)
+	new->args = malloc(sizeof(char *) * 1000);
+    new->args_built_in = malloc(sizeof(char *)* 1000);
+	new->file_in = malloc(sizeof(char *)* 1000);
+	new->file_out = malloc(sizeof(char *)* 1000);
+	new->append = malloc(sizeof(char *)* 1000);
+	new->ap = malloc(sizeof(int )* 1000);
+	new->out = malloc(sizeof(int )* 1000);
+	new->in = malloc(sizeof(int )* 1000);
+	new->her_doc = malloc(sizeof(char *)* 1000);
+	while (i < 1000)
 	{
         new->args_built_in[i] = NULL;
 		new->args[i] = NULL;
@@ -110,6 +110,16 @@ int		ft_count_word(char *str)
 	return (count);
 }
 
+int	ft_count_2d(char **a)
+{
+	int	i;
+
+	i = 0;
+	while (a && a[i])
+		i++;
+	return (i);
+}
+
 t_holder    *ft_create_holder_node(t_line *node, char *line)
 {
 	t_holder    *holder= NULL;
@@ -123,6 +133,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 	int	mm = 0;
 	tmp = node;
 	tmp1 = tmp;
+	
 	while (i <= c)
 	{
 		j = 0;
@@ -156,8 +167,29 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
 				else 
 				{	
-					new->cmd = tmp->str;
-					new->args[j++] = tmp->str;
+					if (ft_is_there(tmp->str))
+					{
+						char **a = ft_does_it_matche(tmp->str);
+						int qq = ft_count_2d(a);
+						int	ee = 0;
+						if (qq >= 1)
+						{
+							new->cmd = ft_strdup(a[0]);
+							while (a[ee])
+							{
+								new->args[j++] = ft_strdup(a[ee]);
+								ee++;
+							}
+							// ft_free_2d(a);
+						}
+					}
+					else
+					{
+						new->cmd = tmp->str;
+						new->args[j++] = tmp->str;
+					}
+					new->args[j] = NULL;
+					flag = 0;
 				}
 				flag = 0;
 			}
@@ -173,34 +205,168 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						new->cmd_built_in = ft_strdup(array[0]);
 						while (array[mm])
 						{
-							new->args_built_in[zz++] = ft_strdup(array[mm]);
+							new->args_built_in[z++] = ft_strdup(array[mm]);
 							mm++;
 						}
 						ft_free_2d(array);
 					}
 					flag = 1;
 				}
-				else 
+				else
 				{	
-                	new->args_built_in[z++] = tmp->str;
-                	new->cmd_built_in = tmp->str;
+					if (ft_is_there(tmp->str))
+					{
+						char **a = ft_does_it_matche(tmp->str);
+						int qq = ft_count_2d(a);
+						int	ee = 0;
+						if (qq >= 1)
+						{
+							new->cmd = ft_strdup(a[0]);
+							while (a[ee])
+							{
+								new->args[z++] = ft_strdup(a[ee]);
+								ee++;
+							}
+							// ft_free_2d(a);
+						}
+					}
+					else
+					{
+						new->args_built_in[z++] = tmp->str;
+						new->cmd_built_in = tmp->str;
+					}
+					new->args_built_in[z] = NULL;
 				}
                 flag = 1;
             }
 			else if (tmp->token == ARGS && flag == 0)
-				new->args[j++] = tmp->str;
-            else if (tmp->token == ARGS && flag == 1)
-                new->args_built_in[z++] = tmp->str;
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee] != NULL)
+						{
+							new->args[j++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else 
+					new->args[j++] = tmp->str;
+				new->args[j] = NULL;
+			}
+            else if(tmp->token == ARGS && flag == 1)
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee])
+						{
+							new->args_built_in[z++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else
+                	new->args_built_in[z++] = tmp->str;
+				new->args_built_in[z] = NULL;
+			}
 			else if (tmp->token == OUT_FILE)
-				new->file_out[k++] = tmp->str;
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee])
+						{
+							new->file_out[k++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else
+					new->file_out[k++] = tmp->str;
+				new->file_out[w] = NULL;
+			}
 			else if (tmp->token == OUT_FILE)
-				 new->file_out[w++] = tmp->str;
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee])
+						{
+							new->file_out[w++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else
+					new->file_out[w++] = tmp->str;
+				new->file_out[w] = NULL;
+			}
 			else if (tmp->token == IN_FILE)
-				 new->file_in[n++] = tmp->str;
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee])
+						{
+							new->file_in[n++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else
+					new->file_in[n++] = tmp->str;
+				new->file_in[n] = NULL;
+			}
 			else if (tmp->token == APPEND)
 			{
 				if (tmp->next)
-					new->append[a++] = tmp->next->str;
+				{
+					if (ft_is_there(tmp->next->str))
+					{
+						char **aa = ft_does_it_matche(tmp->next->str);
+						int qq = ft_count_2d(aa);
+						int	ee = 0;
+						if (qq >= 1)
+						{
+							while (aa[ee])
+							{
+								new->append[a++] = ft_strdup(aa[ee]);
+								ee++;
+							}
+						}
+						// ft_free_2d(aa);
+					}
+					else
+						new->append[a++] = tmp->next->str;
+					new->append[a] = NULL;
+				}
 			}
 			else if (tmp->token == HERDOC && a < 1024)
 			{

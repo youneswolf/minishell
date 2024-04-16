@@ -6,13 +6,13 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:54:59 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/07 20:23:31 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/16 12:19:15 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(char *s)
 {
 	size_t	i;
 
