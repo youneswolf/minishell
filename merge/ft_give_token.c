@@ -6,13 +6,13 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/05 20:50:42 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/17 22:24:42 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int ft_strcmp(char *str, char *str1)
+int ft_strcmp(char *str, char *str1)
 {
     int i;
 
@@ -76,10 +76,10 @@ void    ft_give_token(t_line *head)
                 else if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
                 {
                     tmp->next->token = CMD;
-                    if (ft_cmp_built_in(tmp->next->str))
-                        tmp->next->is_it_built_in = 1;
-                    else
-                        tmp->next->is_it_built_in = 0;
+                    // if (ft_cmp_built_in(tmp->next->str))
+                    //     tmp->next->is_it_built_in = 1;
+                    // else if (!ft_cmp_built_in(tmp->next->str))
+                    //     tmp->next->is_it_built_in = 0;
                 }
                 else if (tmp->next && tmp->token == ARGS)
                     tmp->next->token = ARGS;
@@ -88,10 +88,10 @@ void    ft_give_token(t_line *head)
             {
                 flag1 = 1;
                 tmp->token = CMD;
-                if (ft_cmp_built_in(tmp->str))
-                    tmp->is_it_built_in = 1;
-                else
-                    tmp->is_it_built_in = 0;
+                // if (ft_cmp_built_in(tmp->str))
+                //     tmp->is_it_built_in = 1;
+                // else if (!ft_cmp_built_in(tmp->str))
+                //     tmp->is_it_built_in = 0;
                 if (tmp->next != NULL)
                     tmp->next->token = ARGS;
             }

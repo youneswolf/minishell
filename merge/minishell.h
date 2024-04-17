@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/05 20:56:00 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/17 22:25:51 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define MINISHELL_H
 #include <stdio.h>
 #include <string.h>
+#include <termios.h>
 #include <Kernel/sys/syslimits.h>
 #include <signal.h>
 #include <fcntl.h>
@@ -41,15 +42,21 @@
 # define CYAN        "\x1b[36m"
 # define WHT        "\e[0;37m"
 # define RESET        "\x1b[0m"
+typedef struct s_status
+{
+    int status;
+}t_status;
+
 typedef struct s_line
 {
-	char *str;
-	int delimiter_quote;
-	int token;
-	int status;
-	int is_it_built_in;
-	struct s_line *next;
-}t_line;
+    char            *str;
+    int             token;
+	int				quote;
+	int				flag;
+    int             is_it_built_in;
+    struct s_status *status;
+    struct s_line   *next;
+}                   t_line;
 typedef struct s_start_end
 {
 	int    start;
@@ -68,6 +75,7 @@ typedef struct s_env
 {
 	char            *env;
 	struct s_env    *next;
+	int				printed;
 }                    t_env;
 
 typedef struct s_cmd
@@ -106,18 +114,24 @@ typedef struct s_holder
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
 int     ft_isalnum_str(char *str);
+void exec_export(t_holder **holder, t_env **env);
+void    ft_handler_ctrt_herdoc(int signum);
+int ft_strcmp(char *str, char *str1);
 char    *ft_remove_here(char *str);
-t_holder    *ft_create_holder_node(t_line *node);
+t_holder    *ft_create_holder_node(t_line *node, char *line);
 int             ft_count_pipe(t_line *head);
 // t_holder        *add_list_holder(t_holder **lst, char *line);
 // t_holder	    *ft_lstnew_holder(char *line);
 void            ft_pwd();
 void            ft_execute_cmd(t_line *head);
+int	ft_isalpha(int c);
+char	*ft_sub_str(char *s, unsigned int start, size_t len, int is_free);
 void            ft_give_token(t_line *head);
 char	        *ft_strdup(char *s1);
-char	        *ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(char *static_str, char *buff, int is_free);
+// char	        *ft_strjoin(char *s1, char *s2);
 size_t	        ft_strlen(const char *s);
-char	        *ft_strjoin(char *s1, char *s2);
+// char	        *ft_strjoin(char *s1, char *s2);
 int	            count(char *s, char c);
 char	        *word(char *str, char c);
 int             ft_syntax(t_line *head);
@@ -164,7 +178,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 void fill_null_env(t_env **mini_env);
 int     ft_isalnum(int c);
 char *expand(char *str, t_env **env);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+char *ft_substr(char *str, int start, int len);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 static	int	end_finder(char *s1, char *set);
 char	*ft_strdup(char *s1);
@@ -179,9 +193,9 @@ int is_sgl_quote(char *str);
 void    ft_execute_cmd(t_line *head);
 void    ft_give_token(t_line *head);
 char	*ft_strdup(char *s1);
-char	*ft_strjoin(char *s1, char *s2);
+// char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *s);
-char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(char *s1, char *s2, int is_free);
 int	count(char *s, char c);
 char	*word(char *str, char c);
 // void    ft_syntax(t_line *head);

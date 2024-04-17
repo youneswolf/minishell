@@ -1,0 +1,36 @@
+    sss
+$USER
+Makefile
+aa bb
+asedoun
+b
+e
+filetest
+ft_checking_files.c
+ft_ctrl_c.c
+ft_free.c
+ft_give_token.c
+ft_her_expand.c
+ft_holder_node.c
+ft_put_node.c
+ft_red_args.c
+ft_remove_here_quote.c
+ft_remove_quote.c
+ft_syntax.c
+ft_tools.c
+ft_utlils.c
+homebrew
+id
+l
+minishell
+minishell.c
+minishell.dSYM
+minishell.h
+redirect_append.c
+redirect_input.c
+redirect_output.c
+s
+t
+t1
+test.sh
+tt

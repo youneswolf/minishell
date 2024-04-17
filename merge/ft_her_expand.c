@@ -1,4 +1,33 @@
 #include "minishell.h"
+char	*ft_str_join(char *static_str, char *buff)
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
+	size_t	len;
+
+	if (!static_str && !buff)
+		return (NULL);
+	if (!static_str && buff)
+		return (ft_strdup(buff));
+	if (!buff && static_str)
+		return (ft_strdup(static_str));
+	len = ft_strlen(static_str);
+	str = malloc(sizeof(char) * (len + ft_strlen(buff)) + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (static_str && static_str[i] != '\0')
+	{
+		str[i] = static_str[i];
+		i++;
+	}
+	while (buff && buff[j] != '\0')
+		str[i++] = buff[j++];
+	str[i] = '\0';
+	return (str);
+}
 int	ft_isalpha(int c)
 {
 	if (((unsigned char )c >= 65 && (unsigned char )c <= 90)
@@ -91,11 +120,11 @@ char *handle_expand_here(char *line_str, t_env **env)
 				j = 0;
 				// spaces = ft_substr(dollar_str[i], 0, ft_strlen(dollar_str[i] - j));
 				dollar_str_space = ft_strtrim(dollar_str[i], " ", 1);
-				dollar_str_space = ft_strjoin("$",dollar_str_space);
-				join = ft_strjoin(join, expand_here(dollar_str_space, env));
+				dollar_str_space = ft_str_join("$",dollar_str_space);
+				join = ft_str_join(join, expand_here(dollar_str_space, env));
 				while (dollar_str[j] && dollar_str[i][j] == ' ')
 				{
-					join = ft_strjoin(join, " ");
+					join = ft_str_join(join, " ");
 					j++;
 				}
 				i++;
@@ -106,9 +135,9 @@ char *handle_expand_here(char *line_str, t_env **env)
 		{
 			j = 0;
 			// printf("else\n");
-			join = ft_strjoin(join, expand_here(split->str, env));
+			join = ft_str_join(join, expand_here(split->str, env));
 			if (split->next)
-				join = ft_strjoin(join," ");
+				join = ft_str_join(join," ");
 		}
 		split = split->next;
 	}
@@ -174,19 +203,19 @@ char *expand_here(char *str, t_env **env)
 		i++;
 	}
 	if (pre_var)
-		var = ft_strjoin(pre_var, "=");
+		var = ft_str_join(pre_var, "=");
 	else
-		var = ft_strjoin(sub, "=");
+		var = ft_str_join(sub, "=");
 	while ((tmp && pre_var) || (tmp && var))
 	{
 		if (!ft_strncmp(var, tmp->env, ft_strlen(var)))
 		{
 			i = 0;
-			var = ft_strjoin(tmp->env,special);
+			var = ft_str_join(tmp->env,special);
 			while (var && var[i] != '=')
 				i++;
 			var = ft_substr(var, i + 1, ft_strlen(var) - i - 1);
-			var = ft_strjoin(pre_special,var);
+			var = ft_str_join(pre_special,var);
 			return (var);
 		}
 		tmp = tmp->next;
@@ -212,8 +241,8 @@ char *expand_here(char *str, t_env **env)
 	}
 	if (str && str[0] == '$')
 	{
-		pre_var = ft_strjoin(pre_special, special);
-		return (ft_strjoin("$", pre_var));
+		pre_var = ft_str_join(pre_special, special);
+		return (ft_str_join("$", pre_var));
 	}
-	return (ft_strjoin(pre_special, special));
+	return (ft_str_join(pre_special, special));
 }

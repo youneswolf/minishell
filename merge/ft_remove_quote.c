@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/03 21:58:51 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/08 19:50:21 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@ int ft_remove_utils(t_line *tmp)
     int flag;
     int i;
 
-    count = ft_strlen(tmp->str);
+    count = ft_strlen(tmp->str) + 1;
     i = 0;
     while (tmp && tmp->str[i])
     {
+        tmp->quote = 0;
         if (tmp->str[i] == '\"' || tmp->str[i] == '\'')
         {
             (1) && (flag = tmp->str[i], i++);
+            tmp->quote = 1;
             while (tmp->str[i])
             {
                 if (tmp->str[i] == flag)
