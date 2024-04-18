@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 17:22:16 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/18 21:25:20 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -468,7 +468,8 @@ void execution(t_holder **holder ,t_env *env)
  		}
 		if ((tmp->cmd_built_in &&tmp->file_out[j]) || (tmp->args_built_in[0] && tmp->cmd_built_in))
 		{
-			exec_export(&tmp, &env);
+			// exec_export(&tmp, &env);
+			exec_echo(tmp);
 		}
 		if (tmp && tmp->cmd || tmp->file_out[j] ||tmp->args[0] && tmp->args[0][0])
 		{
@@ -570,10 +571,10 @@ int main(int    ac, char **av, char **env)
 	if (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR
         || signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR)
         return (perror("signal"), 1);
-    // if (env[0])
-    //     fiLL_env(&mini_env, env);
-    // else
-    //     fill_null_env(&mini_env);
+    if (env[0])
+        fiLL_env(&mini_env, env);
+    else
+        fill_null_env(&mini_env);
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
@@ -616,7 +617,7 @@ int main(int    ac, char **av, char **env)
 			ft_checking_files(tmp);
 			execution(&tmp, mini_env);
 		}
-		ft_free_list(&str);
+		// ft_free_list(&str);
 		str = NULL;
 		free(line);
 	}
