@@ -10,6 +10,65 @@ int check_is_all_printed(t_env **env)
 	}
 	return (0);
 }
+
+void    ft_sort_list(t_env **env)
+{
+    t_env    *first;
+    t_env    *second;
+    char    *tmp;
+
+    first = *env;
+    while (first != NULL && first->next != NULL)
+    {
+        second = *env;
+        while (second != NULL && second->next != NULL)
+        {
+            if (ft_strcmp_asd(second->env, second->next->env) > 0)
+            {
+                tmp = second->env;
+                second->env = second->next->env;
+                second->next->env = tmp;
+            }
+            second = second->next;
+        }
+        first = first->next;
+    }
+}
+
+void declare_export(t_env *env)
+{
+	t_env *tmp;
+	t_env *last_node;
+	t_env *node;
+	t_env *head = NULL;
+	tmp = env;
+	while (tmp)
+	{
+		node = malloc(sizeof(t_env));
+		node->env = ft_strdup(tmp->env);
+		node->next = NULL;		
+		if (!head)
+		{
+			head = node;
+		}
+		else
+		{
+			last_node = get_last(&head);
+			last_node->next = node;
+		}
+		tmp = tmp->next;
+	}
+	node = head;
+	ft_sort_list(&head);
+	while (head)
+	{
+		printf("declare -x %s\n",head->env);
+		head = head->next;
+	}
+	// ft_free_env(&node);
+}
+
+
 void exec_export(t_holder **holder, t_env **env)
 {
 	int i;
@@ -24,18 +83,7 @@ void exec_export(t_holder **holder, t_env **env)
 	tmp = *env;
 	if (!line_tmp->args_built_in[1])
 	{
-	while (check_is_all_printed(env))
-	{
-		*env = tmp;
-		while((*env)->next)
-		{
-			node_env = (*env)->env;
-			if (ft_strcmp(node_env ,(*env)->next->env) < 0)
-				node_env = (*env)->next->env;
-			(*env) = (*env)->next;
-		}
-		printf("declare -x %s\n", node_env);
-	}
+		declare_export(*env);
 	}
 	else
 	{
@@ -52,8 +100,8 @@ void exec_export(t_holder **holder, t_env **env)
 			join = ft_strjoin(var_name, value,2);
 			// free(tmp->env);
 			(*env)->env = join;
+			break;
 		}
-			printf("%s\n",(*env)->env);
 		*env = (*env)->next;
 	}
 	*env = tmp;

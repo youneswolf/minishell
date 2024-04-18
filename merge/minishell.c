@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/17 18:16:48 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 15:46:14 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ char **ft_put_env_string(char **array, t_env *env)
 {
     int        i, l;
     t_env    *tmp;
-
+	l = 0;
     tmp = env;
     i = 0;
     while (tmp)
@@ -256,6 +256,7 @@ char **ft_put_env_string(char **array, t_env *env)
         tmp = tmp->next;
     }
     tmp = env;
+	printf("%p",tmp);
     array = malloc((l + 1)* sizeof(char *));
     while (tmp)
     {
@@ -308,8 +309,8 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 		printf("bash: %s: command not found\n", holder->args[0]);
 		exit(127);
 	}
-	// array = ft_put_env_string(array, env);
-    execve(path, holder->args, NULL);
+	array = ft_put_env_string(array, env);
+    execve(path, holder->args, array);
     ft_free_2d(array);
 	exit(1);
 }
@@ -322,6 +323,29 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	res = 0;
 	i = 0;
 	while (i < n)
+	{
+		if (s1 && s1[i] == '\0' && s2[i] == '\0')
+		{
+			return (0);
+		}
+		if ( s1 && s2 && (unsigned char)s1[i] != (unsigned char)s2[i])
+		{
+			res = (unsigned char)s1[i] - (unsigned char)s2[i];
+			return (res);
+		}
+		i++;
+	}
+	return (res);
+}
+
+int	ft_strcmp_asd(char *s1,  char *s2)
+{
+	size_t	i;
+	int		res;
+
+	res = 0;
+	i = 0;
+	while (s1 && s1[i])
 	{
 		if (s1 && s1[i] == '\0' && s2[i] == '\0')
 		{
@@ -381,7 +405,7 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
 	exit(1);
 }
 
-void execution(t_holder **holder ,t_env **env)
+void execution(t_holder **holder ,t_env *env)
 {
 	t_holder *tmp;
 	int child_stat;
@@ -411,8 +435,7 @@ void execution(t_holder **holder ,t_env **env)
 			if (!pid)
 			{
 				signal(SIGINT, SIG_DFL);
-				ft_here_doc(tmp->her_doc[n], pipe_fd, tmp, env, origin_in);
-				printf("hel\n");
+				ft_here_doc(tmp->her_doc[n], pipe_fd, tmp, &env, origin_in);
 			}
 			else
 			{
@@ -445,8 +468,7 @@ void execution(t_holder **holder ,t_env **env)
  		}
 		if ((tmp->cmd_built_in &&tmp->file_out[j]) || (tmp->args_built_in[0] && tmp->cmd_built_in))
 		{
-			printf("built\n");
-			exec_export(&tmp, env);
+			exec_export(&tmp, &env);
 		}
 		if (tmp && tmp->cmd || tmp->file_out[j] ||tmp->args[0] && tmp->args[0][0])
 		{
@@ -461,7 +483,7 @@ void execution(t_holder **holder ,t_env **env)
 			pid = fork();
 			if (!pid)
 			{
-				exec_cmd(tmp, *env, pipe_fd,i-1,j-1,k-1);
+				exec_cmd(tmp, env, pipe_fd,i-1,j-1,k-1);
 			}
 		}
 		close (pipe_fd[1]);
@@ -548,10 +570,10 @@ int main(int    ac, char **av, char **env)
 	if (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR
         || signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR)
         return (perror("signal"), 1);
-    if (env[0])
-        fiLL_env(&mini_env, env);
-    else
-        fill_null_env(&mini_env);
+    // if (env[0])
+    //     fiLL_env(&mini_env, env);
+    // else
+    //     fill_null_env(&mini_env);
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
@@ -563,36 +585,36 @@ int main(int    ac, char **av, char **env)
 		// if (!line)
 			// str->status = 255;
 		ft_put(line, &str); //create linked list 
-			ft_give_token(str); //give token to each node
+		ft_give_token(str); //give token to each node
 		ft_is_buil(str);
 		if (ft_syntax(str))  //check the syntax
 		{
-			old = str;
-			// ft_expand_argument(mini_env, &str); //expand nta3 ismail
-			while (str)
-			{
-				if (if_dollar(str->str) && str->token != DELIMITER)
-				{
-					// free(str->str);
-					str->str = handle_expand(str->str, &mini_env);
-					str->flag = 1;
-					// free(str->str);
-					// ft_put(str->str, &str); //create linked list 
-					// printf("str = %s\n", str->str);
-					// ft_give_token(str); //give token to each node
-				}
-				str = str->next;
-			}
-			str = old;
-			while (str && !str->str[0])
-			{
-				str = str->next;
-			}
+			// old = str;
+			// // ft_expand_argument(mini_env, &str); //expand nta3 ismail
+			// while (str)
+			// {
+			// 	if (if_dollar(str->str) && str->token != DELIMITER)
+			// 	{
+			// 		// free(str->str);
+			// 		str->str = handle_expand(str->str, &mini_env);
+			// 		str->flag = 1;
+			// 		// free(str->str);
+			// 		// ft_put(str->str, &str); //create linked list 
+			// 		// printf("str = %s\n", str->str);
+			// 		// ft_give_token(str); //give token to each node
+			// 	}
+			// 	str = str->next;
+			// }
+			// str = old;
+			// while (str && !str->str[0])
+			// {
+			// 	str = str->next;
+			// }
 			// printf("%d\n",str->token);
-			ft_remove_quote(&str, line); //removing quotes for command and args
-			tmp = ft_create_holder_node(str,line);
-			ft_checking_files(tmp);
-			execution(&tmp, &mini_env);
+			// ft_remove_quote(&str, line); //removing quotes for command and args
+			// tmp = ft_create_holder_node(str,line);
+			// ft_checking_files(tmp);
+			// execution(&tmp, mini_env);
 		}
 		ft_free_list(&str);
 		str = NULL;

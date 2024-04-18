@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/17 22:25:51 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 13:58:02 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,11 @@ typedef struct s_holder
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
 int     ft_isalnum_str(char *str);
+int f_strcmp(char *str1, char *str2);
 void exec_export(t_holder **holder, t_env **env);
 void    ft_handler_ctrt_herdoc(int signum);
-int ft_strcmp(char *str, char *str1);
+int f_strcmp(char *str1, char *str2);
+int	ft_strcmp_asd(char *s1,  char *s2);
 char    *ft_remove_here(char *str);
 t_holder    *ft_create_holder_node(t_line *node, char *line);
 int             ft_count_pipe(t_line *head);
@@ -157,7 +159,7 @@ void            ft_free_env(t_env **head);
 void            ft_remove_quote(t_line **str, char *line);
 char            *ft_remove(t_line *tmp, char *line);
 void            ft_checking_files(t_holder *node);
-int             f_strcmp(char *str1, char *str2);
+int	ft_strcmp(char *s1,  char *s2);
 int		        ft_cmp_built_in(char *str);
 void            ft_handler_ctrl_c(int signum);
 void	        ft_free_2d(char **array);

@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/17 22:24:42 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 15:46:18 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void    ft_give_token(t_line *head)
     {
         if (ft_strcmp(tmp->str, "|"))
             (tmp->token = PIPE, flag1 = 0);
-        else if (ft_strcmp(tmp->str, ">"))
+         if (ft_strcmp(tmp->str, ">"))
         {
             tmp->token = OUT_REDIR;
             if (tmp->next != NULL)
@@ -81,8 +81,8 @@ void    ft_give_token(t_line *head)
                     // else if (!ft_cmp_built_in(tmp->next->str))
                     //     tmp->next->is_it_built_in = 0;
                 }
-                else if (tmp->next && tmp->token == ARGS)
-                    tmp->next->token = ARGS;
+                // else if (tmp->next && tmp->token == ARGS)
+                //     tmp->next->token = ARGS;
             }
             else
             {
