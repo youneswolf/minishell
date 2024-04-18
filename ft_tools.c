@@ -8,6 +8,19 @@
 #include <readline/readline.h>
 #include "minishell.h"
 
+int     ft_isalnum_str(char *str)
+{
+		int i = 0;
+		while (str && str[i])
+		{
+      	if (isalpha(str[i]) || isdigit(str[i]))
+        {
+                return (1);
+        }
+		i++;
+		}
+        return (0);
+}
 t_env	*get_last(t_env **a)
 {
 	t_env	*tmp;
@@ -47,7 +60,7 @@ t_line	*get_last_l(t_line **a)
 	return (tmp);
 }
 
-char	*ft_strjoin(char *static_str, char *buff)
+char	*ft_strjoin(char *static_str, char *buff, int is_free)
 {
 	size_t	i;
 	size_t	j;
@@ -56,10 +69,10 @@ char	*ft_strjoin(char *static_str, char *buff)
 
 	if (!static_str && !buff)
 		return (NULL);
-	if (!static_str && buff)
-		return (ft_strdup(buff));
-	if (!buff && static_str)
-		return (ft_strdup(static_str));
+	// if (!static_str && buff)
+	// 	return (ft_strdup(buff));
+	// if (!buff && static_str)
+	// 	return (ft_strdup(static_str));
 	len = ft_strlen(static_str);
 	str = malloc(sizeof(char) * (len + ft_strlen(buff)) + 1);
 	if (!str)
@@ -74,7 +87,14 @@ char	*ft_strjoin(char *static_str, char *buff)
 	while (buff && buff[j] != '\0')
 		str[i++] = buff[j++];
 	str[i] = '\0';
-	// free(static_str);
+	if (is_free == 1)
+		free(static_str);
+	else if (is_free == 2)
+	{
+		(free(static_str), free(buff));
+	}
+	else if(is_free == 3)
+		free(buff);
 	return (str);
 }
 
@@ -100,15 +120,15 @@ char	*ft_strjoin(char *static_str, char *buff)
 // 	}
 // 	return (res);
 // }
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
+// int	ft_strcmp(char *s1, char *s2)
+// {
+// 	int	i;
 
-	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
-		++i;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
+// 	i = 0;
+// 	while (s1[i] && s2[i] && s1[i] == s2[i])
+// 		++i;
+// 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+// }
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -167,7 +187,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 // 	}
 // 	return (i);
 // }
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_sub_str(char *s, unsigned int start, size_t len, int is_free)
 {
 	size_t	i;
 	char	*dst;
@@ -191,6 +211,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		i++;
 		start++;
 	}
+	if (is_free == 1)
+		free(s);
 	dst[i] = '\0';
 	return (dst);
 }
@@ -289,6 +311,7 @@ t_line *ft_lst_new(char *str)
 	line->next = NULL;
 	return (line);
 }
+
 int	if_dollar(char *str)
 {
 	int i;
@@ -296,55 +319,100 @@ int	if_dollar(char *str)
 	i = 0;
 	while (str && str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' && str[i + 1])
 			return (1);
 		i++;
 	}
 	return (0);
 }
-char *handle_expand(t_line **line, t_env **env)
+int is_char(char *str)
 {
-	t_line *line_tmp = *line;
+	int i = 0;
+	while (str && str[i])
+	{
+		if (ft_isalpha(str[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char *handle_expand(char *line_str, t_env **env)
+{
 	t_line *split = NULL;
 	t_line *node;
+	char *dollar_str_space;
+	char *spaces;
 	char *join = NULL;
-	char **str;
+	char **str = NULL;
+	char **dollar_str = NULL;
+	char *expand_var = NULL;
 	int i = 0;
 	int j = 0;
-	while (line_tmp)
-	{
-		while (line_tmp->str && line_tmp->str[i])
+		while (line_str && line_str[i])
 		{
-			if (line_tmp->str[i] == '$')
+			if (line_str[i] == '$')
 			{
-				str = ft_split(line_tmp->str, ' ');
+				str = ft_split(line_str, 32);
 				while (str[j])
 				{
 					if (!split)
-						split = ft_lst_new(str[j]);
+						split = ft_lst_new(ft_strdup(str[j]));
 					else
 					{
 						node = get_last_l(&split);
-						node->next = ft_lst_new(str[j]);
+						node->next = ft_lst_new(ft_strdup(str[j]));
 					}
 					j++;
 				}
+			ft_free_2d(str);
 			}
 			i++;
 		}
-		line_tmp = line_tmp->next;
-	}
+	j = 0;
+	free(line_str);
+	node = split;
 	while (split)
 	{
-		join = ft_strjoin(join, expand(&split, env));
-		join = ft_strjoin(join," ");
+		if (count_dollar(split->str) > 1)
+		{
+			i = 0;
+			dollar_str = ft_split(split->str, '$');
+			while(dollar_str[i])
+			{
+				j = 0;
+				// spaces = ft_sub_str(dollar_str[i], 0, ft_strlen(dollar_str[i] - j));
+				dollar_str_space = ft_strtrim(dollar_str[i], " ", 1);
+				dollar_str_space = ft_strjoin("$",dollar_str_space,3);
+				join = ft_strjoin(join, expand(dollar_str_space, env),2);
+				while (dollar_str[i] &&dollar_str[i][j]&&  dollar_str[i][j] == ' ')
+				{
+					join = ft_strjoin(join, " ",1);
+					j++;
+				}
+				i++;
+				free(dollar_str_space);
+			}
+				ft_free_2d(dollar_str);
+			// printf("%s\n",join);
+		}
+		else 
+		{
+			// j = 0;
+			join = ft_strjoin(join, expand(split->str, env),2);
+			if (split->next)
+				join = ft_strjoin(join," ",1);
+		}
 		split = split->next;
 	}
+	ft_free_list(&node);
 	if (!join)
 		return ("");
+			// printf("%s\n",join);
 	return (join);
 }
-char *expand(t_line **line, t_env **env)
+
+char *expand(char *str, t_env **env)
 {
 	t_env *tmp;
 	t_line *line_tmp;
@@ -352,69 +420,111 @@ char *expand(t_line **line, t_env **env)
 	char *pre_special = NULL;
 	int i;
 	char *var;
-	char *sub;
+	char *sub = NULL;
+	char *pre_var = NULL;
 	tmp = *env;
-	line_tmp = *line;
 	i = 0;
-	if ( line_tmp && (line_tmp->str[0] == 34 || line_tmp->str[ft_strlen(line_tmp->str) - 1] == 34))
+	int j = 0;
+	if (is_sgl_quote(str) && is_char(str))
 	{
-		sub = ft_strtrim(line_tmp->str, "\"", 1);
-		while (sub && sub[i] != '$')
-			i++;
-		if (i && i != ft_strlen(line_tmp->str))
-		{
-			pre_special = ft_substr(sub, 0, i);
-		}
-		if (line_tmp && line_tmp->str[0] == 34)
-			sub = ft_substr(line_tmp->str, i+2, (ft_strlen(line_tmp->str) - i - 1));
-		else 
-			sub = ft_substr(line_tmp->str, i+1, (ft_strlen(line_tmp->str) - i - 1));
-		sub = ft_strtrim(sub, "\"", 1);
+		printf("%s\n",str);
+		return (ft_strdup(str));
+
 	}
-	else
-	{
-		while (line_tmp && line_tmp->str[i] != '$')
+		// if ( str && (str[0] == 34 || str[ft_strlen(str) - 1] == 34))
+	// {
+	// 	sub = ft_strtrim(str, "\"", 1);
+	// 	while (sub && sub[i] != '$')
+	// 		i++;
+	// 	if (i && i != ft_strlen(str))
+	// 	{
+	// 		pre_special = ft_sub_str(sub, 0, i,0);
+	// 	}
+	// 	if (str && str[0] == 34)
+	// 		sub = ft_sub_str(str, i+2, (ft_strlen(str) - i - 1),0);
+	// 	else 
+	// 		sub = ft_sub_str(str, i+1, (ft_strlen(str) - i - 1),0);
+	// 	sub = ft_strtrim(sub, "\"", 1);
+	// }
+	// else
+	// {
+		while (str && str[i] != '$')
 			i++;
-		if (i && i != ft_strlen(line_tmp->str))
+		if (i && i != ft_strlen(str))
 		{
-			pre_special = ft_substr(line_tmp->str, 0, i);
+			pre_special = ft_sub_str(str, 0, i, 0);
 		}
-		sub = ft_substr(line_tmp->str, i+1, (ft_strlen(line_tmp->str) - i -1));
-	}
+		sub = ft_sub_str(str, i+1, (ft_strlen(str) - i -1),0);
+	// }
 	i = 0;
+	// if (count_sgl_quote(pre_special) % 2 != 0)
+	// {
+	// 	return (str);
+	// }
+
 	while (sub && sub[i])
 	{
-		if (sub[i] == '.' || sub[i] == ',' || sub[i] == '/' || sub[i] == '-' || sub[i] == ':' || sub[i] == '_')
+		if (sub[i] == '.' || sub[i] == ',' || sub[i] == '/' || sub[i] == '-' || sub[i] == ':' || sub[i] == '_' || sub[i] == 34 || sub[i] == 39)
 		{
-			special = ft_substr(sub, i, ft_strlen(sub) - i);
-			sub = ft_substr(sub, 0, ft_strlen(sub) - ft_strlen(special));
+			j = i;
+			while (sub [j] && sub[j] != '$')
+				j++;
+			special = ft_sub_str(sub, i, j - i,0);
+			pre_var = ft_sub_str(sub, 0, i,0);
 			break;
 		}
 		i++;
 	}
-	var = ft_strjoin(sub, "=");
-	// printf("%s\n",var);
-	while (tmp && sub)
+	if (pre_var)
+	{
+		var = ft_strjoin(pre_var, "=",1);
+		free(sub);
+	}
+	else
+		var = ft_strjoin(sub, "=",1);
+	// free(sub);
+	while (tmp && var)
 	{
 		if (!ft_strncmp(var, tmp->env, ft_strlen(var)))
 		{
 			i = 0;
-			var = ft_strjoin(tmp->env,special);
+			free(var);
+			var = ft_strjoin(tmp->env,special,3);
 			while (var && var[i] != '=')
 				i++;
-			var = ft_substr(var, i + 1, ft_strlen(var) - i - 1);
-			var = ft_strjoin(pre_special,var);
+			var = ft_sub_str(var, i + 1, ft_strlen(var) - i - 1,1);
+			var = ft_strjoin(pre_special,var,2);
 			return (var);
 		}
 		tmp = tmp->next;
 	}
-	if (!if_dollar(line_tmp->str))
-	{
-		sub = ft_strtrim(line_tmp->str, "\"", 1);
-		sub = ft_strtrim(sub, "\'", 1);
-		return (sub);
-	}
-	return (pre_special);
+	i = 0;
+	j = 42;
+	// 	printf("enter");
+	// if (if_dollar(str))
+	// {
+	// 	while (str[i] && str[i] != '$')
+	// 	{
+	// 		i++;
+	// 	}
+	// 	while (str[i])
+	// 	{
+	// 		if (ft_isalnum(str[i]) == 1)
+	// 		{
+	// 			return (pre_special);
+	// 		}
+	// 		else
+	// 			return (str);
+	// 	}
+	// 	return ("ee");
+	// }
+	// if (str && str[0] == '$')
+	// {
+	// 	pre_var = ft_strjoin(pre_special, special);
+	// 	return (ft_strjoin("$", pre_var));
+	// }
+	free(var);
+	return (ft_strjoin(pre_special, special,2));
 }
 
 
@@ -440,6 +550,7 @@ void fill_null_env(t_env **mini_env)
 	}
 	line[i] = '\0';
 	node->env = line;
+	node->printed = 0;
 	node->next = NULL;
 	*mini_env = node;
 	fill_second_null_env(mini_env);
@@ -518,7 +629,17 @@ void fiLL_env(t_env **mini_env, char **env)
 
 	}
 }
-
+int is_sgl_quote(char *str)
+{
+	int i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == 39)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 void	env_list(t_env **mini_env, char *line)
 {
 	t_env	*node;
@@ -528,6 +649,7 @@ void	env_list(t_env **mini_env, char *line)
 	if (!node)
 		(ft_free_nodes(mini_env), exit(1));
 	node->env = line;
+	node->printed = 0;
 	node->next = NULL;
 	if (!(*mini_env))
 	{

@@ -6,18 +6,18 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/14 22:34:57 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 15:46:18 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int ft_strcmp(char *str, char *str1)
+int ft_strcmp(char *str, char *str1)
 {
     int i;
 
     i = 0;
-    while (str[i] || str1[i])
+    while (str && str1 && (str[i] || str1[i]))
     {
         if (str[i] != str1[i])
             return (0);
@@ -38,7 +38,7 @@ void    ft_give_token(t_line *head)
     {
         if (ft_strcmp(tmp->str, "|"))
             (tmp->token = PIPE, flag1 = 0);
-        else if (ft_strcmp(tmp->str, ">"))
+         if (ft_strcmp(tmp->str, ">"))
         {
             tmp->token = OUT_REDIR;
             if (tmp->next != NULL)
@@ -58,7 +58,7 @@ void    ft_give_token(t_line *head)
         }
         else if (ft_strcmp(tmp->str, "<<"))
         {
-            flag1 = 0;
+            // flag1 = 0;
             tmp->token = HERDOC;
             if (tmp->next != NULL)
                 tmp->next->token = DELIMITER;
@@ -66,22 +66,32 @@ void    ft_give_token(t_line *head)
         else
         {
             if (tmp->token == ARGS || tmp->token == FILE || tmp->token == DELIMITER 
-            || tmp->token == IN_FILE || tmp->token == OUT_FILE)
+             || tmp->token == IN_FILE || tmp->token == OUT_FILE)
             {
-                if ((tmp->token == IN_FILE || tmp->token == OUT_FILE ) && tmp->next && flag1 == 1)
+                if ((tmp->token == IN_FILE || tmp->token == OUT_FILE
+                    || tmp->token == FILE || tmp->token == DELIMITER) && tmp->next && flag1 == 1)
                 {
                     tmp->next->token = ARGS;
-                    flag1 = 0;
                 }
-                if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
+                else if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
+                {
                     tmp->next->token = CMD;
-                else if (tmp->next && tmp->token == ARGS)
-                    tmp->next->token = ARGS;
+                    // if (ft_cmp_built_in(tmp->next->str))
+                    //     tmp->next->is_it_built_in = 1;
+                    // else if (!ft_cmp_built_in(tmp->next->str))
+                    //     tmp->next->is_it_built_in = 0;
+                }
+                // else if (tmp->next && tmp->token == ARGS)
+                //     tmp->next->token = ARGS;
             }
             else
             {
                 flag1 = 1;
                 tmp->token = CMD;
+                // if (ft_cmp_built_in(tmp->str))
+                //     tmp->is_it_built_in = 1;
+                // else if (!ft_cmp_built_in(tmp->str))
+                //     tmp->is_it_built_in = 0;
                 if (tmp->next != NULL)
                     tmp->next->token = ARGS;
             }

@@ -6,46 +6,25 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/31 23:03:24 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 15:46:14 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// t_line	*ft_lstnew(char *str)
-// {
-// 	t_line	*new;
+int f_strcmp(char *str1, char *str2)
+{
+    int i;
 
-// 	new = (t_line *)malloc(sizeof(t_line));
-//     new->str = strdup(str);
-// 	if (!new)
-// 		return (NULL);
-// 	new->next = NULL;
-// 	return (new);
-// }
-
-// void	add_list(t_line **lst, char *str)
-// {
-// 	t_line	*new;
-// 	t_line	*temp;
-
-// 	new = ft_lstnew(str);
-// 	if (*lst == NULL)
-// 	{
-// 		*lst = new;
-// 		new->next = NULL;
-// 	}
-// 	else
-// 	{
-// 		temp = *lst;
-// 		while (temp->next != NULL)
-// 		{
-// 			temp = temp->next;
-// 		}
-// 		temp->next = new;
-// 	}
-// }
-
+    i = 0;
+    while (str1 && str2 && str2[i] != '\0' && str1[i] != '\0')
+    {
+        if (str1[i] != str2[i])
+            return (0);
+        i++;
+    }
+    return (1);
+}
 
 int is_there_exit(char *str)
 {
@@ -75,7 +54,7 @@ int is_there_exit(char *str)
 // 	return (1);
 // }
 
-char	*ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
+void	ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
 {
 	int	flag;
 
@@ -101,7 +80,8 @@ char	*ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
 		if (str[i] && str[i] == quote)
 			(1) && (new_line[j] = str[i], i++, j++, flag = 0, quote = 0);
 	}
-	return (new_line[j] = '\0', new_line);
+	// return (new_line[j] = '\0', new_line);
+	new_line[j] = '\0';
 }
 
 char    *ft_add_space_to_command(char *str)
@@ -121,12 +101,13 @@ char    *ft_add_space_to_command(char *str)
 	new_line = malloc(i + 1 + count * 2);
 	if (!new_line)
 		return (free(str), perror("malloc"), NULL);
+		// return (NULL);
 	i = 0;
 	count = 0;
-	new_line = ft_add_space_utils(new_line, str, quote, i, count);
-	return (new_line);
+	ft_add_space_utils(new_line, str, quote, i, count);
+	return (free(str), new_line);
+	// return (new_line);
 }
-
 
 void    ft_ctr(int sig)
 {
@@ -134,6 +115,35 @@ void    ft_ctr(int sig)
 	printf(RED"\nminishell$ "RESET);
 	return ;
 }
+
+// int		ft_cmp_built_in(char *str)
+// {
+// 	int	i;
+// 	char **checker;
+
+// 	checker = malloc(8 * sizeof(char *));
+// 	if (!checker)
+// 		return (perror("malloc"), 0);
+// 	checker[0] = ft_strdup("echo");
+// 	checker[1] = ft_strdup("cd");
+// 	checker[2] = ft_strdup("pwd");
+// 	checker[3] = ft_strdup("export");
+// 	checker[4] = ft_strdup("unset");
+// 	checker[5] = ft_strdup("env");
+// 	checker[6] = ft_strdup("exit");
+// 	checker[7] = NULL;
+// 	i = 0;
+// 	while (checker[i])
+// 	{
+// 		if (f_strcmp(checker[i], str))
+// 			return (ft_free_2d(checker), 1);
+// 			// return (1);
+// 		i++;
+// 	}
+// 	return (ft_free_2d(checker), 0);
+// 	// return (0);
+// }
+
 
 char	*find_path(t_env *env)
 {
@@ -201,7 +211,7 @@ char	*ft_strjoin_path(char *static_str, char *buff)
 	while (buff && buff[j] != '\0')
 		str[i++] = buff[j++];
 	str[i] = '\0';
-	// free(static_str);
+	free(static_str);
 	return (str);
 }
 
@@ -231,11 +241,37 @@ char	*get_path(t_env *env, char *cmd)
 	while (path[k] && path)
 		free(path[k++]);
 	return (path[i]);
-	return (NULL);
 }
+
+char **ft_put_env_string(char **array, t_env *env)
+{
+    int        i, l;
+    t_env    *tmp;
+	l = 0;
+    tmp = env;
+    i = 0;
+    while (tmp)
+    {
+        l++;
+        tmp = tmp->next;
+    }
+    tmp = env;
+	printf("%p",tmp);
+    array = malloc((l + 1)* sizeof(char *));
+    while (tmp)
+    {
+        array[i] = ft_strdup(tmp->env);
+        i++;
+        tmp = tmp->next;
+    }
+    array[i] = NULL;
+    return (array);
+}
+
 void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k)
 {
 	char *path;
+	char **array;
 
 	// if (pipe(pipe_fd) == -1)
 	// 	perror("pipe");
@@ -249,38 +285,33 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 			j++;
 		redirect_output(holder->out[j-1]);
 	}
+	if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
+	{
+		while (holder->ap[k] != -42)
+			k++;
+		redirect_append(holder->ap[k-1]);
+	}
 	else if (holder->next)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 	}
-	// else if(i == -1 && holder->in[i + 1] == -42)
-	// {
-	// 	exit(1);
-	// }
-	// if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
-	// {
-	// 	redirect_append(holder->ap[k]);
-	// }
-	// char a[1024];
-	// int ss = read (0 ,a, 100);
-	// printf("%d\n",ss);
-	// write(1,a,ss);
-	// printf("%s\n",holder->args[0]);
+
 	if (!access(holder->args[0], X_OK))
 	{
 		path = holder->args[0];
 	}
 	else
-		path = get_path(env, holder->cmd);
+		path = get_path(env, holder->args[0]);
 	if (!path)
 	{
 		printf("bash: %s: command not found\n", holder->args[0]);
 		exit(127);
 	}
-	execve(path, holder->args, NULL);
-	perror("execve error");
+	array = ft_put_env_string(array, env);
+    execve(path, holder->args, array);
+    ft_free_2d(array);
 	exit(1);
 }
 
@@ -306,81 +337,140 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (res);
 }
-void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp)
+
+int	ft_strcmp_asd(char *s1,  char *s2)
+{
+	size_t	i;
+	int		res;
+
+	res = 0;
+	i = 0;
+	while (s1 && s1[i])
+	{
+		if (s1 && s1[i] == '\0' && s2[i] == '\0')
+		{
+			return (0);
+		}
+		if ( s1 && s2 && (unsigned char)s1[i] != (unsigned char)s2[i])
+		{
+			res = (unsigned char)s1[i] - (unsigned char)s2[i];
+			return (res);
+		}
+		i++;
+	}
+	return (res);
+}
+int is_quote(char *str)
+{
+	int i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == 39 || str[i] == 34)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in)
 {
 	char	*line;
 	char	*str;
-	int		i = 1;
-	write(1, "here_doc> ", 11);
-	line = readline("");
+	int		i = 42;
+	// write(1, "here_doc> ", 11);
+	// dup2(origin_in, STDIN_FILENO);
+	// if (signal(SIGINT, ft_handler_ctrt_herdoc) == SIG_ERR)
+    //     exit(255);
+	line = readline("here_doc> ");
+	i = is_quote(lim);
+	if (i == 1)
+	{
+		lim = ft_remove_here(lim);
+	}
 	while (ft_strncmp(lim, line, ft_strlen(line))
 		|| ft_strlen(line) != ft_strlen(lim))
 	{
-		write(1, "here_doc> ", 11);
+		// write(1, "here_doc> ", 11);
+		if (if_dollar(line) && !i)
+		{
+			line = handle_expand_here(line, env);
+		}
 		write(pipe_fd[1], line, ft_strlen(line));
 		write(pipe_fd[1], "\n", 1);
 		free(line);
-			line = readline("");
+		line = readline("here_doc> ");
 		if (!line)
-			break ;
+			exit(2) ;
 	}
-	close (pipe_fd[1]);
-	if (tmp->cmd)
-	{
-	free (line);
-	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-		(perror("dup2 doc"));
-	close(pipe_fd[0]);
-	}
-	else
-	{
-		pipe(pipe_fd);
-		close(pipe_fd[ 1]);
-		dup2(pipe_fd[0], STDIN_FILENO);
-	}
+	free(line);
+	exit(1);
 }
 
-void execution(t_holder **holder ,t_env **env)
+void execution(t_holder **holder ,t_env *env)
 {
 	t_holder *tmp;
+	int child_stat;
 	int pipe_fd[2];
-	int i ,j , k, n;
-	(i = 0, j = 0, k = 0, n = 0);
+	int i ,j , k, n, wait_i;
+	(i = 0, j = 0, k = 0, n = 0, wait_i = 0);
 	int pid;
 	tmp = *holder;
 	int origin_in = dup(STDIN_FILENO);
 	tmp = *holder;
 	t_holder *doc_tmp = NULL;
-	// while (tmp)
-	// {
-	// 	if (tmp->her_doc[n])
-	// 	{
-	// 		doc_tmp = tmp;
-	// 	}
-	// 	tmp = tmp->next;
-	// }
-	// if (!doc_tmp)
-	// {
-	// 	tmp = *holder;
-	// }
-	// else
-	// 	tmp = doc_tmp;
+	struct termios    attr;
+    tcgetattr(STDIN_FILENO, &attr);
 	while (tmp)
 	{
+		wait_i = 0;
 		pipe(pipe_fd);
-		// n = 0;
 		if (tmp->her_doc[n])
 		{
 			while (tmp->her_doc[n])
 			{
+		dup2(origin_in, STDIN_FILENO);
+
 			if (n > 0)
 				pipe(pipe_fd);
-			dup2(origin_in, STDIN_FILENO);
-			ft_here_doc(tmp->her_doc[n], pipe_fd, tmp);
-			n++;
+			pid = fork();
+			if (!pid)
+			{
+				signal(SIGINT, SIG_DFL);
+				ft_here_doc(tmp->her_doc[n], pipe_fd, tmp, &env, origin_in);
+			}
+			else
+			{
+				waitpid(pid, &child_stat, 0);
+				if (WIFEXITED(child_stat))
+				{
+        			int exit_status = WEXITSTATUS(child_stat);
+					if (exit_status == 255)
+					{
+						tmp = tmp->next;
+						break;
+					}
+				}
+			close(pipe_fd[1]);
+			if (tmp->cmd)
+			{
+			if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+				(perror("dup2 doc"));
+			close(pipe_fd[0]);
+			}
+			else
+			{
+				close(pipe_fd[ 1]);
+				dup2(pipe_fd[0], STDIN_FILENO);
+				pipe(pipe_fd);
+			}
+			}
+				n++;
 			}
  		}
-		if (tmp->cmd || tmp->file_out[j])
+		if ((tmp->cmd_built_in &&tmp->file_out[j]) || (tmp->args_built_in[0] && tmp->cmd_built_in))
+		{
+			exec_export(&tmp, &env);
+		}
+		if (tmp && tmp->cmd || tmp->file_out[j] ||tmp->args[0] && tmp->args[0][0])
 		{
 			if (tmp->in[i] != -42 && tmp->in[i] != -1)
 				i++;
@@ -390,30 +480,11 @@ void execution(t_holder **holder ,t_env **env)
 			}
 			if (tmp->ap[k] != -42 && tmp->ap[k] != -1)
 				k++;
-			// pipe(pipe_fd);
-			// if (tmp->her_doc[n])
-			// {
-			// 	ft_here_doc(tmp->her_doc[n], pipe_fd, tmp);
-			// 	tmp = tmp->next;
-			// }
-			// else
-			// {
 			pid = fork();
 			if (!pid)
 			{
-				// printf("args : %s\n",tmp->args[0]);
-				exec_cmd(tmp, *env, pipe_fd,i-1,j-1,k-1);
+				exec_cmd(tmp, env, pipe_fd,i-1,j-1,k-1);
 			}
-			// else if(pid > 0)
-			// {
-			// 	close (pipe_fd[1]);
-			// 	// close (tmp->out[j - 1]);
-			// 	// close (tmp->in[i - 1]);
-			// 	// close (tmp->ap[k - 1]);
-			// 	dup2 (pipe_fd[0], STDIN_FILENO);
-			// 	close(pipe_fd[0]);
-			// }
-			// }
 		}
 		close (pipe_fd[1]);
 				// close (tmp->out[j - 1]);
@@ -423,9 +494,6 @@ void execution(t_holder **holder ,t_env **env)
 		close(pipe_fd[0]);
 		tmp = tmp->next;
 	}
-	// char a[1024];
-	// int ss = read (0 ,a, 100);
-	// write(1,a,ss);
 	tmp = *holder;
 	while (tmp)
 	{
@@ -436,8 +504,55 @@ void execution(t_holder **holder ,t_env **env)
 	close(origin_in);
 	if (pipe_fd[0])
 		close(pipe_fd[0]);
+	if (WIFSIGNALED(child_stat) && (WTERMSIG(child_stat) == SIGINT) || WTERMSIG(child_stat) == SIGQUIT)
+    {
+        tcsetattr(STDIN_FILENO, TCSANOW, &attr);
+    }
 }
 
+int		ft_cmp_built_in(char *str)
+{
+	int	i;
+	char **checker;
+
+	checker = malloc(8 * sizeof(char *));
+	if (!checker)
+		return (perror("malloc"), 0);
+	checker[0] = ft_strdup("echo");
+	checker[1] = ft_strdup("cd");
+	checker[2] = ft_strdup("pwd");
+	checker[3] = ft_strdup("export");
+	checker[4] = ft_strdup("unset");
+	checker[5] = ft_strdup("env");
+	checker[6] = ft_strdup("exit");
+	checker[7] = NULL;
+	i = 0;
+	while (checker[i])
+	{
+		if (f_strcmp(checker[i], str))
+			return (ft_free_2d(checker), 1);
+		i++;
+	}
+	return (ft_free_2d(checker), 0);
+}
+void	ft_is_buil(t_line *str)
+{
+	t_line *tmp = str;
+
+	while (tmp)
+	{
+		tmp->is_it_built_in = 0;
+		if (tmp->token == CMD && ft_cmp_built_in(tmp->str) == 1)
+			tmp->is_it_built_in = 1;
+		tmp = tmp->next;
+	}
+	// ft_print_tokens(str);
+}
+
+void lek()
+{
+	system("leaks minishell");
+}
 int main(int    ac, char **av, char **env)
 {
 	t_line  *str;
@@ -450,70 +565,59 @@ int main(int    ac, char **av, char **env)
 	t_env *mini_env = NULL;
 	str = NULL;
 	tmp = NULL;
-	// t_envi  *mini_env;
-	// t_env *mini_env = ft_get_env(env);
-    if (env[0])
-        fiLL_env(&mini_env, env);
-    else
-        fill_null_env(&mini_env);
+	// atexit(lek);
+	rl_catch_signals = 0;
+	if (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR
+        || signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR)
+        return (perror("signal"), 1);
+    // if (env[0])
+    //     fiLL_env(&mini_env, env);
+    // else
+    //     fill_null_env(&mini_env);
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
-		if (!SIGQUIT || line == NULL || is_there_exit(line))
-		{
-			if (line == NULL)
-				(printf("exit!\n"), exit(0));
-		}
+		if (!SIGQUIT || line == NULL || (is_there_exit(line) && ft_strlen(line) == 4))
+				(ft_free_list(&str), free(line), printf("exit!\n"), exit(0));
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line); //add space between special carahcteres like | >< ...
-		str = ft_put(line); //create linked list 
+		// if (!line)
+			// str->status = 255;
+		ft_put(line, &str); //create linked list 
 		ft_give_token(str); //give token to each node
-		ft_syntax(str);  //check the syntax
-		ft_remove_quote(&str); //removing quotes for command and args
-		old = str;
-		// ft_expand_argument(mini_env, &str); //expand nta3 ismail
-		while (str)
+		ft_is_buil(str);
+		if (ft_syntax(str))  //check the syntax
 		{
-			if (if_dollar(str->str))
-			{
-				str->str = handle_expand(&str, &mini_env);
-			}
-			str = str->next;
+			// old = str;
+			// // ft_expand_argument(mini_env, &str); //expand nta3 ismail
+			// while (str)
+			// {
+			// 	if (if_dollar(str->str) && str->token != DELIMITER)
+			// 	{
+			// 		// free(str->str);
+			// 		str->str = handle_expand(str->str, &mini_env);
+			// 		str->flag = 1;
+			// 		// free(str->str);
+			// 		// ft_put(str->str, &str); //create linked list 
+			// 		// printf("str = %s\n", str->str);
+			// 		// ft_give_token(str); //give token to each node
+			// 	}
+			// 	str = str->next;
+			// }
+			// str = old;
+			// while (str && !str->str[0])
+			// {
+			// 	str = str->next;
+			// }
+			// printf("%d\n",str->token);
+			// ft_remove_quote(&str, line); //removing quotes for command and args
+			// tmp = ft_create_holder_node(str,line);
+			// ft_checking_files(tmp);
+			// execution(&tmp, mini_env);
 		}
-		str = old;
-		printf("%s\n",str->str);
-		tmp = ft_create_holder_node(str);
-		ft_checking_files(tmp);
-		execution(&tmp, &mini_env);
-		while (str)
-		{
-			// if (str->token == CMD)
-			// 	printf(BLUE"[%s]"RESET, "CMD");
-			// else if (str->token == ARGS)
-			// 	printf(YELLOW"[%s]"RESET, "ARGS");
-			// else if (str->token == PIPE)
-			// 	printf(MAGENTA"[%s]"RESET, "PIPE");
-			// else if (str->token == IN_REDIR)
-			// 	printf(CYAN"[%s]"RESET, "IN_REDIR");
-			// else if (str->token == OUT_REDIR)
-			// 	printf(WHT"[%s]"RESET, "OUT_REDIR");
-			// else if (str->token == HERDOC)
-			// 	printf(GREEN"[%s]"RESET, "HERDOC");
-			// else if (str->token == OUT_FILE)
-			// 	printf(MAGENTA"[%s]"RESET, "OUT_FILE");
-			// else if (str->token == IN_FILE)
-			// 	printf(YELLOW"[%s]"RESET, "IN_FILE");
-			// else if (str->token == FILE)
-			// 	printf(YELLOW"[%s]"RESET, "FILE");
-			// else if (str->token == APPEND)
-			// 	printf(YELLOW"[%s]"RESET, "APPEND");
-			// else if (str->token == DELIMITER)
-			// 	printf(YELLOW"[%s]"RESET, "DELIMITER");
-			// printf("--%s--", str->str);
-			str = str->next;
-		}
-		// printf("\n");
+		ft_free_list(&str);
+		str = NULL;
 		free(line);
 	}
 }

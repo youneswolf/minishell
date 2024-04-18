@@ -6,63 +6,54 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/14 22:40:25 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/05 00:45:48 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int    ft_syntax_quote(char *str)
+int    ft_syntax_quote(char *str, int i, int count)
 {
-    int i;
-    int count;
     int flag;
 
-    i = 0;
-    count = 0;
-    // if (str[0] == '\''|| str[0] == '\"')
-    // {
-    //     if (str[ft_strlen(str) - 1] == '\'' || str[ft_strlen(str) - 1] == '\"')
-    //         flag = str[ft_strlen(str) - 1];
-    //     flag = str[0];
-    // }
-    // while (str[i])
-    // {
-    //     if (str[i] == flag)
-    //         count++;
-    //     i++;
-    // }
     while (str && str[i])
     {
         if (str[i] == '\"' || str[i] == '\'')
         {
             flag = str[i];
-            count++;
-            i++;
+            (1) && (count++,  i++);
             while (str[i])
             {
                 if (str[i] == flag)
                 {
-                    count++;
-                    flag = 0;
+                    (1) && (count++,  flag = 0);
                     break;
                 }
-                if (str[i])
-                    i++;
+                i++;
             }
         }
         if (str[i])
             i++;
     }
     if (count % 2 != 0)
-    {
-        write(2, "syntax error: double or single quote\n", 36);
-        return (0);
-    }
+        return (write(2, "syntax error: double or single quote\n", 36), 0);
     return (1);
 }
+int     ft_her_doc(t_line *head)
+{
+    t_line *tmp;
 
-void    ft_syntax(t_line *head)
+    tmp = head;
+    while (tmp && tmp->next)
+    {
+        if (tmp->token == HERDOC && tmp->next->token == HERDOC)
+            return (1);
+        tmp = tmp->next;
+    }
+    return (0);
+}
+
+int    ft_syntax(t_line *head)
 {
     int i;
     int flag;
@@ -72,27 +63,21 @@ void    ft_syntax(t_line *head)
     i = 0;
     count = 0;
     tmp = head;
-    if (tmp && tmp->token == PIPE)
-    {
-        perror("parse error");
-        return ;
-    }
+    if (tmp && tmp->token == PIPE || ft_her_doc(head))  
+        return ( printf("error near `%s'", tmp->str), 0);
     while (tmp)
     {
-        if (!ft_syntax_quote(tmp->str))
-            return ;
+        if (!ft_syntax_quote(tmp->str, i, count))
+            return (0);
         flag = tmp->token;
+        if ((tmp->token == OUT_REDIR || tmp->token == IN_REDIR) && !tmp->next)
+            return (printf("error near `%s'\n", tmp->str), 0);
         if (tmp->next && flag == tmp->next->token && flag != ARGS)
-        {
-            perror("parse error");
-            return ;
-        }
+            return (printf("error near `%s'\n", tmp->str), 0);
         else if ((tmp->token == PIPE || tmp->token == HERDOC || tmp->token == IN_REDIR 
         || tmp->token == OUT_REDIR || tmp->token == APPEND) && !tmp->next)
-        {
-            perror("parse error");
-            return ;
-        }
+            return (printf("error near `%s'\n", tmp->str), 0);
         tmp = tmp->next;
     }
+    return (1);
 }

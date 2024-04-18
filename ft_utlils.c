@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:54:59 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/31 01:24:01 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/07 20:22:21 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,133 +47,100 @@ size_t	ft_strlen(const char *s)
 // 	return (s1 = NULL, str);
 // }
 
-int	count(char *s, char c)
-{
-	int	i;
-	int	count;
+static	char	*free2darray(char **array, int n);
 
+static	size_t	count_seps(const char *str, char c)
+{
+	size_t	i;
+	size_t	k;
+	size_t	j;
+
+	k = 0;
 	i = 0;
-	count = 0;
-	while (s[i] && s[i] != '\0')
+	if (c == '\0')
+		return (1);
+	if (str[0] == '\0')
+		return (0);
+	j = ft_strlen(str);
+	while (i <= j)
 	{
-		while (s[i] == c && s[i] != '\0')
+		while (str[i] == c)
 			i++;
-		if (s[i] != c && s[i] != '\0')
+		if (str[i] != c && str[i])
 		{
-			count++;
-			while (s[i] != c && s[i] != '\0')
+			k++;
+			while (str[i] != c && str[i])
 				i++;
 		}
-	}
-	return (count);
-}
-
-char	*word(char *str, char c)
-{
-	int		i;
-	char	*p;
-
-	i = 0;
-	while (str[i] && str[i] != c)
-		i++;
-	p = (char *)malloc(i + 1);
-	if (!p)
-		return (NULL);
-	i = 0;
-	while (str[i] != c && str[i] != '\0')
-	{
-		p[i] = str[i];
 		i++;
 	}
-	p[i] = '\0';
-	return (p);
+	return (k);
 }
 
-int	fti_free(char **array, const char *str, char c, int a)
+static	char	*to_alloc(size_t word_len, const char *start,
+char **new_strs, int k)
 {
-	int	i;
-	int	j;
+	char	*new_str;
 
-	i = 0;
-	j = 0;
-	if (a == 3)
+	new_str = (char *)malloc(sizeof(char) * (word_len + 1));
+	if (!new_str)
 	{
-		while (array[i])
-		{
-			free(array[i]);
-			i++;
-		}
-		free(array);
-		return (0);
+		return (free2darray(new_strs, k));
 	}
-	else if (a == 0)
-		while (*(str + j) == c && *(str + j))
-			j++;
-	else if (a == 1)
-		while (*(str + j) != c && *(str + j))
-			j++;
-	return (j);
+	memcpy(new_str, start, word_len);
+	new_str[word_len] = '\0';
+	return (new_str);
 }
 
-char	**alloc(int l)
+static	char	*free2darray(char **array, int n)
 {
-	char	**array;
-
-	array = (char **)malloc((l + 1) * sizeof(char *));
-	if (!array)
-		return (0);
-	return (array);
+	while (n--)
+		free(array[n]);
+	free(array);
+	return (NULL);
 }
 
-void	ft_put_point(char *str)
+static	char	**f25lnorm(const char *s, char c, char **new_strs)
 {
-	int	i;
-	int	flag;
+	const char	*start;
+	size_t		k;
+	char		*new_str;
+	size_t		word_len;
 
-	i = 0;
-	while (str[i])
+	k = 0;
+	while (*s)
 	{
-		if (str[i] == '\"' || str[i] == '\'')
+		if (*s != c)
 		{
-			flag = str[i];
-			i++;
-			while (str[i] && str[i] != flag)
-			{
-				if (str[i] == ' ')
-					str[i] = '*';
-				i++;
-			}
-		}
-		i++;
-	}
-}
-
-char	**ft_split(char *str, char c)
-{
-	int		j;
-	int		l;
-	char	**array;
-
-	j = 0;
-	if (str == NULL)
-		return (NULL);
-	ft_put_point(str);
-	l = count(str, c);
-	array = alloc(l);
-	if (!array)
-		return (NULL);
-	while (j < l)
-	{
-		str += fti_free(array, str, c, 0);
-		if (*str != c && *str)
-		{
-			array[j] = word(str, c);
-			if (!array[j] && !fti_free(array, str, c, 3))
+			start = s;
+			while (*s && *s != c)
+				s++;
+			word_len = s - start;
+			new_str = to_alloc(word_len, start, new_strs, k);
+			if (!new_str)
 				return (NULL);
-			j++;
+			new_strs[k++] = new_str;
 		}
-		str += fti_free(array, str, c, 1);
+		else
+			s++;
 	}
-	array[j] = NULL;
-	return (array);
+	new_strs[k] = NULL;
+	return (new_strs);
+}
+
+char	**ft_split(char *s, char c)
+{
+	size_t	i;
+	size_t	k;
+	char	**new_strs;
+
+	if (!s)
+		return (NULL);
+	k = 0;
+	i = count_seps(s, c);
+	new_strs = (char **)malloc(sizeof(char *) * (i + 1));
+	if (new_strs == NULL)
+		return (NULL);
+	new_strs = f25lnorm(s, c, new_strs);
+	return (new_strs);
 }
