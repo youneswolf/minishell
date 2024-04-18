@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/04 03:56:13 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/17 15:30:35 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ int    ft_syntax(t_line *head)
         flag = tmp->token;
         if (tmp->next && flag == tmp->next->token && flag != ARGS)
             return (head->status->status = 255, printf("error near `%s'\n", tmp->str), 0);
+        else if (tmp && (tmp->token == HERDOC && tmp->next->token == OUT_REDIR)
+        || (tmp->token == HERDOC && tmp->next->token == IN_REDIR)
+        || (tmp->token == IN_REDIR && tmp->next->token == OUT_REDIR))
+        return (printf("error near2 `%s'\n", tmp->str), 0);
         else if ((tmp->token == PIPE || tmp->token == HERDOC || tmp->token == IN_REDIR 
         || tmp->token == OUT_REDIR || tmp->token == APPEND) && !tmp->next)
             return (head->status->status = 255, printf("error near `%s'\n", tmp->str), 0);

@@ -6,50 +6,79 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 10:32:36 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/16 14:46:13 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/17 15:09:51 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_is_there_in_the_dir(char *str, char *s1)
+int ft_str(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str && str[i])
+        i++;
+    return (i);
+}
+
+int    ft_search_back(char *pattern, char *text, int l, int ll)
+{
+    while (l >= 0 && ll >= 0)
+    {
+        if (pattern[l] == '*')
+        {
+            while (l > 0 && pattern[l] == '*')
+                l--;
+            if (l <= 0)
+                return 1;
+            while (text[ll] && text[ll] != pattern[l])
+                ll--;
+        }
+        if (pattern[l] == text[ll])
+        {
+            l--;
+            ll--;
+        }
+        else
+            return 0;
+    }
+    if ((l <= 0 && ll <= 0) || pattern[0] == '*')
+        return  (1);
+    else
+        return (0);
+}
+
+int ft_is_there_in_the_dir(char *pattern, char *text)
 {
     int i;
     int j;
+    int l;
+    int ll;
 
-    i = 0;
-    j = 0;
-    while (str && s1 && str[i] && s1[j])
+    (1) && (i = 0, j = 0, l = ft_str(pattern) - 1, ll = ft_str(text) - 1);
+    if (pattern[l] != '*')
+        return (ft_search_back(pattern, text, l, ll));
+    else
     {
-        if (str[i] == '*')
+        while (pattern[i] && text[j])
         {
-            while (str[i] && str[i] == '*')
-                i++;
-            if (str[i] == '\0')
-                return (1);
-        }
-        while (s1 && s1[j])
-        {
-            if (str[i] == s1[j])
+            if (pattern[i] == '*')
             {
-                j++;
-                i++;
+                while (pattern[i] == '*')
+                    i++;
+                if (pattern[i] == '\0')
+                    return 1;
+                while (text[j] && text[j] != pattern[i])
+                    j++; 
             }
-            else if (str[i] == '*')
-            {
-                j++;
-                break;
-            }
-            else if (str[i] != s1[j])
-                return (0);
+            if (pattern[i] == text[j])
+                (1) && (i++, j++);
             else
-                j++;
+                return 0;
         }
-        if (s1[j] == '\0')
-            return (0);
-        i++;
+        return ((pattern[i] == '\0' && text[j] == '\0') || pattern[i] == '*');
     }
-    return (1);
 }
 
 int ft_is_there(char *str)
@@ -84,7 +113,6 @@ char **ft_does_it_matche(char *str)
             if (ft_is_there_in_the_dir(str, name->d_name) && name->d_name[0] != '.')
             {
                 array[i] = ft_strdup(name->d_name);
-                printf("{%s}\n", array[i]);
                 i++;
             }
             name = readdir(dir);
