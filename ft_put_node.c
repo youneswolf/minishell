@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_put_node.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/17 18:12:03 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:10:51 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ t_line	*ft_lstnew(char *str, int start, int end)
 	t_line	*new;
 
 	new = (t_line *)malloc(sizeof(t_line));
+	new->status = (t_status *)malloc(sizeof(t_status));
 	if (!new)
 		return (NULL);
     new->str = ft_substr(str, start, end - start);
 	if (new->str == NULL)
+		printf("here\n");
 	new->next = NULL;
 	return (new);
 }
@@ -94,8 +96,6 @@ void	ft_put(char *str, t_line **head)
 	t_status	*status;
 
     (1) && (i = 0, j = 0, flag = 0);
-	// status = malloc(sizeof(t_status));
-	// (*head)->status = status;
     while (str && str[i])
     {
         while (str[i] && ft_strchr1(" \t\n\v\f\r", str[i]))

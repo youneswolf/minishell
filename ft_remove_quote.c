@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remove_quote.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/08 19:50:21 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:18:58 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,17 @@ int ft_remove_utils(t_line *tmp)
     int flag;
     int i;
 
-    count = ft_strlen(tmp->str) + 1;
+    count = ft_strlen(tmp->str);
     i = 0;
     while (tmp && tmp->str[i])
     {
         tmp->quote = 0;
+        tmp->type_quote = 0;
         if (tmp->str[i] == '\"' || tmp->str[i] == '\'')
         {
-            (1) && (flag = tmp->str[i], i++);
+            tmp->type_quote = tmp->str[i];
             tmp->quote = 1;
+            (1) && (flag = tmp->str[i], i++);
             while (tmp->str[i])
             {
                 if (tmp->str[i] == flag)
@@ -40,7 +42,7 @@ int ft_remove_utils(t_line *tmp)
         if(tmp->str[i])
             i++;
     }
-    return (count);
+    return (count + 1);
 }
 
 char    *ft_remove_utils2(t_line *tmp, char *str, int j, int i)
@@ -85,11 +87,34 @@ char    *ft_remove(t_line *tmp, char *line)
     if (count > 0)
         str = malloc(count + 1 * sizeof(char));
     if (!str)
-        return (NULL);
+        return (tmp->status->status = 255, NULL);
         // return (free(str), ft_free_list(tmp), "");
     str = ft_remove_utils2(tmp, str, j, i);
     return (str);
 }
+
+char	*ft_strchr1(char *s, int c)
+{
+	char	x;
+	int		i;
+
+	i = 0;
+	x = (char)c;
+	while (s[i])
+	{
+		if (s[i] == x)
+		{
+			return ((char *)&s[i]);
+		}
+		i++;
+	}
+	if (s[i] == x)
+	{
+		return ((char *)&s[i]);
+	}
+	return (NULL);
+}
+
 
 void    ft_remove_quote(t_line **str, char *line)
 {
@@ -100,13 +125,9 @@ void    ft_remove_quote(t_line **str, char *line)
     i = 0;
     while (tmp)
     {
-        if (tmp && (tmp->token == CMD || tmp->token == ARGS))
-        {
-            // if (tmp->token == DELIMITER)
-            //     tmp->delimiter_quote = 1;
-            // free(tmp->str);
+        if (tmp && (tmp->token == CMD || tmp->token == ARGS)
+            && (ft_strchr1(tmp->str, '\'') || ft_strchr1(tmp->str, '"')))
             tmp->str = ft_remove(tmp, line);
-        }
         tmp = tmp->next;
     }
 }

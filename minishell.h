@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 13:58:02 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:04:59 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <readline/readline.h>
+#include <dirent.h>
 #include <readline/history.h>
 #define CMD 0
 #define PIPE 1
@@ -51,8 +52,9 @@ typedef struct s_line
 {
     char            *str;
     int             token;
-	int				quote;
-	int				flag;
+    int             quote;
+    int             type_quote;
+    int             flag;
     int             is_it_built_in;
     struct s_status *status;
     struct s_line   *next;
@@ -226,5 +228,15 @@ char *handle_expand_here(char *line_str, t_env **env);
 t_line	*get_last_l(t_line **a);
 char *expand_here(char *str, t_env **env);
 int count_sgl_quote(char *str);
+char	**ft_split1(const char *str, char c);
+static char	**alloc1(int l);
+static int	ft_free(char **array, const char *str, char c, int a);
+static char	*word1(const char *str, char c);
+static int	count1(const char *s, char c);
+char **ft_does_it_matche(char *str);
+int ft_is_there(char *str);
+int ft_is_there_in_the_dir(char *pattern, char *text);
+int    ft_search_back(char *pattern, char *text, int l, int ll);
+int ft_str(char *str);
 //======================================================================
 #endif

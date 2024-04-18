@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 15:46:14 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:22:16 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -589,32 +589,32 @@ int main(int    ac, char **av, char **env)
 		ft_is_buil(str);
 		if (ft_syntax(str))  //check the syntax
 		{
-			// old = str;
-			// // ft_expand_argument(mini_env, &str); //expand nta3 ismail
-			// while (str)
-			// {
-			// 	if (if_dollar(str->str) && str->token != DELIMITER)
-			// 	{
-			// 		// free(str->str);
-			// 		str->str = handle_expand(str->str, &mini_env);
-			// 		str->flag = 1;
-			// 		// free(str->str);
-			// 		// ft_put(str->str, &str); //create linked list 
-			// 		// printf("str = %s\n", str->str);
-			// 		// ft_give_token(str); //give token to each node
-			// 	}
-			// 	str = str->next;
-			// }
-			// str = old;
-			// while (str && !str->str[0])
-			// {
-			// 	str = str->next;
-			// }
+			old = str;
+			// ft_expand_argument(mini_env, &str); //expand nta3 ismail
+			while (str)
+			{
+				if (if_dollar(str->str) && str->token != DELIMITER)
+				{
+					// free(str->str);
+					str->str = handle_expand(str->str, &mini_env);
+					str->flag = 1;
+					// free(str->str);
+					// ft_put(str->str, &str); //create linked list 
+					// printf("str = %s\n", str->str);
+					// ft_give_token(str); //give token to each node
+				}
+				str = str->next;
+			}
+			str = old;
+			while (str && !str->str[0])
+			{
+				str = str->next;
+			}
 			// printf("%d\n",str->token);
-			// ft_remove_quote(&str, line); //removing quotes for command and args
-			// tmp = ft_create_holder_node(str,line);
-			// ft_checking_files(tmp);
-			// execution(&tmp, mini_env);
+			ft_remove_quote(&str, line); //removing quotes for command and args
+			tmp = ft_create_holder_node(str,line);
+			ft_checking_files(tmp);
+			execution(&tmp, mini_env);
 		}
 		ft_free_list(&str);
 		str = NULL;

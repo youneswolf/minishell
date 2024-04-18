@@ -1,22 +1,22 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_red_args.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/03 16:28:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/14 22:36:39 by asedoun          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
+
+int    ft_red_args_utils(t_line *tmp1, int flag)
+{
+    while (tmp1 && tmp1->token == CMD)
+    {
+        if (tmp1 && tmp1->token == CMD && flag == 1)
+            tmp1->token = ARGS;
+        tmp1 = tmp1->next;
+    }
+    return (0);
+}
 
 void    ft_red_args(t_line *head)
 {
    t_line *tmp;
    t_line *tmp1;
-   int  i, flag;
+   int  i;
+   int  flag;
 
     tmp = head;
     while (tmp)
@@ -30,13 +30,7 @@ void    ft_red_args(t_line *head)
                 tmp1 = tmp1->next->next;
             else
                 return ;
-            while (tmp1 && tmp1->token == CMD)
-            {
-                if (tmp1 && tmp1->token == CMD && flag == 1)
-                    tmp1->token = ARGS;
-                tmp1 = tmp1->next;
-            }
-            flag = 0;
+            flag = ft_red_args_utils(tmp1, flag);
         }
         tmp = tmp->next;
     }

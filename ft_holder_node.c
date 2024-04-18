@@ -1,124 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_holder_node.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/13 15:04:30 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/17 18:12:20 by asedoun          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "minishell.h"
 #include "minishell.h"
 
-static int	count1(const char *s, char c)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (s[i] && s[i] != '\0')
-	{
-		while (s[i] == c && s[i] != '\0')
-			i++;
-		if (s[i] != c && s[i] != '\0')
-		{
-			count++;
-			while (s[i] != c && s[i] != '\0')
-				i++;
-		}
-	}
-	return (count);
-}
-
-static char	*word1(const char *str, char c)
-{
-	int		i;
-	char	*p;
-
-	i = 0;
-	while (str[i] && str[i] != c)
-		i++;
-	p = (char *)malloc(i + 1);
-	if (!p)
-		return (NULL);
-	i = 0;
-	while (str[i] != c && str[i] != '\0')
-	{
-		p[i] = str[i];
-		i++;
-	}
-	p[i] = '\0';
-	return (p);
-}
-
-static int	ft_free(char **array, const char *str, char c, int a)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	if (a == 3)
-	{
-		while (array[i])
-		{
-			free(array[i]);
-			i++;
-		}
-		free(array);
-		return (0);
-	}
-	else if (a == 0)
-		while (*(str + j) == c && *(str + j))
-			j++;
-	else if (a == 1)
-		while (*(str + j) != c && *(str + j))
-			j++;
-	return (j);
-}
-
-static char	**alloc1(int l)
-{
-	char	**array;
-
-	array = (char **)malloc((l + 1) * sizeof(char *));
-	if (!array)
-		return (0);
-	return (array);
-}
-
-char	**ft_split1(const char *str, char c)
-{
-	int		j;
-	int		l;
-	char	**array;
-
-	j = 0;
-	if (str == NULL)
-		return (NULL);
-	l = count1(str, c);
-	array = alloc1(l);
-	if (!array)
-		return (NULL);
-	while (j < l)
-	{
-		str += ft_free(array, str, c, 0);
-		if (*str != c && *str)
-		{
-			array[j] = word1(str, c);
-			if (!array[j] && !ft_free(array, str, c, 3))
-				return (NULL);
-			j++;
-		}
-		str += ft_free(array, str, c, 1);
-	}
-	array[j] = NULL;
-	return (array);
-}
 t_holder	*ft_lstnew_holder(char *line)
 {
 	t_holder	*new;
@@ -128,14 +9,14 @@ t_holder	*ft_lstnew_holder(char *line)
 	new->cmd = NULL;
     new->cmd_built_in = NULL;
 	new->args = malloc(sizeof(char *) * 1000);
-    new->args_built_in = malloc(sizeof(char *) * 1000);
-	new->file_in = malloc(sizeof(char *) * 1000);
-	new->file_out = malloc(sizeof(char *) * 1000);
-	new->append = malloc(sizeof(char *) * 1000);
-	new->ap = malloc(sizeof(int ) * 1000);
-	new->out = malloc(sizeof(int ) * 1000);
-	new->in = malloc(sizeof(int ) * 1000);
-	new->her_doc = malloc(sizeof(char *) * 1000);
+    new->args_built_in = malloc(sizeof(char *)* 1000);
+	new->file_in = malloc(sizeof(char *)* 1000);
+	new->file_out = malloc(sizeof(char *)* 1000);
+	new->append = malloc(sizeof(char *)* 1000);
+	new->ap = malloc(sizeof(int )* 1000);
+	new->out = malloc(sizeof(int )* 1000);
+	new->in = malloc(sizeof(int )* 1000);
+	new->her_doc = malloc(sizeof(char *)* 1000);
 	while (i < 1000)
 	{
         new->args_built_in[i] = NULL;
@@ -217,6 +98,16 @@ int		ft_count_word(char *str)
 	return (count);
 }
 
+int	ft_count_2d(char **a)
+{
+	int	i;
+
+	i = 0;
+	while (a && a[i])
+		i++;
+	return (i);
+}
+
 t_holder    *ft_create_holder_node(t_line *node, char *line)
 {
 	t_holder    *holder= NULL;
@@ -230,9 +121,11 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 	int	mm = 0;
 	tmp = node;
 	tmp1 = tmp;
+	
 	while (i <= c)
 	{
 		j = 0;
+		// tmp->flag = 1;
 		new = add_list_holder(&holder, line);
 		flag = 42;
 		while (tmp)
@@ -258,17 +151,33 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						}
 						ft_free_2d(array);
 					}
-					else 
+					flag = 0;
+				}
+				else 
+				{	
+					if (ft_is_there(tmp->str))
+					{
+						char **a = ft_does_it_matche(tmp->str);
+						int qq = ft_count_2d(a);
+						int	ee = 0;
+						if (qq >= 1)
+						{
+							new->cmd = ft_strdup(a[0]);
+							while (a[ee])
+							{
+								new->args[j++] = ft_strdup(a[ee]);
+								ee++;
+							}
+							// ft_free_2d(a);
+						}
+					}
+					else
 					{
 						new->cmd = tmp->str;
 						new->args[j++] = tmp->str;
 					}
+					new->args[j] = NULL;
 					flag = 0;
-				}
-				else 
-				{
-					new->cmd = tmp->str;
-					new->args[j++] = tmp->str;
 				}
 				flag = 0;
 			}
@@ -284,41 +193,168 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						new->cmd_built_in = ft_strdup(array[0]);
 						while (array[mm])
 						{
-							new->args_built_in[zz++] = ft_strdup(array[mm]);
+							new->args_built_in[z++] = ft_strdup(array[mm]);
 							mm++;
 						}
 						ft_free_2d(array);
 					}
-					else 
-					{
-					
-                		new->args_built_in[z++] = tmp->str;
-                		new->cmd_built_in = tmp->str;
-					}
 					flag = 1;
 				}
-				else 
-				{
-					
-                	new->args_built_in[z++] = tmp->str;
-                	new->cmd_built_in = tmp->str;
+				else
+				{	
+					if (ft_is_there(tmp->str))
+					{
+						char **a = ft_does_it_matche(tmp->str);
+						int qq = ft_count_2d(a);
+						int	ee = 0;
+						if (qq >= 1)
+						{
+							new->cmd = ft_strdup(a[0]);
+							while (a[ee])
+							{
+								new->args[z++] = ft_strdup(a[ee]);
+								ee++;
+							}
+							// ft_free_2d(a);
+						}
+					}
+					else
+					{
+						new->args_built_in[z++] = tmp->str;
+						new->cmd_built_in = tmp->str;
+					}
+					new->args_built_in[z] = NULL;
 				}
                 flag = 1;
             }
 			else if (tmp->token == ARGS && flag == 0)
-				new->args[j++] = tmp->str;
-            else if (tmp->token == ARGS && flag == 1)
-                new->args_built_in[z++] = tmp->str;
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee] != NULL)
+						{
+							new->args[j++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else 
+					new->args[j++] = tmp->str;
+				new->args[j] = NULL;
+			}
+            else if(tmp->token == ARGS && flag == 1)
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee])
+						{
+							new->args_built_in[z++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else
+                	new->args_built_in[z++] = tmp->str;
+				new->args_built_in[z] = NULL;
+			}
 			else if (tmp->token == OUT_FILE)
-				new->file_out[k++] = tmp->str;
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee])
+						{
+							new->file_out[k++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else
+					new->file_out[k++] = tmp->str;
+				new->file_out[w] = NULL;
+			}
 			else if (tmp->token == OUT_FILE)
-				 new->file_out[w++] = tmp->str;
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee])
+						{
+							new->file_out[w++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else
+					new->file_out[w++] = tmp->str;
+				new->file_out[w] = NULL;
+			}
 			else if (tmp->token == IN_FILE)
-				 new->file_in[n++] = tmp->str;
+			{
+				if (ft_is_there(tmp->str))
+				{
+					char **a = ft_does_it_matche(tmp->str);
+					int qq = ft_count_2d(a);
+					int	ee = 0;
+					if (qq >= 1)
+					{
+						while (a[ee])
+						{
+							new->file_in[n++] = ft_strdup(a[ee]);
+							ee++;
+						}
+						// ft_free_2d(a);
+					}
+				}
+				else
+					new->file_in[n++] = tmp->str;
+				new->file_in[n] = NULL;
+			}
 			else if (tmp->token == APPEND)
 			{
 				if (tmp->next)
-					new->append[a++] = tmp->next->str;
+				{
+					if (ft_is_there(tmp->next->str))
+					{
+						char **aa = ft_does_it_matche(tmp->next->str);
+						int qq = ft_count_2d(aa);
+						int	ee = 0;
+						if (qq >= 1)
+						{
+							while (aa[ee])
+							{
+								new->append[a++] = ft_strdup(aa[ee]);
+								ee++;
+							}
+						}
+						// ft_free_2d(aa);
+					}
+					else
+						new->append[a++] = tmp->next->str;
+					new->append[a] = NULL;
+				}
 			}
 			else if (tmp->token == HERDOC && a < 1024)
 			{
