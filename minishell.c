@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/19 10:09:02 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/19 11:54:34 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -417,6 +417,7 @@ void execution(t_holder **holder ,t_env *env)
 	int pid;
 	tmp = *holder;
 	int origin_in = dup(STDIN_FILENO);
+	int origin_out = dup(STDOUT_FILENO);
 	tmp = *holder;
 	t_holder *doc_tmp = NULL;
 	struct termios    attr;
@@ -470,27 +471,36 @@ void execution(t_holder **holder ,t_env *env)
  		}
 		if ((tmp->cmd_built_in &&tmp->file_out[j]) || (tmp->args_built_in[0] && tmp->cmd_built_in))
 		{
-			if (i >= 0 && j < 1024 && tmp->in[i] != -42 && tmp->in[i] != -1)
+			if (tmp->in[i] != -42 && tmp->in[i] != -1)
+				i++;
+			if (tmp->out[j] != -42 && tmp->out[j] != -1)
 			{
-				redirect_input(tmp->in[i]);
+				j++;
 			}
-			if (j >= 0 && j < 1024 && tmp->out[j] != -42 && tmp->out[j] != -1)
+			if (tmp->ap[k] != -42 && tmp->ap[k] != -1)
+				k++;
+			if (i-1 >= 0 && j-1 < 1024 && tmp->in[i-1] != -42 && tmp->in[i-1] != -1)
 			{
-				while (tmp->out[j] != -42)
+				redirect_input(tmp->in[i-2]);
+			}
+			if (j-1 >= 0 && j-1 < 1024 && tmp->out[j-1] != -42 && tmp->out[j-1] != -1)
+			{
+				
+				while (tmp->out[j-1] != -42)
 					j++;
-				redirect_output(tmp->out[j-1]);
+				redirect_output(tmp->out[j-2]);
 			}
-			if (k >= 0 && k < 1024 && tmp->ap[k] != -42 && tmp->ap[k] != -1)
+			if (k-1 >= 0 && k-1 < 1024 && tmp->ap[k-1] != -42 && tmp->ap[k-1] != -1)
 			{
-			while (tmp->ap[k] != -42)
+			while (tmp->ap[k-1] != -42)
 						k++;
-				redirect_append(tmp->ap[k-1]);
+				redirect_append(tmp->ap[k-2]);
 			}
 			else if (tmp->next)
 			{
 				dup2(pipe_fd[1], STDOUT_FILENO);
-				close(pipe_fd[0]);
-				close(pipe_fd[1]);
+				// close(pipe_fd[0]);
+				// close(pipe_fd[1]);
 			}
 			if (!ft_strcmp_asd(tmp->args_built_in[0], "export"))
 				exec_export(&tmp, &env);
@@ -500,6 +510,8 @@ void execution(t_holder **holder ,t_env *env)
 				exec_unset(&env, tmp);
 			else if (!ft_strcmp_asd(tmp->args_built_in[0], "env"))
 				exec_env(&env);
+			dup2(origin_out, STDOUT_FILENO);
+			
 		}
 		if (tmp && tmp->cmd || tmp->file_out[j] ||tmp->args[0] && tmp->args[0][0])
 		{

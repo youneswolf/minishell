@@ -288,7 +288,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
 				else
 					new->file_out[k++] = tmp->str;
-				new->file_out[w] = NULL;
+				new->file_out[k] = NULL;
 			}
 			else if (tmp->token == OUT_FILE)
 			{
