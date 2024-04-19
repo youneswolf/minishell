@@ -76,6 +76,8 @@ void exec_export(t_holder **holder, t_env **env)
 	char *var_name;
 	char *value;
 	t_env *tmp;
+	t_env *node;
+	int is_invalid = 0;
 	t_holder *line_tmp;
 	char *join;
 	int j;
@@ -88,22 +90,85 @@ void exec_export(t_holder **holder, t_env **env)
 	else
 	{
 	i = 0;
-	j = 7;
-	while (line_tmp->args_built_in[1][i] != '=')
+	j = 1;
+	while(line_tmp->args_built_in[j])
+	{
+	if (line_tmp->args_built_in[j][0] && (line_tmp->args_built_in[j][0] >= '0' && line_tmp->args_built_in[j][0] <= '9'))
+	{
+		printf("bash: export: `%s': not a valid identifier\n",line_tmp->args_built_in[j]);
+		j++;
+		continue;
+	}
+	while (line_tmp->args_built_in[j][i] && line_tmp->args_built_in[j][i] != '=')
+	{
+		if (line_tmp->args_built_in[j][i] == '.' || line_tmp->args_built_in[j][i] == ',' ||
+		 line_tmp->args_built_in[j][i] == '/' || line_tmp->args_built_in[j][i] == '-' || line_tmp->args_built_in[j][i] == ':')
+		 {
+			printf("bash: export: `%s' not a valid identifipper\n",line_tmp->args_built_in[j]);
+			j++;
+			i = 0;
+			is_invalid = 1;
+			break;
+		 }
 		i++;
-	var_name = ft_substr(line_tmp->args_built_in[1], 0, i);
+	}
+	if (is_invalid == 1)
+	{
+		is_invalid = 0;
+		continue;
+	}
+	if (line_tmp->args_built_in[j][i] && line_tmp->args_built_in[j][i-1] == '+')
+	{
+	var_name = ft_substr(line_tmp->args_built_in[j], 0, i-1);
 	while (*env)
 	{
 		if (!ft_strncmp(var_name, (*env)->env, ft_strlen(var_name)))
 		{
-			value = ft_substr(line_tmp->args_built_in[1], i, ft_strlen(line_tmp->args_built_in[1]) - i);
+			value = ft_substr(line_tmp->args_built_in[j], i+1, ft_strlen(line_tmp->args_built_in[j]) - i-1);
+			// join = ft_strjoin(var_name, value,2);
+			// free(tmp->env); 
+			(*env)->env = ft_strjoin((*env)->env, value,2);
+			free(var_name);
+			break;
+		}
+		*env = (*env)->next;
+	}
+	}
+	else
+	{
+	var_name = ft_substr(line_tmp->args_built_in[j], 0, i);
+	while (*env)
+	{
+		if (!ft_strncmp(var_name, (*env)->env, ft_strlen(var_name)))
+		{
+			value = ft_substr(line_tmp->args_built_in[j], i, ft_strlen(line_tmp->args_built_in[j]) - i);
 			join = ft_strjoin(var_name, value,2);
-			// free(tmp->env);
+			// free(tmp->env); 
 			(*env)->env = join;
 			break;
 		}
 		*env = (*env)->next;
 	}
+	
+	if (!(*env))
+	{
 	*env = tmp;
+	while ((*env)->next)
+	{
+		(*env) = (*env)->next;
 	}
+		value = ft_substr(line_tmp->args_built_in[1], i, ft_strlen(line_tmp->args_built_in[1]) - i);
+		join = ft_strjoin(var_name, value,2);
+		node = malloc(sizeof(t_env));
+		node->env = join;
+		node->next = NULL;
+		(*env)->next = node;
+	}
+	}
+	j++;
+	*env = tmp;
+	i = 0;
+	}
+	}
+	
 }

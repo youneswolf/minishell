@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/19 10:43:30 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:11:13 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,14 +147,14 @@ void    ft_ctr(int sig)
 
 char	*find_path(t_env *env)
 {
-	char	*dest;
+	char	*dest = NULL;
 	t_env *tmp;
 
 	tmp = env;
 	dest = NULL;
 	while (!dest)
 	{
-		dest = strnstr(tmp->env, "PATH=", 5);
+		dest = strnstr(tmp->env, "PATH=", 5); 
 		tmp = tmp->next;
 	}
 	return (dest);
@@ -223,6 +223,8 @@ char	*get_path(t_env *env, char *cmd)
 
 	i = -1;
 	path = ft_split(find_path(env), ':');
+	if (!path)
+		return(NULL);
 	path[0] = skip_path(path[0]);
 	while (cmd && path[++i])
 	{
@@ -415,6 +417,7 @@ void execution(t_holder **holder ,t_env *env)
 	int pid;
 	tmp = *holder;
 	int origin_in = dup(STDIN_FILENO);
+	int origin_out = dup(STDOUT_FILENO);
 	tmp = *holder;
 	t_holder *doc_tmp = NULL;
 	struct termios    attr;
@@ -468,7 +471,47 @@ void execution(t_holder **holder ,t_env *env)
  		}
 		if ((tmp->cmd_built_in &&tmp->file_out[j]) || (tmp->args_built_in[0] && tmp->cmd_built_in))
 		{
-			exec_export(&tmp, &env);
+			if (tmp->in[i] != -42 && tmp->in[i] != -1)
+				i++;
+			if (tmp->out[j] != -42 && tmp->out[j] != -1)
+			{
+				j++;
+			}
+			if (tmp->ap[k] != -42 && tmp->ap[k] != -1)
+				k++;
+			if (i-1 >= 0 && j-1 < 1024 && tmp->in[i-1] != -42 && tmp->in[i-1] != -1)
+			{
+				redirect_input(tmp->in[i-2]);
+			}
+			if (j-1 >= 0 && j-1 < 1024 && tmp->out[j-1] != -42 && tmp->out[j-1] != -1)
+			{
+				
+				while (tmp->out[j-1] != -42)
+					j++;
+				redirect_output(tmp->out[j-2]);
+			}
+			if (k-1 >= 0 && k-1 < 1024 && tmp->ap[k-1] != -42 && tmp->ap[k-1] != -1)
+			{
+			while (tmp->ap[k-1] != -42)
+						k++;
+				redirect_append(tmp->ap[k-2]);
+			}
+			else if (tmp->next)
+			{
+				dup2(pipe_fd[1], STDOUT_FILENO);
+				// close(pipe_fd[0]);
+				// close(pipe_fd[1]);
+			}
+			if (!ft_strcmp_asd(tmp->args_built_in[0], "export"))
+				exec_export(&tmp, &env);
+			else if (!ft_strcmp_asd(tmp->args_built_in[0], "echo"))
+				exec_echo(tmp);
+			else if (!ft_strcmp_asd(tmp->args_built_in[0], "unset"))
+				exec_unset(&env, tmp);
+			else if (!ft_strcmp_asd(tmp->args_built_in[0], "env"))
+				exec_env(&env);
+			dup2(origin_out, STDOUT_FILENO);
+			
 		}
 		if (tmp && tmp->cmd || tmp->file_out[j] ||tmp->args[0] && tmp->args[0][0])
 		{
@@ -650,7 +693,6 @@ int main(int    ac, char **av, char **env)
 			ft_checking_files(tmp);
 			execution(&tmp, mini_env);
 		}
-		ft_print_tokens(str);
 		ft_free_list(&str);
 		str = NULL;
 		free(line);

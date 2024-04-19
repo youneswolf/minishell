@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 17:04:59 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/18 21:50:21 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,9 @@ typedef struct s_holder
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
 int     ft_isalnum_str(char *str);
+void exec_env(t_env **mini_env );
+void exec_unset(t_env **mini_env, t_holder *holder);
+void exec_echo(t_holder *holder);
 int f_strcmp(char *str1, char *str2);
 void exec_export(t_holder **holder, t_env **env);
 void    ft_handler_ctrt_herdoc(int signum);
