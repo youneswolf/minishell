@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 21:25:20 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/19 10:09:02 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,14 +147,14 @@ void    ft_ctr(int sig)
 
 char	*find_path(t_env *env)
 {
-	char	*dest;
+	char	*dest = NULL;
 	t_env *tmp;
 
 	tmp = env;
 	dest = NULL;
 	while (!dest)
 	{
-		dest = strnstr(tmp->env, "PATH=", 5);
+		dest = strnstr(tmp->env, "PATH=", 5); 
 		tmp = tmp->next;
 	}
 	return (dest);
@@ -223,6 +223,8 @@ char	*get_path(t_env *env, char *cmd)
 
 	i = -1;
 	path = ft_split(find_path(env), ':');
+	if (!path)
+		return(NULL);
 	path[0] = skip_path(path[0]);
 	while (cmd && path[++i])
 	{
@@ -468,8 +470,36 @@ void execution(t_holder **holder ,t_env *env)
  		}
 		if ((tmp->cmd_built_in &&tmp->file_out[j]) || (tmp->args_built_in[0] && tmp->cmd_built_in))
 		{
-			// exec_export(&tmp, &env);
-			exec_echo(tmp);
+			if (i >= 0 && j < 1024 && tmp->in[i] != -42 && tmp->in[i] != -1)
+			{
+				redirect_input(tmp->in[i]);
+			}
+			if (j >= 0 && j < 1024 && tmp->out[j] != -42 && tmp->out[j] != -1)
+			{
+				while (tmp->out[j] != -42)
+					j++;
+				redirect_output(tmp->out[j-1]);
+			}
+			if (k >= 0 && k < 1024 && tmp->ap[k] != -42 && tmp->ap[k] != -1)
+			{
+			while (tmp->ap[k] != -42)
+						k++;
+				redirect_append(tmp->ap[k-1]);
+			}
+			else if (tmp->next)
+			{
+				dup2(pipe_fd[1], STDOUT_FILENO);
+				close(pipe_fd[0]);
+				close(pipe_fd[1]);
+			}
+			if (!ft_strcmp_asd(tmp->args_built_in[0], "export"))
+				exec_export(&tmp, &env);
+			else if (!ft_strcmp_asd(tmp->args_built_in[0], "echo"))
+				exec_echo(tmp);
+			else if (!ft_strcmp_asd(tmp->args_built_in[0], "unset"))
+				exec_unset(&env, tmp);
+			else if (!ft_strcmp_asd(tmp->args_built_in[0], "env"))
+				exec_env(&env);
 		}
 		if (tmp && tmp->cmd || tmp->file_out[j] ||tmp->args[0] && tmp->args[0][0])
 		{
