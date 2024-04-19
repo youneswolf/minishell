@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 17:22:16 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:43:30 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -553,6 +553,40 @@ void lek()
 {
 	system("leaks minishell");
 }
+
+void	ft_print_tokens(t_line *node)
+{
+	t_line *head = node;
+	while (head)
+	{
+		if (head->token == CMD && head->str)
+			printf(BLUE"[%s]"RESET, "CMD");
+		else if (head->token == ARGS && head->str)
+			printf(YELLOW"[%s]"RESET, "ARGS");
+		else if (head->token == PIPE && head->str)
+			printf(MAGENTA"[%s]"RESET, "PIPE");
+		else if (head->token == IN_REDIR && head->str)
+			printf(CYAN"[%s]"RESET, "IN_REDIR");
+		else if (head->token == OUT_REDIR && head->str)
+			printf(WHT"[%s]"RESET, "OUT_REDIR");
+		else if (head->token == HERDOC && head->str)
+			printf(GREEN"[%s]"RESET, "HERDOC");
+		else if (head->token == OUT_FILE && head->str)
+			printf(MAGENTA"[%s]"RESET, "OUT_FILE");
+		else if (head->token == IN_FILE && head->str)
+			printf(YELLOW"[%s]"RESET, "IN_FILE");
+		else if (head->token == FILE && head->str)
+			printf(YELLOW"[%s]"RESET, "FILE");
+		else if (head->token == APPEND && head->str)
+			printf(YELLOW"[%s]"RESET, "APPEND");
+		else if (head->token == DELIMITER && head->str)
+			printf(YELLOW"[%s]"RESET, "DELIMITER");
+		printf("{%s}\n", head->str);
+		head = head->next;
+	}
+	printf("\n");
+}
+
 int main(int    ac, char **av, char **env)
 {
 	t_line  *str;
@@ -570,10 +604,10 @@ int main(int    ac, char **av, char **env)
 	if (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR
         || signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR)
         return (perror("signal"), 1);
-    // if (env[0])
-    //     fiLL_env(&mini_env, env);
-    // else
-    //     fill_null_env(&mini_env);
+    if (env[0])
+        fiLL_env(&mini_env, env);
+    else
+        fill_null_env(&mini_env);
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
@@ -616,6 +650,7 @@ int main(int    ac, char **av, char **env)
 			ft_checking_files(tmp);
 			execution(&tmp, mini_env);
 		}
+		ft_print_tokens(str);
 		ft_free_list(&str);
 		str = NULL;
 		free(line);

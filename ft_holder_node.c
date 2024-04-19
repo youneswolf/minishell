@@ -288,29 +288,29 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
 				else
 					new->file_out[k++] = tmp->str;
-				new->file_out[w] = NULL;
+				new->file_out[k] = NULL;
 			}
-			else if (tmp->token == OUT_FILE)
-			{
-				if (ft_is_there(tmp->str))
-				{
-					char **a = ft_does_it_matche(tmp->str);
-					int qq = ft_count_2d(a);
-					int	ee = 0;
-					if (qq >= 1)
-					{
-						while (a[ee])
-						{
-							new->file_out[w++] = ft_strdup(a[ee]);
-							ee++;
-						}
-						// ft_free_2d(a);
-					}
-				}
-				else
-					new->file_out[w++] = tmp->str;
-				new->file_out[w] = NULL;
-			}
+			// else if (tmp->token == OUT_FILE)
+			// {
+			// 	if (ft_is_there(tmp->str))
+			// 	{
+			// 		char **a = ft_does_it_matche(tmp->str);
+			// 		int qq = ft_count_2d(a);
+			// 		int	ee = 0;
+			// 		if (qq >= 1)
+			// 		{
+			// 			while (a[ee])
+			// 			{
+			// 				new->file_out[w++] = ft_strdup(a[ee]);
+			// 				ee++;
+			// 			}
+			// 			// ft_free_2d(a);
+			// 		}
+			// 	}
+			// 	else
+			// 		new->file_out[w++] = tmp->str;
+			// 	new->file_out[w] = NULL;
+			// }
 			else if (tmp->token == IN_FILE)
 			{
 				if (ft_is_there(tmp->str))

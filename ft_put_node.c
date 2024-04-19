@@ -6,11 +6,12 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 17:10:51 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:01:46 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
 
 char *ft_substr(char *str, int start, int len)
 {
@@ -31,6 +32,7 @@ char *ft_substr(char *str, int start, int len)
 	while (i < len)
 		sub[i++] = str[start++];
     sub[len] = '\0';
+	// printf("---%s---\n", sub);
     return (sub);
 }
 
@@ -108,11 +110,15 @@ void	ft_put(char *str, t_line **head)
                 flag = str[i++];
                 while (str[i] && str[i] != flag)
                     i++;
+				if (str[i] == '\0')
+					break;
                 if (str[i] == flag)
                     flag = 0;
             }
             i++;
         }
+		if (i == j)
+			break;
         add_list(head, str, j, i);
         if (!str[i])
             break ;

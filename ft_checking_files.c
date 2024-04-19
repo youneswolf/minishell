@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_checking_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/05 03:08:01 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/19 10:34:00 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ void    ft_checking_files(t_holder *node)
         {
             if (tmp->file_in[i])
             {
-                if(!is_ambiguous(tmp->file_in[i]))
-                {
+                // if(!is_ambiguous(tmp->file_in[i]))
+                // {
                 tmp->in[i] = open(tmp->file_in[i], O_RDONLY);
                 if (tmp->in[i] == -1)
                 {
@@ -100,22 +100,23 @@ void    ft_checking_files(t_holder *node)
                     check  = -42;
                 }
                 i++;
-                }
-            else
-            {
-                        tmp->cmd = NULL;
-                    tmp->args[0] = NULL;
-                    write(2,"ambiguous redirect\n",ft_strlen("ambiguous redirect\n"));
-                }
+                
             }
+            // else
+            // {
+            //             tmp->cmd = NULL;
+            //         tmp->args[0] = NULL;
+            //         write(2,"ambiguous redirect\n",ft_strlen("ambiguous redirect\n"));
+            // }
             b++;
         }
+        printf("-------%s-----\n",tmp->file_out[0]);
         while (tmp->file_out[n])
         {
             if (tmp->file_out[j])
             {
-                if (!is_ambiguous(tmp->file_out[j]))
-                {
+                // if (!is_ambiguous(tmp->file_out[j]))
+                // {
                 if (check != -42)
                 {
                     tmp->out[j] = open(tmp->file_out[j], O_CREAT| O_RDWR, 0644);
@@ -123,13 +124,13 @@ void    ft_checking_files(t_holder *node)
                         write(2, "such file or directory\n", 26);
                     j++;
                 }
-                }
-                else
-                {
-                    tmp->cmd = NULL;
-                    tmp->args[0] = NULL;
-                    write(2,"ambiguous redirect\n",ft_strlen("ambiguous redirect\n"));
-                }
+                // }
+                // else
+                // {
+                //     tmp->cmd = NULL;
+                //     tmp->args[0] = NULL;
+                //     write(2,"ambiguous redirect\n",ft_strlen("ambiguous redirect\n"));
+                // }
             }
             n++;
         }

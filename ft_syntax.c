@@ -6,11 +6,12 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 17:12:15 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:17:56 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 int    ft_syntax_quote(char *str, int i, int count)
 {
@@ -36,7 +37,7 @@ int    ft_syntax_quote(char *str, int i, int count)
             i++;
     }
     if (count % 2 != 0)
-        return (write(2, "syntax error: double or single quote\n", 36), 0);
+        return (printf("syntax error: double or single quote\n"), 0);
     return (1);
 }
 int     ft_her_doc(t_line *head)
