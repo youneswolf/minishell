@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/19 10:34:00 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/20 11:27:18 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void    ft_checking_files(t_holder *node)
             // }
             b++;
         }
-        printf("-------%s-----\n",tmp->file_out[0]);
+        // printf("-------%s-----\n",tmp->file_out[0]);
         while (tmp->file_out[n])
         {
             if (tmp->file_out[j])

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/19 13:11:13 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/20 15:02:23 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -654,7 +654,7 @@ int main(int    ac, char **av, char **env)
 	while (1)
 	{
 		line = readline(RED"minishell$ "RESET);
-		if (!SIGQUIT || line == NULL || (is_there_exit(line) && ft_strlen(line) == 4))
+		if (line == NULL || (is_there_exit(line) && ft_strlen(line) == 4))
 				(ft_free_list(&str), free(line), printf("exit!\n"), exit(0));
 		if (ft_strlen(line) > 0)
 			add_history(line);
@@ -664,10 +664,12 @@ int main(int    ac, char **av, char **env)
 		ft_put(line, &str); //create linked list 
 		ft_give_token(str); //give token to each node
 		ft_is_buil(str);
+		ft_print_tokens(str);
 		if (ft_syntax(str))  //check the syntax
 		{
+			// ft_cd(line, mini_env, str);
 			old = str;
-			// ft_expand_argument(mini_env, &str); //expand nta3 ismail
+		// 	// ft_expand_argument(mini_env, &str); //expand nta3 ismail
 			while (str)
 			{
 				if (if_dollar(str->str) && str->token != DELIMITER)
@@ -689,11 +691,12 @@ int main(int    ac, char **av, char **env)
 			}
 			// printf("%d\n",str->token);
 			ft_remove_quote(&str, line); //removing quotes for command and args
+			ft_print_tokens(str);
 			tmp = ft_create_holder_node(str,line);
 			ft_checking_files(tmp);
 			execution(&tmp, mini_env);
 		}
-		ft_free_list(&str);
+		// ft_free_list(&str);
 		str = NULL;
 		free(line);
 	}

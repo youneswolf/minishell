@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/19 10:17:56 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/20 15:06:47 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,9 @@ int    ft_syntax(t_line *head)
     i = 0;
     count = 0;
     tmp = head;
-    if (tmp && tmp->token == PIPE || ft_her_doc(head))  
+    if (!tmp)
+        return (0);
+    if (tmp && tmp->token == PIPE || ft_her_doc(head) || (tmp->token == IN_REDIR && !tmp->next) || (tmp->token == HERDOC && !tmp->next))  
         return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
     while (tmp)
     {
@@ -73,12 +75,20 @@ int    ft_syntax(t_line *head)
         flag = tmp->token;
         if (tmp->next && flag == tmp->next->token && flag != ARGS)
             return (head->status->status = 255, printf("error near `%s'\n", tmp->str), 0);
+        else if (tmp->next && (tmp->token == IN_REDIR || tmp->token == OUT_REDIR) && tmp->next->token == PIPE)
+            return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
+        else if (tmp->next && tmp->token ==HERDOC && tmp->next->token == PIPE)
+            return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
+        else if (tmp->next && tmp->token == PIPE && (tmp->next->token == IN_REDIR || tmp->next->token == OUT_REDIR))
+            return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
+        else if ((tmp->token == IN_REDIR || tmp->token == OUT_REDIR) && !tmp->next)
+            return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
         else if (tmp && (tmp->token == HERDOC && tmp->next->token == OUT_REDIR)
         || (tmp->token == HERDOC && tmp->next->token == IN_REDIR)
         || (tmp->token == IN_REDIR && tmp->next->token == OUT_REDIR))
         return (printf("error near2 `%s'\n", tmp->str), 0);
-        else if ((tmp->token == PIPE || tmp->token == HERDOC || tmp->token == IN_REDIR 
-        || tmp->token == OUT_REDIR || tmp->token == APPEND) && !tmp->next)
+        else if ((tmp->token == PIPE || tmp->token == HERDOC || tmp->token == IN_REDIR
+            || tmp->token == OUT_REDIR || tmp->token == APPEND) && !tmp->next)
             return (head->status->status = 255, printf("error near `%s'\n", tmp->str), 0);
         else
             tmp = tmp->next;

@@ -6,25 +6,25 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/15 14:26:48 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/20 14:48:34 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int f_strcmp(char *str1, char *str2)
-{
-    int i;
+// int f_strcmp(char *str1, char *str2)
+// {
+//     int i;
 
-    i = 0;
-    while (str1 && str2 && str2[i] != '\0' && str1[i] != '\0')
-    {
-        if (str1[i] != str2[i])
-            return (0);
-        i++;
-    }
-    return (1);
-}
+//     i = 0;
+//     while (str1 && str2 && str2[i] != '\0' && str1[i] != '\0')
+//     {
+//         if (str1[i] != str2[i])
+//             return (0);
+//         i++;
+//     }
+//     return (1);
+// }
 
 int    ft_cd(char *str, t_env *mini_env, t_line *head)
 {
@@ -37,6 +37,7 @@ int    ft_cd(char *str, t_env *mini_env, t_line *head)
 
     int i = 0;
     dir = opendir(str);
+    printf("------%s----\n", str);
     if (dir == NULL)
     {
         perror("path not found");
@@ -56,11 +57,11 @@ int    ft_cd(char *str, t_env *mini_env, t_line *head)
         {
             while (mini_env)
             {
-                if (f_strcmp(mini_env->value, "PWD"))
+                if (f_strcmp(mini_env->env, "PWD"))
                 {
-                    str1 = ft_strjoin(mini_env->value, "/");
-                    str1 = ft_strjoin(str1, str);
-                    mini_env->value = ft_strdup(str1);
+                    str1 = ft_strjoin(mini_env->env, "/", 1);
+                    str1 = ft_strjoin(str1, str, 1);
+                    mini_env->env = ft_strdup(str1);
                     // free(str1);
                     break;
                 }
@@ -72,13 +73,13 @@ int    ft_cd(char *str, t_env *mini_env, t_line *head)
         {
             while(mini_env)
             {
-                if (f_strcmp(mini_env->value, "PWD"))
+                if (f_strcmp(mini_env->env, "PWD"))
                 {
                     perror("error retrieving current directory: getcwd: cannot access parent directories: ");
-                    str1 = ft_strjoin(mini_env->value, "/");
-                    str1 = ft_strjoin(str1, str);
-                    mini_env->value = ft_strdup(str1);
-                    // printf("%s\n", mini_env->value);
+                    str1 = ft_strjoin(mini_env->env, "/", 1);
+                    str1 = ft_strjoin(str1, str, 1);
+                    mini_env->env = ft_strdup(str1);
+                    // printf("%s\n", mini_env->env);
                     // free(str1);
                     break;
                 }

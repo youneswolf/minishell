@@ -278,7 +278,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 					int	ee = 0;
 					if (qq >= 1)
 					{
-						while (a[ee])
+						while (a && a[ee])
 						{
 							new->file_out[k++] = ft_strdup(a[ee]);
 							ee++;

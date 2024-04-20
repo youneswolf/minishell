@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/19 13:09:38 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/20 11:06:20 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	add_list(t_line **lst, char *str, int start, int end)
 	}
 }
 
-static int		ft_strchr1(char *str, char c)
+int		ft_strchr1(char *str, char c)
 {
 	int	i;
 

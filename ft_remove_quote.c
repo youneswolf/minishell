@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 17:18:58 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/20 11:52:14 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char    *ft_remove(t_line *tmp, char *line)
     return (str);
 }
 
-char	*ft_strchr1(char *s, int c)
+char	*ft_strchr2(char *s, int c)
 {
 	char	x;
 	int		i;
@@ -125,7 +125,9 @@ void    ft_remove_quote(t_line **str, char *line)
     i = 0;
     while (tmp)
     {
-        if (tmp && (tmp->token == CMD || tmp->token == ARGS)
+        if (ft_strchr1(tmp->str, '*'))
+            ;
+        else if (tmp && (tmp->token == CMD || tmp->token == ARGS)
             && (ft_strchr1(tmp->str, '\'') || ft_strchr1(tmp->str, '"')))
             tmp->str = ft_remove(tmp, line);
         tmp = tmp->next;

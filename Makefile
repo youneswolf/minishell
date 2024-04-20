@@ -14,7 +14,7 @@ RESET=		\033[0m        # No Color
 SRC_FILE = minishell.c ft_utlils.c ft_give_token.c ft_put_node.c ft_syntax.c ft_red_args.c ft_free.c\
 			 ft_remove_quote.c ft_holder_node.c ft_checking_files.c ft_ctrl_c.c ft_tools.c\
 			 redirect_append.c redirect_input.c redirect_output.c ft_her_expand.c ft_remove_here_quote.c\
-			 export.c ft_does_matche.c ft_split.c ft_remove_here_quote.c ft_echo.c ft_unset.c ft_env.c
+			 export.c ft_does_matche.c ft_split.c ft_remove_here_quote.c ft_echo.c ft_unset.c ft_env.c ft_cd.c
 
 SRC_HEADER = minishell.h
 
@@ -34,7 +34,7 @@ READLINEDIR = $(shell brew --prefix readline)
 
 $(NAME): $(OBJS)
 	@echo "$(YELLOW)Compilation of the Objects files...$(RESET)"
-	@$(CC) $(LINKER) $^ -o $@ -L$(READLINEDIR)/lib -lreadline
+	@$(CC) $(LINKER) $^ -fsanitize=address -g -o $@ -L$(READLINEDIR)/lib -lreadline
 	@echo "$(GREEN)[====Executable file Compiled Successfully!====]$(RESET)"
 
 clean:

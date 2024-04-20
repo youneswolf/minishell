@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 21:50:21 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/20 13:37:52 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@
 # define RESET        "\x1b[0m"
 typedef struct s_status
 {
-    int status;
-}t_status;
-
+    int     status;
+    int     quote;
+    char    *lastdir;
+}           t_status;
 typedef struct s_line
 {
     char            *str;
@@ -144,7 +145,7 @@ char	        *word(char *str, char c);
 int             ft_syntax(t_line *head);
 char	        **alloc(int l);
 char	        **ft_split(char *str, char c);
-int             ft_cd(char *str, t_env *mini_env);
+int             ft_cd(char *str, t_env *mini_env, t_line *head);
 int				count_dollar(char *str);
 void            ft_put(char *str, t_line **head);
 void            ft_red_args(t_line *head);
@@ -163,7 +164,9 @@ int	            ft_push_value(char *value, t_env **head);
 void            ft_free_env(t_env **head);
 void            ft_remove_quote(t_line **str, char *line);
 char            *ft_remove(t_line *tmp, char *line);
+int				ft_strchr1(char *s, char c);
 void            ft_checking_files(t_holder *node);
+int				ft_count_2d(char **array);
 int	ft_strcmp(char *s1,  char *s2);
 int		        ft_cmp_built_in(char *str);
 void            ft_handler_ctrl_c(int signum);
@@ -176,7 +179,7 @@ t_line *ft_lst_new(char *str);
 int	if_dollar(char *str);
 char *handle_expand(char *line_str, t_env **env);
 void	env_list(t_env **mini_env, char *line);
-void fiLL_env(t_env **mini_env, char **env);
+void	fiLL_env(t_env **mini_env, char **env);
 t_env	*get_last(t_env **a);
 void	ft_free_nodes(t_env **a);
 // char *expand(t_line **line, t_env **env);
@@ -208,7 +211,7 @@ char	*word(char *str, char c);
 // void    ft_syntax(t_line *head);
 char	**alloc(int l);
 char	**ft_split(char *str, char c);
-int    ft_cd(char *str, t_env *mini_env);
+// int    ft_cd(char *str, t_env *mini_env);
 // t_line    *ft_put(char *line);
 void    ft_red_args(t_line *head);
 void	ft_expand_argument(t_env *env, t_line **linked_list);
