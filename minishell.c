@@ -6,11 +6,16 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/20 15:02:23 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/20 15:58:33 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
+#include <sys/signal.h>
+#include <unistd.h>
+
+struct termios    attr;
 
 int f_strcmp(char *str1, char *str2)
 {
@@ -420,8 +425,7 @@ void execution(t_holder **holder ,t_env *env)
 	int origin_out = dup(STDOUT_FILENO);
 	tmp = *holder;
 	t_holder *doc_tmp = NULL;
-	struct termios    attr;
-    tcgetattr(STDIN_FILENO, &attr);
+
 	while (tmp)
 	{
 		wait_i = 0;
@@ -430,7 +434,7 @@ void execution(t_holder **holder ,t_env *env)
 		{
 			while (tmp->her_doc[n])
 			{
-		dup2(origin_in, STDIN_FILENO);
+				dup2(origin_in, STDIN_FILENO);
 
 			if (n > 0)
 				pipe(pipe_fd);
@@ -438,11 +442,14 @@ void execution(t_holder **holder ,t_env *env)
 			if (!pid)
 			{
 				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
 				ft_here_doc(tmp->her_doc[n], pipe_fd, tmp, &env, origin_in);
 			}
 			else
 			{
 				waitpid(pid, &child_stat, 0);
+				if (WIFSIGNALED(child_stat) && WTERMSIG(child_stat) == SIGINT)
+					break ;
 				if (WIFEXITED(child_stat))
 				{
         			int exit_status = WEXITSTATUS(child_stat);
@@ -547,10 +554,10 @@ void execution(t_holder **holder ,t_env *env)
 	close(origin_in);
 	if (pipe_fd[0])
 		close(pipe_fd[0]);
-	if (WIFSIGNALED(child_stat) && (WTERMSIG(child_stat) == SIGINT) || WTERMSIG(child_stat) == SIGQUIT)
-    {
-        tcsetattr(STDIN_FILENO, TCSANOW, &attr);
-    }
+	// if (WIFSIGNALED(child_stat) && (WTERMSIG(child_stat) == SIGINT) || WTERMSIG(child_stat) == SIGQUIT)
+    // {
+    //     tcsetattr(STDIN_FILENO, TCSANOW, &attr);
+    // }
 }
 
 int		ft_cmp_built_in(char *str)
@@ -630,8 +637,12 @@ void	ft_print_tokens(t_line *node)
 	printf("\n");
 }
 
-int main(int    ac, char **av, char **env)
+int main(int ac, char **av, char **env)
 {
+	if (isatty(0) == -1)
+		printf("============="), perror("isatty");
+    if (tcgetattr(STDIN_FILENO, &attr) == -1)
+		printf("============="), perror("tcgetattr");
 	t_line  *str;
 	int     i = 0;
 	char    *line;
@@ -644,8 +655,7 @@ int main(int    ac, char **av, char **env)
 	tmp = NULL;
 	// atexit(lek);
 	rl_catch_signals = 0;
-	if (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR
-        || signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR)
+	if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
         return (perror("signal"), 1);
     if (env[0])
         fiLL_env(&mini_env, env);

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/20 13:37:52 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/20 15:21:57 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct s_holder
 }   t_holder;
 
 
+extern	struct termios    attr;
 
 // echo $USER << 1 cat
 // echo "''''""$USER.$"'"$$USER"'"'"

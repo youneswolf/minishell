@@ -30,7 +30,7 @@ all: $(NAME)
 READLINEDIR = $(shell brew --prefix readline)
 
 %.o: %.c $(SRC_HEADER)
-	@$(CC) -c $< -o $@ -I$(READLINEDIR)/include -lreadline
+	@$(CC) -c $< -o $@ -I$(READLINEDIR)/include
 
 $(NAME): $(OBJS)
 	@echo "$(YELLOW)Compilation of the Objects files...$(RESET)"
