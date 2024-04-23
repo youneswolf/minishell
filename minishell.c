@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 17:09:53 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:47:18 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -592,7 +592,7 @@ void	ft_is_buil(t_line *str)
 	while (tmp)
 	{
 		tmp->is_it_built_in = 0;
-		if (tmp->token == CMD && ft_cmp_built_in(tmp->str) == 1)
+		if ((tmp->token == CMD) && ft_cmp_built_in(tmp->str) == 1)
 			tmp->is_it_built_in = 1;
 		tmp = tmp->next;
 	}
@@ -677,6 +677,18 @@ void	ft_handle_issue_herdoc(t_line *str)
 	}
 }
 
+void	ft_set_token_to_none(t_line *str)
+{
+	t_line	*tmp;
+
+	tmp = str;
+	while (tmp)
+	{
+		tmp->token = NONE;
+		tmp = tmp->next;
+	}
+}
+
 int main(int ac, char **av, char **env)
 {
 	if (isatty(0) == -1)
@@ -708,19 +720,17 @@ int main(int ac, char **av, char **env)
 				(ft_free_list(&str), free(line), printf("exit!\n"), exit(0));
 		if (ft_strlen(line) > 0)
 			add_history(line);
-		line = ft_add_space_to_command(line); //add space between special carahcteres like | >< ...
+		line = ft_add_space_to_command(line);
 		// if (!line)
 			// str->status = 255;
-		ft_put(line, &str); //create linked list 
-		ft_give_token(str); //give token to each node
+		ft_put(line, &str);
+		ft_give_token(str);
 		ft_is_buil(str);
-		ft_print_tokens(str);
-		if (ft_syntax(str))  //check the syntax
+		// ft_print_tokens(str);
+		if (ft_syntax(str))
 		{
-			// ft_cd(line, mini_env, str);
 			// ft_handle_issue_herdoc(str);
 			old = str;
-		// 	// ft_expand_argument(mini_env, &str); //expand nta3 ismail
 			while (str)
 			{
 				if (if_dollar(str->str) && str->token != DELIMITER)
@@ -740,11 +750,13 @@ int main(int ac, char **av, char **env)
 			{
 				str = str->next;
 			}
-			// printf("%d\n",str->token);
-			ft_remove_quote(&str, line); //removing quotes for command and args
-			ft_print_tokens(str);
+			ft_set_token_to_none(str);
+			ft_give_token(str);
+			ft_is_buil(str);
+			// ft_print_tokens(str);
+			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
-			printf("---%s---\n", tmp->args[0]);
+			// printf("---%s---\n", tmp->args[0]);
 			// ft_checking_files(tmp);
 			ft_oppen_files(tmp);
 			execution(&tmp, mini_env);

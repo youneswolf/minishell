@@ -237,7 +237,14 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
                 flag = 1;
             }
-			if (tmp->token == ARGS && (flag == 0 || flag == 42))
+			// if (tmp->token == ARGS && flag == 42)
+			// {
+			// 	if (ft_cmp_built_in(tmp->str) == 1)
+			// 		flag = 1;
+			// 	else
+			// 	 	flag = 0;
+			// }
+			if (tmp->token == ARGS && flag == 0)
 			{
 				if (ft_is_there(tmp->str))
 				{
@@ -260,7 +267,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
 				new->args[j] = NULL;
 			}
-        	if(tmp->token == ARGS && (flag == 1 || flag == 42))
+        	if(tmp->token == ARGS && flag == 1)
 			{
 				if (ft_is_there(tmp->str))
 				{
@@ -280,7 +287,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				else
 				{
                 	new->args_built_in[z++] = tmp->str;
-					printf("new->args %s\n", tmp->str);
+					// printf("new->args %s\n", tmp->str);
 				}
 				new->args_built_in[z] = NULL;
 			}

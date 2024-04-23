@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 16:16:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:45:08 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <readline/readline.h>
 #include <dirent.h>
 #include <readline/history.h>
+#define NONE -1
 #define CMD 0
 #define PIPE 1
 #define ARGS 2
