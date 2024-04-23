@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 16:58:20 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/22 19:13:55 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,30 +31,41 @@ void    ft_give_token(t_line *head)
     t_line  *tmp;
 
     tmp = head;
+    int index;
     int flag1;
 
     flag1 = 0;
+    index = 0;
     while (tmp)
     {
         if (ft_strcmp(tmp->str, "|"))
-            (tmp->token = PIPE, flag1 = 0);
+            (tmp->token = PIPE, flag1 = 0, index = 0);
         else if (ft_strcmp(tmp->str, ">"))
         {
             tmp->token = OUT_REDIR;
             if (tmp->next != NULL)
+            {
+                tmp->next->status->index = index++;
                 tmp->next->token = OUT_FILE;
+            }
         }
         else if (ft_strcmp(tmp->str, "<"))
         {
             tmp->token = IN_REDIR;
             if (tmp->next != NULL)
+            {
+                tmp->next->status->index = index++;
                 tmp->next->token = IN_FILE;
+            }
         }
         else if (ft_strcmp(tmp->str, ">>"))
         {
             tmp->token = APPEND;
             if (tmp->next != NULL)
+            {
+                tmp->next->status->index = index++;
                 tmp->next->token = FILE;
+            }
         }
         else if (ft_strcmp(tmp->str, "<<"))
         {

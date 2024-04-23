@@ -8,6 +8,7 @@ t_holder	*ft_lstnew_holder(char *line)
 	new = (t_holder *)malloc(sizeof(t_holder));
 	new->cmd = NULL;
     new->cmd_built_in = NULL;
+	new->nbr_file = 0;
 	new->args = malloc(sizeof(char *) * 1000);
     new->args_built_in = malloc(sizeof(char *)* 1000);
 	new->file_in = malloc(sizeof(char *)* 1000);
@@ -15,6 +16,8 @@ t_holder	*ft_lstnew_holder(char *line)
 	new->append = malloc(sizeof(char *)* 1000);
 	new->ap = malloc(sizeof(int )* 1000);
 	new->out = malloc(sizeof(int )* 1000);
+	new->outfile_index = malloc(sizeof(int )* 1000);
+	new->infile_index = malloc(sizeof(int )* 1000);
 	new->in = malloc(sizeof(int )* 1000);
 	new->her_doc = malloc(sizeof(char *)* 1000);
 	while (i < 1000)
@@ -23,8 +26,10 @@ t_holder	*ft_lstnew_holder(char *line)
 		new->args[i] = NULL;
 		new->file_in[i] = NULL;
 		new->file_out[i] = NULL;
+		new->infile_index[i] = -1337;
 		new->append[i] = NULL;
 		new->ap[i] = -42;
+		new->outfile_index[i] = -1337; 
 		new->in[i] = -42;
 		new->out[i] = -42;
 		new->her_doc[i] = NULL;
@@ -113,12 +118,17 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 	t_holder    *holder= NULL;
 	t_holder    *new;
 	t_line      *tmp;
+	int			zzz, www;
+	int			sss;
 	t_line      *tmp1;
 
 	int c = ft_count_pipe(node);
 	int i = 0;
+	www = 0;
 	int j = 0, k = 0, w = 0, a = 0, n = 0, l = 0, z = 0, zz = 0, flag = 1;
 	int	mm = 0;
+	sss = 0;
+	zzz = 0;
 	tmp = node;
 	tmp1 = tmp;
 	
@@ -137,7 +147,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			}
 			if (tmp->token == CMD && tmp->is_it_built_in == 0)
 			{
-				if (tmp->flag == 1 && tmp->quote == 0)
+				if (tmp->flag == 1) //&& tmp->quote == 0
 				{
 					zz = ft_count_word(tmp->str);
 					if (zz > 1)
@@ -183,7 +193,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			}
             else if (tmp->token == CMD && tmp->is_it_built_in == 1)
             {
-				if (tmp->flag == 1 && tmp->quote == 0)
+				if (tmp->flag == 1) //&& tmp->quote == 0
 				{
 					zz = ft_count_word(tmp->str);
 					if (zz > 1)
@@ -282,35 +292,20 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						{
 							new->file_out[k++] = ft_strdup(a[ee]);
 							ee++;
+							new->nbr_file++;
 						}
 						// ft_free_2d(a);
 					}
 				}
 				else
+				{
 					new->file_out[k++] = tmp->str;
+					new->outfile_index[zzz++] = tmp->status->index;
+					new->nbr_file++;
+				}
+				// new->outfile_index[zzz] = -1337;
 				new->file_out[k] = NULL;
 			}
-			// else if (tmp->token == OUT_FILE)
-			// {
-			// 	if (ft_is_there(tmp->str))
-			// 	{
-			// 		char **a = ft_does_it_matche(tmp->str);
-			// 		int qq = ft_count_2d(a);
-			// 		int	ee = 0;
-			// 		if (qq >= 1)
-			// 		{
-			// 			while (a[ee])
-			// 			{
-			// 				new->file_out[w++] = ft_strdup(a[ee]);
-			// 				ee++;
-			// 			}
-			// 			// ft_free_2d(a);
-			// 		}
-			// 	}
-			// 	else
-			// 		new->file_out[w++] = tmp->str;
-			// 	new->file_out[w] = NULL;
-			// }
 			else if (tmp->token == IN_FILE)
 			{
 				if (ft_is_there(tmp->str))
@@ -324,12 +319,17 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						{
 							new->file_in[n++] = ft_strdup(a[ee]);
 							ee++;
+							new->nbr_file++;
 						}
 						// ft_free_2d(a);
 					}
 				}
 				else
+				{
 					new->file_in[n++] = tmp->str;
+					new->infile_index[sss++] = tmp->status->index;
+					new->nbr_file++;
+				}
 				new->file_in[n] = NULL;
 			}
 			else if (tmp->token == APPEND)
@@ -347,12 +347,17 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							{
 								new->append[a++] = ft_strdup(aa[ee]);
 								ee++;
+								new->nbr_file++;
 							}
 						}
 						// ft_free_2d(aa);
 					}
 					else
-						new->append[a++] = tmp->next->str;
+						{
+							new->append_index[www++] = tmp->status->index;
+							new->append[a++] = tmp->next->str;
+							new->nbr_file++;
+						}
 					new->append[a] = NULL;
 				}
 			}

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/20 15:21:57 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:31:21 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_status
     int     status;
     int     quote;
     char    *lastdir;
+	int		index;
 }           t_status;
 typedef struct s_line
 {
@@ -97,19 +98,23 @@ typedef struct s_cmd
 // } t_herdoc;
 typedef struct s_holder
 {
-	char    *cmd;
-	char    **args;
-	char    **file_in;
-	char    **file_out;
-	char    **append;
-	char    **her_doc;
-	int     *in;
-	int     *out;
-	int     *ap;
-	char 	**args_built_in;
-	char	*cmd_built_in;
-	struct s_holder *next;
-}   t_holder;
+	char			*cmd;
+	char			**args;
+	char			**file_in;
+	int				*infile_index;
+	char			**file_out;
+	int				*outfile_index;
+	char			**append;
+	int				*append_index;
+	char			**her_doc;
+	int				*in;
+	int				*out;
+	int				*ap;
+	char			**args_built_in;
+	char			*cmd_built_in;
+	int				nbr_file;
+	struct s_holder	*next;
+}   				t_holder;
 
 
 extern	struct termios    attr;
@@ -117,7 +122,8 @@ extern	struct termios    attr;
 // echo $USER << 1 cat
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
-int     ft_isalnum_str(char *str);
+void		ft_oppen_files(t_holder *node);
+int			ft_isalnum_str(char *str);
 void exec_env(t_env **mini_env );
 void exec_unset(t_env **mini_env, t_holder *holder);
 void exec_echo(t_holder *holder);
@@ -168,30 +174,30 @@ char            *ft_remove(t_line *tmp, char *line);
 int				ft_strchr1(char *s, char c);
 void            ft_checking_files(t_holder *node);
 int				ft_count_2d(char **array);
-int	ft_strcmp(char *s1,  char *s2);
+int				ft_strcmp(char *s1,  char *s2);
 int		        ft_cmp_built_in(char *str);
 void            ft_handler_ctrl_c(int signum);
 void	        ft_free_2d(char **array);
 void            ft_free_list(t_line **str);
-void    redirect_append(int fd);
-void    redirect_output(int fd);
-void    redirect_input(int fd);
-t_line *ft_lst_new(char *str);
-int	if_dollar(char *str);
-char *handle_expand(char *line_str, t_env **env);
-void	env_list(t_env **mini_env, char *line);
-void	fiLL_env(t_env **mini_env, char **env);
-t_env	*get_last(t_env **a);
-void	ft_free_nodes(t_env **a);
+void    		redirect_append(int fd);
+void    		redirect_output(int fd);
+void    		redirect_input(int fd);
+t_line 			*ft_lst_new(char *str);
+int				if_dollar(char *str);
+char			*handle_expand(char *line_str, t_env **env);
+void			env_list(t_env **mini_env, char *line);
+void			fiLL_env(t_env **mini_env, char **env);
+t_env			*get_last(t_env **a);
+void			ft_free_nodes(t_env **a);
 // char *expand(t_line **line, t_env **env);
-void fill_second_null_env(t_env **mini_env);
-int	ft_strncmp(const char *s1, const char *s2, size_t n);
-void fill_null_env(t_env **mini_env);
-int     ft_isalnum(int c);
-char *expand(char *str, t_env **env);
-char *ft_substr(char *str, int start, int len);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-static	int	end_finder(char *s1, char *set);
+void 			fill_second_null_env(t_env **mini_env);
+int				ft_strncmp(const char *s1, const char *s2, size_t n);
+void 			fill_null_env(t_env **mini_env);
+int   			ft_isalnum(int c);
+char 			*expand(char *str, t_env **env);
+char 			*ft_substr(char *str, int start, int len);
+size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
+static			int	end_finder(char *s1, char *set);
 char	*ft_strdup(char *s1);
 static	int	start_finder(char *s1, char *set);
 char	*ft_strtrim(char *s1, char *set, int arg);

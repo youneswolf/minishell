@@ -1,3 +1,1 @@
-ls | wc
-ls
-./filetest
+0x603000001720iletest

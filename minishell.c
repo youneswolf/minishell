@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/20 15:58:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:30:46 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -622,20 +622,30 @@ void	ft_print_tokens(t_line *node)
 		else if (head->token == HERDOC && head->str)
 			printf(GREEN"[%s]"RESET, "HERDOC");
 		else if (head->token == OUT_FILE && head->str)
+		{
 			printf(MAGENTA"[%s]"RESET, "OUT_FILE");
+			printf("----index {%d}---\n", head->status->index);
+		}
 		else if (head->token == IN_FILE && head->str)
+		{
 			printf(YELLOW"[%s]"RESET, "IN_FILE");
+			printf("---index {%d}---", head->status->index);
+		}
 		else if (head->token == FILE && head->str)
+		{
 			printf(YELLOW"[%s]"RESET, "FILE");
+			printf("---index {%d}---", head->status->index);
+		}
 		else if (head->token == APPEND && head->str)
 			printf(YELLOW"[%s]"RESET, "APPEND");
 		else if (head->token == DELIMITER && head->str)
 			printf(YELLOW"[%s]"RESET, "DELIMITER");
-		printf("{%s}\n", head->str);
+		printf("{%s} index\n", head->str);
 		head = head->next;
 	}
 	printf("\n");
 }
+
 
 int main(int ac, char **av, char **env)
 {
@@ -674,7 +684,7 @@ int main(int ac, char **av, char **env)
 		ft_put(line, &str); //create linked list 
 		ft_give_token(str); //give token to each node
 		ft_is_buil(str);
-		ft_print_tokens(str);
+		// ft_print_tokens(str);
 		if (ft_syntax(str))  //check the syntax
 		{
 			// ft_cd(line, mini_env, str);
@@ -701,9 +711,9 @@ int main(int ac, char **av, char **env)
 			}
 			// printf("%d\n",str->token);
 			ft_remove_quote(&str, line); //removing quotes for command and args
-			ft_print_tokens(str);
 			tmp = ft_create_holder_node(str,line);
-			ft_checking_files(tmp);
+			// ft_checking_files(tmp);
+			ft_oppen_files(tmp);
 			execution(&tmp, mini_env);
 		}
 		// ft_free_list(&str);

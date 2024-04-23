@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/20 15:06:47 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/22 18:30:57 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ int    ft_syntax(t_line *head)
             return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
         else if (tmp->next && tmp->token ==HERDOC && tmp->next->token == PIPE)
             return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
-        else if (tmp->next && tmp->token == PIPE && (tmp->next->token == IN_REDIR || tmp->next->token == OUT_REDIR))
-            return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
+        // else if (tmp->next && tmp->token == PIPE && (tmp->next->token == IN_REDIR || tmp->next->token == OUT_REDIR))
+        //     return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
         else if ((tmp->token == IN_REDIR || tmp->token == OUT_REDIR) && !tmp->next)
             return (head->status->status = 255, printf("error near2 `%s'\n", tmp->str), 0);
         else if (tmp && (tmp->token == HERDOC && tmp->next->token == OUT_REDIR)

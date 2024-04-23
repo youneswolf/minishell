@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/20 11:27:18 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:30:20 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,56 @@ int is_ambiguous(char *str)
     }  
     return (0);
 }
+
+void    ft_oppen_files(t_holder *node)
+{
+    t_holder    *tmp;
+    int         i;
+    int         z;
+    int         q;
+    int         b;
+
+    tmp = node;
+    i = 0;
+    z = 0;
+    q = 0;
+    b = 0;
+    while (i < tmp->nbr_file)
+    {
+        if (tmp->outfile_index[b] == i)
+        {
+            tmp->out[b] = open(tmp->file_out[b], O_CREAT| O_RDWR, 0644);
+            if (tmp->out[b] == -1)
+            {
+                write(2, "such file or directory\n", 26);
+                    return ;
+            }
+            b++;
+        }
+        else if (tmp->infile_index[z] == i)
+        {
+            tmp->in[z] = open(tmp->file_in[z], O_RDONLY);
+            if (tmp->in[z] == -1)
+            {
+                write(2, "such file or directory\n", 24);
+                return ;
+            }
+            z++;
+        }
+        else if (tmp->append_index[q] == i)
+        {
+            tmp->ap[q] = open(tmp->append[q], O_CREAT| O_RDWR | O_APPEND, 0644);
+            if (tmp->ap[q] == -1)
+            {
+                write(2, "such file or directory\n", 26);
+                return ;
+            }
+            q++;
+        }
+        i++;
+    }
+}
+
 void    ft_checking_files(t_holder *node)
 {
     t_holder    *tmp;
@@ -98,6 +148,7 @@ void    ft_checking_files(t_holder *node)
                     // ft_putstr_fd(2, in[i]);
                     write(2, "such file or directory\n", 24);
                     check  = -42;
+                    // return ;
                 }
                 i++;
                 
@@ -121,7 +172,10 @@ void    ft_checking_files(t_holder *node)
                 {
                     tmp->out[j] = open(tmp->file_out[j], O_CREAT| O_RDWR, 0644);
                     if (tmp->out[j] == -1)
+                    {
                         write(2, "such file or directory\n", 26);
+                        // return ;
+                    }
                     j++;
                 }
                 // }
@@ -150,6 +204,7 @@ void    ft_checking_files(t_holder *node)
                      tmp->cmd = NULL;
                     tmp->args[0] = NULL;
                     write(2,"ambiguous redirect\n",ft_strlen("ambiguous redirect\n"));
+                    // return ;
                 }
             }
             z++;
