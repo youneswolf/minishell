@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 15:31:21 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:16:33 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_line
 {
     char            *str;
     int             token;
+	int				deja;
     int             quote;
     int             type_quote;
     int             flag;
@@ -124,6 +125,9 @@ extern	struct termios    attr;
 // echo "$"
 void		ft_oppen_files(t_holder *node);
 int			ft_isalnum_str(char *str);
+char    	*ft_remove3(char *line);
+char		*ft_remove_utils4(char *line, char *str, int j, int i);
+int			ft_remove_utils3(char *str);
 void exec_env(t_env **mini_env );
 void exec_unset(t_env **mini_env, t_holder *holder);
 void exec_echo(t_holder *holder);

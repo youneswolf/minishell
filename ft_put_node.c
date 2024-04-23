@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/22 18:05:49 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:25:43 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_line	*ft_lstnew(char *str, int start, int end)
 	new = (t_line *)malloc(sizeof(t_line));
 	new->status = (t_status *)malloc(sizeof(t_status));
 	new->status->index = 0;
+	new->deja = 0;
 	if (!new)
 		return (NULL);
     new->str = ft_substr(str, start, end - start);

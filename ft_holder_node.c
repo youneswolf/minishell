@@ -191,7 +191,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
 				flag = 0;
 			}
-            else if (tmp->token == CMD && tmp->is_it_built_in == 1)
+            if (tmp->token == CMD && tmp->is_it_built_in == 1)
             {
 				if (tmp->flag == 1) //&& tmp->quote == 0
 				{
@@ -237,7 +237,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
                 flag = 1;
             }
-			else if (tmp->token == ARGS && flag == 0)
+			if (tmp->token == ARGS && (flag == 0 || flag == 42))
 			{
 				if (ft_is_there(tmp->str))
 				{
@@ -254,11 +254,13 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						// ft_free_2d(a);
 					}
 				}
-				else 
+				else
+				{
 					new->args[j++] = tmp->str;
+				}
 				new->args[j] = NULL;
 			}
-            else if(tmp->token == ARGS && flag == 1)
+        	if(tmp->token == ARGS && (flag == 1 || flag == 42))
 			{
 				if (ft_is_there(tmp->str))
 				{
@@ -276,10 +278,13 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 					}
 				}
 				else
+				{
                 	new->args_built_in[z++] = tmp->str;
+					printf("new->args %s\n", tmp->str);
+				}
 				new->args_built_in[z] = NULL;
 			}
-			else if (tmp->token == OUT_FILE)
+			if (tmp->token == OUT_FILE)
 			{
 				if (ft_is_there(tmp->str))
 				{
@@ -306,7 +311,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				// new->outfile_index[zzz] = -1337;
 				new->file_out[k] = NULL;
 			}
-			else if (tmp->token == IN_FILE)
+			if (tmp->token == IN_FILE)
 			{
 				if (ft_is_there(tmp->str))
 				{
@@ -332,7 +337,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
 				new->file_in[n] = NULL;
 			}
-			else if (tmp->token == APPEND)
+			if (tmp->token == APPEND)
 			{
 				if (tmp->next)
 				{
@@ -361,7 +366,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 					new->append[a] = NULL;
 				}
 			}
-			else if (tmp->token == HERDOC && a < 1024)
+			if (tmp->token == HERDOC && a < 1024)
 			{
 				if (tmp->next)
 					new->her_doc[l++] = tmp->next->str;

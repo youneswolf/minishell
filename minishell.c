@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 15:30:46 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:09:53 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -646,6 +646,36 @@ void	ft_print_tokens(t_line *node)
 	printf("\n");
 }
 
+void	ft_handle_issue_herdoc(t_line *str)
+{
+	t_line *tmp;
+	char	*s1;
+
+	tmp = str;
+	while (tmp)
+	{
+		if (tmp->token == HERDOC && tmp->next && tmp->next->token == DELIMITER)
+		{
+			if (tmp->next->str[0] == '$')
+				return ;
+			s1 = ft_strdup(tmp->next->str);
+			tmp->next->str = ft_remove3(tmp->next->str);
+			if ((s1[0] == '\'' || s1[0] == '"') && s1[1] == '$')
+				return ;
+			else if (!ft_strcmp(s1, tmp->next->str))
+			{
+				if (tmp->next->str[0] == '$')
+				{
+					tmp->deja = 1;
+					tmp->next->str = ft_substr(tmp->next->str, 1, ft_strlen(tmp->next->str));
+					// printf("----DELIMITER %s -----\n", tmp->next->str);
+				}
+				return ;
+			}
+		}
+		tmp = tmp->next;
+	}
+}
 
 int main(int ac, char **av, char **env)
 {
@@ -684,10 +714,11 @@ int main(int ac, char **av, char **env)
 		ft_put(line, &str); //create linked list 
 		ft_give_token(str); //give token to each node
 		ft_is_buil(str);
-		// ft_print_tokens(str);
+		ft_print_tokens(str);
 		if (ft_syntax(str))  //check the syntax
 		{
 			// ft_cd(line, mini_env, str);
+			// ft_handle_issue_herdoc(str);
 			old = str;
 		// 	// ft_expand_argument(mini_env, &str); //expand nta3 ismail
 			while (str)
@@ -711,7 +742,9 @@ int main(int ac, char **av, char **env)
 			}
 			// printf("%d\n",str->token);
 			ft_remove_quote(&str, line); //removing quotes for command and args
+			ft_print_tokens(str);
 			tmp = ft_create_holder_node(str,line);
+			printf("---%s---\n", tmp->args[0]);
 			// ft_checking_files(tmp);
 			ft_oppen_files(tmp);
 			execution(&tmp, mini_env);
