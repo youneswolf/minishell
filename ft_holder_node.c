@@ -237,13 +237,6 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 				}
                 flag = 1;
             }
-			// if (tmp->token == ARGS && flag == 42)
-			// {
-			// 	if (ft_cmp_built_in(tmp->str) == 1)
-			// 		flag = 1;
-			// 	else
-			// 	 	flag = 0;
-			// }
 			if (tmp->token == ARGS && flag == 0)
 			{
 				if (ft_is_there(tmp->str))

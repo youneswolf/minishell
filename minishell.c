@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 17:47:18 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/23 20:22:25 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -689,6 +689,65 @@ void	ft_set_token_to_none(t_line *str)
 	}
 }
 
+void	ft_skip_empty_expand(t_line **node)
+{
+	t_line	*head;
+	t_line	*previous;
+
+	if ((*node) && (*node)->flag == 1 && !(*node)->str[0])
+	{
+		(*node) = (*node)->next;
+		while ((*node) && (*node)->flag == 1 && !(*node)->str[0])
+			(*node) = (*node)->next;
+	}
+	head = *node;
+	previous = *node;
+	if (head)
+	{
+		while (head)
+		{
+			if (head && head->flag == 1 && head->str[0] == '\0')
+			{
+				while (head && head->flag == 1 && !head->str[0])
+					head = head->next;
+				previous->next = head;
+			}
+			if (head)
+			{
+				previous = head;
+				head = head->next;
+			}
+		}
+	}
+}
+
+// void ft_skip_nodes(t_line* head_ref)
+// {
+//     t_line *current = head_ref;
+//     t_line *temp = NULL;
+
+//     while (current != NULL && current->flag == 1 && !current->str[0]) {
+//         temp = current;
+//         head_ref = current->next;
+//         // free(temp);
+//         current = head_ref;
+//     }
+
+//     while (current != NULL) {
+//         while (current != NULL && current->flag != 1 && !current->str[0]) {
+//             temp = current;
+//             current = current->next;
+//         }
+
+//         if (current == NULL)
+//             return;
+
+//         temp->next = current->next;
+//         // free(current);
+//         current = temp->next;
+//     }
+// }
+
 int main(int ac, char **av, char **env)
 {
 	if (isatty(0) == -1)
@@ -726,7 +785,6 @@ int main(int ac, char **av, char **env)
 		ft_put(line, &str);
 		ft_give_token(str);
 		ft_is_buil(str);
-		// ft_print_tokens(str);
 		if (ft_syntax(str))
 		{
 			// ft_handle_issue_herdoc(str);
@@ -746,13 +804,16 @@ int main(int ac, char **av, char **env)
 				str = str->next;
 			}
 			str = old;
-			while (str && !str->str[0])
-			{
-				str = str->next;
-			}
+			// while (str && !str->str[0])
+			// {
+			// 	str = str->next;
+			// }
+			ft_skip_empty_expand(&str);
+			// ft_skip_nodes(str);
 			ft_set_token_to_none(str);
 			ft_give_token(str);
 			ft_is_buil(str);
+			ft_print_tokens(str);
 			// ft_print_tokens(str);
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
