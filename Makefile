@@ -1,7 +1,7 @@
 # SRC = ft_tools.c minishell.c ft_utlils.c ft_give_token.c ft_put_node.c ft_syntax.c ft_red_args.c ft_remove_quote.c ft_holder_node.c ft_checking_files.c redirect_append.c redirect_input.c redirect_output.c ft_free.c
 # all:
 # 	cc -lreadline -fsanitize=address -g $(SRC) -o minishell
-CC = cc -g
+CC = cc  -fsanitize=address -g
 # CC += -Wall -Wextra -Werror
 RM = rm -f
 NAME = minishell
@@ -34,7 +34,7 @@ READLINEDIR = $(shell brew --prefix readline)
 
 $(NAME): $(OBJS)
 	@echo "$(YELLOW)Compilation of the Objects files...$(RESET)"
-	@$(CC) $(LINKER) $^ -fsanitize=address -g -o $@ -L$(READLINEDIR)/lib -lreadline
+	@$(CC) $(LINKER) $^ -o $@ -L$(READLINEDIR)/lib -lreadline
 	@echo "$(GREEN)[====Executable file Compiled Successfully!====]$(RESET)"
 
 clean:

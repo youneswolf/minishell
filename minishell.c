@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 20:22:25 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/24 20:42:07 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -520,6 +520,7 @@ void execution(t_holder **holder ,t_env *env)
 			dup2(origin_out, STDOUT_FILENO);
 			
 		}
+		// printf("%s\n",tmp->args[0]);
 		if (tmp && tmp->cmd || tmp->file_out[j] ||tmp->args[0] && tmp->args[0][0])
 		{
 			if (tmp->in[i] != -42 && tmp->in[i] != -1)
@@ -747,7 +748,20 @@ void	ft_skip_empty_expand(t_line **node)
 //         current = temp->next;
 //     }
 // }
-
+int is_between_quotes(char *str)
+{
+	int i = 0;
+	if (str && str[0] == 34 && str[1] && str[1] != 34)
+	{
+	while (str && str[i])
+	{
+		i++;
+	}
+	if (str[i - 1] == 34)
+		return (1);
+	}
+	return (0);
+}
 int main(int ac, char **av, char **env)
 {
 	if (isatty(0) == -1)
@@ -788,6 +802,7 @@ int main(int ac, char **av, char **env)
 		if (ft_syntax(str))
 		{
 			// ft_handle_issue_herdoc(str);
+			ft_print_tokens(str);
 			old = str;
 			while (str)
 			{
@@ -796,6 +811,10 @@ int main(int ac, char **av, char **env)
 					// free(str->str);
 					str->str = handle_expand(str->str, &mini_env);
 					str->flag = 1;
+					if (is_between_quotes(str->str))
+					{
+						str->is_between_quote = 1;
+					}
 					// free(str->str);
 					// ft_put(str->str, &str); //create linked list 
 					// printf("str = %s\n", str->str);
@@ -804,21 +823,16 @@ int main(int ac, char **av, char **env)
 				str = str->next;
 			}
 			str = old;
-			// while (str && !str->str[0])
-			// {
-			// 	str = str->next;
-			// }
+			// printf("%d\n",str->is_between_quote);
 			ft_skip_empty_expand(&str);
-			// ft_skip_nodes(str);
 			ft_set_token_to_none(str);
 			ft_give_token(str);
 			ft_is_buil(str);
 			ft_print_tokens(str);
 			// ft_print_tokens(str);
 			ft_remove_quote(&str, line);
+			// printf("%s\n",str->str);
 			tmp = ft_create_holder_node(str,line);
-			// printf("---%s---\n", tmp->args[0]);
-			// ft_checking_files(tmp);
 			ft_oppen_files(tmp);
 			execution(&tmp, mini_env);
 		}

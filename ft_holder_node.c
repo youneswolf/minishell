@@ -147,10 +147,10 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			}
 			if (tmp->token == CMD && tmp->is_it_built_in == 0)
 			{
-				if (tmp->flag == 1) //&& tmp->quote == 0
+				if (tmp->flag == 1 && tmp->is_between_quote != 1) //&& tmp->quote == 0
 				{
 					zz = ft_count_word(tmp->str);
-					if (zz > 1)
+					if (zz >= 1)
 					{
 						char **array = ft_split1(tmp->str, ' ');
 						new->cmd = ft_strdup(array[0]);
@@ -193,10 +193,10 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			}
             if (tmp->token == CMD && tmp->is_it_built_in == 1)
             {
-				if (tmp->flag == 1) //&& tmp->quote == 0
+				if (tmp->flag == 1 && tmp->is_between_quote != 1) //&& tmp->quote == 0
 				{
 					zz = ft_count_word(tmp->str);
-					if (zz > 1)
+					if (zz >= 1)
 					{
 						char **array = ft_split1(tmp->str, ' ');
 						mm = 0;

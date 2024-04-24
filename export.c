@@ -142,6 +142,8 @@ void exec_export(t_holder **holder, t_env **env)
 		if (!ft_strncmp(var_name, (*env)->env, ft_strlen(var_name)))
 		{
 			value = ft_substr(line_tmp->args_built_in[j], i, ft_strlen(line_tmp->args_built_in[j]) - i);
+			// value = ft_strjoin("\"",value,3);
+			// value = ft_strjoin(value, "\"",1);
 			join = ft_strjoin(var_name, value,2);
 			// free(tmp->env); 
 			(*env)->env = join;
@@ -158,6 +160,8 @@ void exec_export(t_holder **holder, t_env **env)
 		(*env) = (*env)->next;
 	}
 		value = ft_substr(line_tmp->args_built_in[1], i, ft_strlen(line_tmp->args_built_in[1]) - i);
+		// value = ft_strjoin("\"",value,3);
+		// value = ft_strjoin(value, "\"",1);
 		join = ft_strjoin(var_name, value,2);
 		node = malloc(sizeof(t_env));
 		node->env = join;

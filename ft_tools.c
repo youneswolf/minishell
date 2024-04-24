@@ -376,6 +376,7 @@ char *handle_expand(char *line_str, t_env **env)
 	{
 		if (count_dollar(split->str) > 1)
 		{
+
 			i = 0;
 			dollar_str = ft_split(split->str, '$');
 			while(dollar_str[i])
@@ -415,6 +416,7 @@ char *handle_expand(char *line_str, t_env **env)
 char *expand(char *str, t_env **env)
 {
 	t_env *tmp;
+	static int ddd;
 	t_line *line_tmp;
 	char *special = NULL;
 	char *pre_special = NULL;
@@ -425,11 +427,10 @@ char *expand(char *str, t_env **env)
 	tmp = *env;
 	i = 0;
 	int j = 0;
+	ddd++;
 	if (is_sgl_quote(str) && is_char(str))
 	{
-		printf("%s\n",str);
 		return (ft_strdup(str));
-
 	}
 		// if ( str && (str[0] == 34 || str[ft_strlen(str) - 1] == 34))
 	// {
@@ -448,7 +449,7 @@ char *expand(char *str, t_env **env)
 	// }
 	// else
 	// {
-		while (str && str[i] != '$')
+		while (str && str[i] && str[i] != '$')
 			i++;
 		if (i && i != ft_strlen(str))
 		{

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 17:45:08 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/24 19:41:34 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_line
     int             quote;
     int             type_quote;
     int             flag;
+	int 			is_between_quote;
     int             is_it_built_in;
     struct s_status *status;
     struct s_line   *next;
