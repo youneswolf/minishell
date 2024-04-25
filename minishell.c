@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 17:22:11 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:29:34 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,9 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 
 	// if (pipe(pipe_fd) == -1)
 	// 	perror("pipe");
-	if (holder->out[j] == -7 || holder->in[i] == -7 || holder->ap[k] == -7)
+	if (holder->out[j] && holder->out[j] == -7)
+		exit(1);
+	else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
 		exit(1);
 	if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
 	{
@@ -820,7 +822,7 @@ int main(int ac, char **av, char **env)
 						str->is_between_quote = 1;
 					}
 					// free(str->str);
-					printf("str = %s\n", str->str);
+					printf("str = |%s|\n", str->str);
 				}
 				str = str->next;
 			}

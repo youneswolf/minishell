@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 17:22:28 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:31:30 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ int is_ambiguous(char *str)
 {
     int i = 0;
     int j = 0;
+    if (str && str[0] == 32)
+    {
+        while(str[i] && str[i] == 32)
+            i++;
+        if (!str[i])
+            return (1);
+    }
+    i = 0;
     while (str && str[i])
     {
         if (str[i] == ' ')
@@ -101,7 +109,7 @@ int    ft_oppen_files(t_holder *node)
         }
         else
         {
-            printf("bash: %s: ambiguous redirect", tmp->file_out[b]);
+            printf("bash: %s: ambiguous redirect\n", tmp->file_out[b]);
             tmp->out[b] = -7;
         }
         }
@@ -119,7 +127,7 @@ int    ft_oppen_files(t_holder *node)
             }
             else
             {
-                printf("bash: %s: ambiguous redirect", tmp->file_in[z]);
+                printf("bash: %s: ambiguous redirect\n", tmp->file_in[z]);
                  tmp->in[z] = -7;
 
             }
@@ -138,7 +146,7 @@ int    ft_oppen_files(t_holder *node)
             }
             else
             {
-                 printf("bash: %s: ambiguous redirect", tmp->append[q]);
+                 printf("bash: %s: ambiguous redirect\n", tmp->append[q]);
                 tmp->ap[q] = -7;
                 
             }
