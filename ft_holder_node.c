@@ -25,13 +25,13 @@ t_holder	*ft_lstnew_holder(char *line)
 	{
         new->args_built_in[i] = NULL;
 		new->args[i] = NULL;
-		new->append_index[i] = -1337;
+		new->append_index[i] = -42;
 		new->file_in[i] = NULL;
 		new->file_out[i] = NULL;
-		new->infile_index[i] = -1337;
+		new->infile_index[i] = -42;
 		new->append[i] = NULL;
 		new->ap[i] = -42;
-		new->outfile_index[i] = -1337; 
+		new->outfile_index[i] = -42; 
 		new->in[i] = -42;
 		new->out[i] = -42;
 		new->her_doc[i] = NULL;
