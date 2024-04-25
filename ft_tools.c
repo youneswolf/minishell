@@ -400,6 +400,7 @@ char *handle_expand(char *line_str, t_env **env)
 		else 
 		{
 			// j = 0;
+			printf("%s\n",split->str);
 			join = ft_strjoin(join, expand(split->str, env),2);
 			if (split->next)
 				join = ft_strjoin(join," ",1);
@@ -429,6 +430,10 @@ char *expand(char *str, t_env **env)
 	int j = 0;
 	ddd++;
 	if (is_sgl_quote(str) && is_char(str))
+	{
+		return (ft_strdup(str));
+	}
+	if (!if_dollar(str))
 	{
 		return (ft_strdup(str));
 	}
