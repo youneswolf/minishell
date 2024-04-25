@@ -18,12 +18,14 @@ t_holder	*ft_lstnew_holder(char *line)
 	new->out = malloc(sizeof(int )* 1000);
 	new->outfile_index = malloc(sizeof(int )* 1000);
 	new->infile_index = malloc(sizeof(int )* 1000);
+	new->append_index = malloc(sizeof(int )* 1000);
 	new->in = malloc(sizeof(int )* 1000);
 	new->her_doc = malloc(sizeof(char *)* 1000);
 	while (i < 1000)
 	{
         new->args_built_in[i] = NULL;
 		new->args[i] = NULL;
+		new->append_index[i] = -1337;
 		new->file_in[i] = NULL;
 		new->file_out[i] = NULL;
 		new->infile_index[i] = -1337;
@@ -354,6 +356,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							while (aa[ee])
 							{
 								new->append[a++] = ft_strdup(aa[ee]);
+								// new->append_index[www++] = tmp->status->index;
 								ee++;
 								new->nbr_file++;
 							}

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 15:45:19 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:23:57 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -816,22 +816,16 @@ int main(int ac, char **av, char **env)
 						str->is_between_quote = 1;
 					}
 					// free(str->str);
-					// ft_put(str->str, &str); //create linked list 
 					printf("str = %s\n", str->str);
-					// ft_give_token(str); //give token to each node
 				}
 				str = str->next;
 			}
 			str = old;
-			// printf("%d\n",str->is_between_quote);
 			ft_skip_empty_expand(&str);
 			ft_set_token_to_none(str);
 			ft_give_token(str);
 			ft_is_buil(str);
-			// ft_print_tokens(str);
 			ft_remove_quote(&str, line);
-			ft_print_tokens(str);
-			// printf("%s\n",str->str);
 			tmp = ft_create_holder_node(str,line);
 			// ft_checking_files(tmp);
 			if (ft_oppen_files(tmp))
