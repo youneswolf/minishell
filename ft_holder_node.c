@@ -272,6 +272,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						while (a[ee])
 						{
 							new->args_built_in[z++] = ft_strdup(a[ee]);
+							printf("--{%s}--\n", a[ee]);
 							ee++;
 						}
 						// ft_free_2d(a);
@@ -296,8 +297,9 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						while (a && a[ee])
 						{
 							new->file_out[k++] = ft_strdup(a[ee]);
-							ee++;
+							new->outfile_index[zzz++] = tmp->status->index;
 							new->nbr_file++;
+							ee++;
 						}
 						// ft_free_2d(a);
 					}
@@ -325,6 +327,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							new->file_in[n++] = ft_strdup(a[ee]);
 							ee++;
 							new->nbr_file++;
+							new->infile_index[sss++] = tmp->status->index;
 						}
 						// ft_free_2d(a);
 					}

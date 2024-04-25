@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/24 20:42:07 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:45:19 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -817,7 +817,7 @@ int main(int ac, char **av, char **env)
 					}
 					// free(str->str);
 					// ft_put(str->str, &str); //create linked list 
-					// printf("str = %s\n", str->str);
+					printf("str = %s\n", str->str);
 					// ft_give_token(str); //give token to each node
 				}
 				str = str->next;
@@ -828,13 +828,14 @@ int main(int ac, char **av, char **env)
 			ft_set_token_to_none(str);
 			ft_give_token(str);
 			ft_is_buil(str);
-			ft_print_tokens(str);
 			// ft_print_tokens(str);
 			ft_remove_quote(&str, line);
+			ft_print_tokens(str);
 			// printf("%s\n",str->str);
 			tmp = ft_create_holder_node(str,line);
-			ft_oppen_files(tmp);
-			execution(&tmp, mini_env);
+			// ft_checking_files(tmp);
+			if (ft_oppen_files(tmp))
+				execution(&tmp, mini_env);
 		}
 		// ft_free_list(&str);
 		str = NULL;
