@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 16:43:59 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:09:27 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,8 @@ void    ft_remove_quote(t_line **str, char *line)
             ;
         // if (tmp->token == DELIMITER && tmp->deja == 1)
         //     ;
-        else if (tmp && (tmp->token == CMD || tmp->token == ARGS)
+        else if (tmp && (tmp->token == CMD || tmp->token == ARGS ||
+            tmp->token == OUT_FILE || tmp->token == IN_FILE)
             && (ft_strchr1(tmp->str, '\'') || ft_strchr1(tmp->str, '"')))
                 tmp->str = ft_remove(tmp, line);
         tmp = tmp->next;

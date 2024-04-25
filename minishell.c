@@ -6,9 +6,10 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 17:15:51 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:22:11 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 #include <stdio.h>
@@ -819,14 +820,11 @@ int main(int ac, char **av, char **env)
 						str->is_between_quote = 1;
 					}
 					// free(str->str);
-					// ft_put(str->str, &str); //create linked list 
-					// printf("str = %s\n", str->str);
-					// ft_give_token(str); //give token to each node
+					printf("str = %s\n", str->str);
 				}
 				str = str->next;
 			}
 			str = old;
-			// printf("%d\n",str->is_between_quote);
 			ft_skip_empty_expand(&str);
 			ft_set_token_to_none(str);
 			ft_give_token(str);
@@ -834,10 +832,10 @@ int main(int ac, char **av, char **env)
 			// ft_print_tokens(str);
 			// ft_print_tokens(str);
 			ft_remove_quote(&str, line);
-			// printf("%s\n",str->str);
 			tmp = ft_create_holder_node(str,line);
-			ft_oppen_files(tmp);
-			execution(&tmp, mini_env);
+			// ft_checking_files(tmp);
+			if (ft_oppen_files(tmp))
+				execution(&tmp, mini_env);
 		}
 		// ft_free_list(&str);
 		str = NULL;

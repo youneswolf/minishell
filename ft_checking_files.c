@@ -6,9 +6,10 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 17:15:07 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:22:28 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -71,7 +72,7 @@ int is_ambiguous(char *str)
     return (0);
 }
 
-void    ft_oppen_files(t_holder *node)
+int    ft_oppen_files(t_holder *node)
 {
     t_holder    *tmp;
     int         i;
@@ -84,7 +85,7 @@ void    ft_oppen_files(t_holder *node)
     z = 0;
     q = 0;
     b = 0;
-    while (i < tmp->nbr_file)
+    while (tmp && (i < tmp->nbr_file))
     {
         if (tmp->outfile_index[b] == i)
         {
@@ -94,7 +95,7 @@ void    ft_oppen_files(t_holder *node)
             if (tmp->out[b] == -1)
             {
                 write(2, "such file or directory\n", 26);
-                    return ;
+                    return (0);
             }
             b++;
         }
@@ -112,7 +113,7 @@ void    ft_oppen_files(t_holder *node)
             if (tmp->in[z] == -1)
             {
                 write(2, "such file or directory\n", 24);
-                return ;
+                return (0);
             }
             z++;
             }
@@ -131,7 +132,7 @@ void    ft_oppen_files(t_holder *node)
             if (tmp->ap[q] == -1)
             {
                 write(2, "such file or directory\n", 26);
-                return ;
+                return (0);
             }
             q++;
             }
@@ -144,6 +145,7 @@ void    ft_oppen_files(t_holder *node)
         }  
         i++;
     }
+    return (1);
 }
 
 void    ft_checking_files(t_holder *node)

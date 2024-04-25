@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 10:32:36 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/20 12:09:55 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:16:14 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int ft_is_there_in_the_dir(char *pattern, char *text)
     int ll;
 
     (1) && (i = 0, j = 0, l = ft_str(pattern) - 1, ll = ft_str(text) - 1);
-    if (pattern[l] != '*')
+    if (pattern[l] == '*')
         return (ft_search_back(pattern, text, l, ll));
     else
     {

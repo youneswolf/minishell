@@ -18,18 +18,20 @@ t_holder	*ft_lstnew_holder(char *line)
 	new->out = malloc(sizeof(int )* 1000);
 	new->outfile_index = malloc(sizeof(int )* 1000);
 	new->infile_index = malloc(sizeof(int )* 1000);
+	new->append_index = malloc(sizeof(int )* 1000);
 	new->in = malloc(sizeof(int )* 1000);
 	new->her_doc = malloc(sizeof(char *)* 1000);
 	while (i < 1000)
 	{
         new->args_built_in[i] = NULL;
 		new->args[i] = NULL;
+		new->append_index[i] = -42;
 		new->file_in[i] = NULL;
 		new->file_out[i] = NULL;
-		new->infile_index[i] = -1337;
+		new->infile_index[i] = -42;
 		new->append[i] = NULL;
 		new->ap[i] = -42;
-		new->outfile_index[i] = -1337; 
+		new->outfile_index[i] = -42; 
 		new->in[i] = -42;
 		new->out[i] = -42;
 		new->her_doc[i] = NULL;
@@ -272,6 +274,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						while (a[ee])
 						{
 							new->args_built_in[z++] = ft_strdup(a[ee]);
+							printf("--{%s}--\n", a[ee]);
 							ee++;
 						}
 						// ft_free_2d(a);
@@ -296,8 +299,9 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 						while (a && a[ee])
 						{
 							new->file_out[k++] = ft_strdup(a[ee]);
-							ee++;
+							new->outfile_index[zzz++] = tmp->status->index;
 							new->nbr_file++;
+							ee++;
 						}
 						// ft_free_2d(a);
 					}
@@ -325,6 +329,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							new->file_in[n++] = ft_strdup(a[ee]);
 							ee++;
 							new->nbr_file++;
+							new->infile_index[sss++] = tmp->status->index;
 						}
 						// ft_free_2d(a);
 					}
@@ -351,6 +356,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							while (aa[ee])
 							{
 								new->append[a++] = ft_strdup(aa[ee]);
+								// new->append_index[www++] = tmp->status->index;
 								ee++;
 								new->nbr_file++;
 							}
