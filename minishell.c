@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/26 15:56:34 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:15:22 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,12 @@ void	ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
 
 char    *ft_add_space_to_command(char *str)
 {
-	int i, count, quote = 0;
-	char *new_line;
+	int 	i;
+	char 	*new_line;
+	int		count;
+	int		quote;
 
-	i = 0;
-	count = 0;
+	(1) && (i = 0, count = 0, quote = 0); 
 	while (str[i] != '\0')
 	{
 		if (str[i] == '|' || str[i] == '>' || str[i] == '<'
@@ -107,12 +108,10 @@ char    *ft_add_space_to_command(char *str)
 	new_line = malloc(i + 1 + count * 2);
 	if (!new_line)
 		return (free(str), perror("malloc"), NULL);
-		// return (NULL);
 	i = 0;
 	count = 0;
 	ft_add_space_utils(new_line, str, quote, i, count);
 	return (free(str), new_line);
-	// return (new_line);
 }
 
 void    ft_ctr(int sig)
@@ -121,35 +120,6 @@ void    ft_ctr(int sig)
 	printf(RED"\nminishell$ "RESET);
 	return ;
 }
-
-// int		ft_cmp_built_in(char *str)
-// {
-// 	int	i;
-// 	char **checker;
-
-// 	checker = malloc(8 * sizeof(char *));
-// 	if (!checker)
-// 		return (perror("malloc"), 0);
-// 	checker[0] = ft_strdup("echo");
-// 	checker[1] = ft_strdup("cd");
-// 	checker[2] = ft_strdup("pwd");
-// 	checker[3] = ft_strdup("export");
-// 	checker[4] = ft_strdup("unset");
-// 	checker[5] = ft_strdup("env");
-// 	checker[6] = ft_strdup("exit");
-// 	checker[7] = NULL;
-// 	i = 0;
-// 	while (checker[i])
-// 	{
-// 		if (f_strcmp(checker[i], str))
-// 			return (ft_free_2d(checker), 1);
-// 			// return (1);
-// 		i++;
-// 	}
-// 	return (ft_free_2d(checker), 0);
-// 	// return (0);
-// }
-
 
 char	*find_path(t_env *env)
 {
@@ -188,6 +158,7 @@ char	*skip_path(char *str)
 	free (str);
 	return (new_str);
 }
+
 char	*ft_strjoin_path(char *static_str, char *buff)
 {
 	size_t	i;
@@ -283,10 +254,10 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 
 	// if (pipe(pipe_fd) == -1)
 	// 	perror("pipe");
-	if (holder->out[j] && holder->out[j] == -7)
-		exit(1);
-	else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
-		exit(1);
+	// if (holder->out[j] && holder->out[j] == -7)
+	// 	exit(1);
+	// else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
+	// 	exit(1);
 	if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
 	{
 		redirect_input(holder->in[i]);
@@ -710,7 +681,7 @@ void	ft_skip_empty_expand(t_line **node)
 	{
 		previous = (*node);
 		(*node) = (*node)->next;
-		free(previous->str);
+		// free(previous->str);
 		free(previous->status);
 		free(previous);
 		while ((*node) && (*node)->flag == 1 && !(*node)->str[0])
@@ -721,9 +692,9 @@ void	ft_skip_empty_expand(t_line **node)
 			free(previous->status);
 			free(previous);
 		}
-		free(previous->str);
-		free(previous->status);
-		free(previous);
+		// free(previous->str);
+		// free(previous->status);
+		// free(previous);
 	}
 	head = *node;
 	previous = *node;
@@ -737,7 +708,6 @@ void	ft_skip_empty_expand(t_line **node)
 				{
 					tmp = head;
 					head = head->next;
-					free(tmp->str);
 					free(tmp->status);
 					free(tmp);
 				}
@@ -779,20 +749,19 @@ int main(int ac, char **av, char **env)
 	atexit(leaks);
 	
 	if (isatty(0) == -1)
-		printf("============="), perror("isatty");
+		perror("isatty");
     if (tcgetattr(STDIN_FILENO, &attr) == -1)
-		printf("============="), perror("tcgetattr");
+		perror("tcgetattr");
 	t_line  *str;
 	int     i = 0;
 	char    *line;
-	char *a;
+	char 	*a;
 	char    *exp;
 	t_holder* tmp;
 	t_line *old;
 	t_env *mini_env = NULL;
 	str = NULL;
 	tmp = NULL;
-	// atexit(lek);
 	rl_catch_signals = 0;
 	if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
         return (perror("signal"), 1);
@@ -808,7 +777,6 @@ int main(int ac, char **av, char **env)
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line);
-		//checked leaks for add space
 		// if (!line)
 			// str->status = 255;
 		ft_put(line, &str);
@@ -816,45 +784,32 @@ int main(int ac, char **av, char **env)
 		ft_is_buil(str);
 		if (ft_syntax(str))
 		{
-			// ft_handle_issue_herdoc(str);
+			ft_handle_issue_herdoc(str);
 			ft_print_tokens(str);
 			old = str;
 			while (str)
 			{
 				if (if_dollar(str->str) && str->token != DELIMITER)
 				{
-					// free(str->str);
-					printf("%p\n",str->str);
 					str->str = handle_expand(str->str, &mini_env);
-					// printf("%s\n",str->str);
 					str->flag = 1;
-					// while(1);
 					if (is_between_quotes(str->str))
-					{
 						str->is_between_quote = 1;
-					}
-					// free(str->str);
-					printf("str = %s\n", str->str);
 				}
 				str = str->next;
 			}
 			str = old;
-			// ft_skip_empty_expand(&str);
+			ft_skip_empty_expand(&str);
 			ft_set_token_to_none(str);
 			ft_give_token(str);
 			ft_is_buil(str);
-			// ft_print_tokens(str);
-			// ft_print_tokens(str);
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
-			// ft_checking_files(tmp);
 			if (ft_oppen_files(tmp))
 				execution(&tmp, mini_env);
 		}
 		ft_free_list(&str);
-		// ft_free_holder(&tmp);
 		str = NULL;
-		// tmp = NULL;
 		free(line);
 	}
 }
