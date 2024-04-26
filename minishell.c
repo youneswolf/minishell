@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/26 15:25:13 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:47:12 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -559,6 +559,8 @@ void execution(t_holder **holder ,t_env *env)
     // {
     //     tcsetattr(STDIN_FILENO, TCSANOW, &attr);
     // }
+	// ft_free_list(&str);
+	ft_free_holder(holder);
 }
 
 int		ft_cmp_built_in(char *str)
@@ -817,8 +819,10 @@ int main(int ac, char **av, char **env)
 				if (if_dollar(str->str) && str->token != DELIMITER)
 				{
 					// free(str->str);
+					printf("%p\n",str->str);
 					str->str = handle_expand(str->str, &mini_env);
 					str->flag = 1;
+					// while(1);
 					if (is_between_quotes(str->str))
 					{
 						str->is_between_quote = 1;
@@ -839,9 +843,9 @@ int main(int ac, char **av, char **env)
 				execution(&tmp, mini_env);
 		}
 		ft_free_list(&str);
-		ft_free_holder(&tmp);
+		// ft_free_holder(&tmp);
 		str = NULL;
-		tmp = NULL;
+		// tmp = NULL;
 		free(line);
 	}
 }

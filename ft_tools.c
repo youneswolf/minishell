@@ -336,7 +336,33 @@ int is_char(char *str)
 	}
 	return (0);
 }
+void    ft_free_list2(t_line **str)
+{
+	t_line *to_be_free;
+	t_line	*prev;
+	to_be_free = *str;
+	while (to_be_free)
+	{
+		prev = to_be_free;
+		to_be_free = to_be_free->next;
+		free(prev->str);
+		free(prev);
+	}
+	// free(str);
+	// t_line *next;
 
+	// to_be_free = *str;
+	// while (to_be_free)
+	// {
+	// 	if (to_be_free->next)
+	// 		next = to_be_free->next;
+	// 	free(to_be_free->str);
+	// 	free(to_be_free);
+	// 	to_be_free = next;
+	// }
+	// // free(to_be_free);
+	// free(str);
+}
 char *handle_expand(char *line_str, t_env **env)
 {
 	t_line *split = NULL;
@@ -400,17 +426,17 @@ char *handle_expand(char *line_str, t_env **env)
 		else 
 		{
 			// j = 0;
-			printf("%s\n",split->str);
 			join = ft_strjoin(join, expand(split->str, env),2);
 			if (split->next)
 				join = ft_strjoin(join," ",1);
 		}
 		split = split->next;
 	}
-	// ft_free_list(&node);
+	ft_free_list2(&node);
 	if (!join)
 		return ("");
 			// printf("%s\n",join);
+			// while (1);
 	return (join);
 }
 
