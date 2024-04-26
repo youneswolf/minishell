@@ -6,9 +6,10 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/26 15:47:12 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:56:34 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 #include <stdio.h>
@@ -282,6 +283,10 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 
 	// if (pipe(pipe_fd) == -1)
 	// 	perror("pipe");
+	if (holder->out[j] && holder->out[j] == -7)
+		exit(1);
+	else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
+		exit(1);
 	if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
 	{
 		redirect_input(holder->in[i]);
@@ -435,7 +440,7 @@ void execution(t_holder **holder ,t_env *env)
 			while (tmp->her_doc[n])
 			{
 				dup2(origin_in, STDIN_FILENO);
-
+				
 			if (n > 0)
 				pipe(pipe_fd);
 			pid = fork();
@@ -811,8 +816,8 @@ int main(int ac, char **av, char **env)
 		ft_is_buil(str);
 		if (ft_syntax(str))
 		{
-			ft_handle_issue_herdoc(str);
-			// ft_print_tokens(str);
+			// ft_handle_issue_herdoc(str);
+			ft_print_tokens(str);
 			old = str;
 			while (str)
 			{
@@ -821,6 +826,7 @@ int main(int ac, char **av, char **env)
 					// free(str->str);
 					printf("%p\n",str->str);
 					str->str = handle_expand(str->str, &mini_env);
+					// printf("%s\n",str->str);
 					str->flag = 1;
 					// while(1);
 					if (is_between_quotes(str->str))
@@ -828,6 +834,7 @@ int main(int ac, char **av, char **env)
 						str->is_between_quote = 1;
 					}
 					// free(str->str);
+					printf("str = %s\n", str->str);
 				}
 				str = str->next;
 			}
@@ -836,6 +843,8 @@ int main(int ac, char **av, char **env)
 			ft_set_token_to_none(str);
 			ft_give_token(str);
 			ft_is_buil(str);
+			// ft_print_tokens(str);
+			// ft_print_tokens(str);
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
 			// ft_checking_files(tmp);

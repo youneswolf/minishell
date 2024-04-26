@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_checking_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 15:14:02 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:31:30 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -60,6 +61,14 @@ int is_ambiguous(char *str)
 {
     int i = 0;
     int j = 0;
+    if (str && str[0] == 32)
+    {
+        while(str[i] && str[i] == 32)
+            i++;
+        if (!str[i])
+            return (1);
+    }
+    i = 0;
     while (str && str[i])
     {
         if (str[i] == ' ')
@@ -88,6 +97,8 @@ int    ft_oppen_files(t_holder *node)
     {
         if (tmp->outfile_index[b] == i)
         {
+        if(!is_ambiguous(tmp->file_out[b]))
+        {
             tmp->out[b] = open(tmp->file_out[b], O_CREAT| O_RDWR, 0644);
             if (tmp->out[b] == -1)
             {
@@ -96,18 +107,35 @@ int    ft_oppen_files(t_holder *node)
             }
             b++;
         }
+        else
+        {
+            printf("bash: %s: ambiguous redirect\n", tmp->file_out[b]);
+            tmp->out[b] = -7;
+        }
+        }
         else if (tmp->infile_index[z] == i)
         {
             tmp->in[z] = open(tmp->file_in[z], O_RDONLY);
+            if(!is_ambiguous(tmp->file_in[i]))
+            {
             if (tmp->in[z] == -1)
             {
                 write(2, "such file or directory\n", 24);
                 return (0);
             }
             z++;
+            }
+            else
+            {
+                printf("bash: %s: ambiguous redirect\n", tmp->file_in[z]);
+                 tmp->in[z] = -7;
+
+            }
         }
         else if (tmp->append_index[q] == i)
         {
+            if(!is_ambiguous(tmp->append[q]))
+            {
             tmp->ap[q] = open(tmp->append[q], O_CREAT| O_RDWR | O_APPEND, 0644);
             if (tmp->ap[q] == -1)
             {
@@ -115,7 +143,14 @@ int    ft_oppen_files(t_holder *node)
                 return (0);
             }
             q++;
-        }
+            }
+            else
+            {
+                 printf("bash: %s: ambiguous redirect\n", tmp->append[q]);
+                tmp->ap[q] = -7;
+                
+            }
+        }  
         i++;
     }
     return (1);
@@ -139,10 +174,10 @@ void    ft_checking_files(t_holder *node)
         check  = 0;
         while (tmp->file_in[b])
         {
-            if (tmp->file_in[i])
-            {
-                // if(!is_ambiguous(tmp->file_in[i]))
-                // {
+            // if (tmp->file_in[i])
+            // {
+                if(!is_ambiguous(tmp->file_in[i]))
+                {
                 tmp->in[i] = open(tmp->file_in[i], O_RDONLY);
                 if (tmp->in[i] == -1)
                 {
