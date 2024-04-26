@@ -6,12 +6,36 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/23 17:45:24 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:22:02 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdlib.h>
+
+char *ft_substr1(char *str, int start, int len, int not_)
+{
+	char	*sub;
+	int		i;
+
+	i = 0;
+    // if (str == NULL || start < 0 || len < 0)
+    //     return NULL;
+    int str_len = ft_strlen(str);
+    // if (start >= str_len)
+    //     return NULL;
+    if (start + len > str_len)
+        len = str_len - start;
+    sub = (char *)malloc((len + 1) * sizeof(char));
+    // if (sub == NULL)
+    //     return (NULL);
+	while (i < len)
+		sub[i++] = str[start++];
+    sub[len] = '\0';
+	// printf("---%s---\n", sub);
+	if (not_ == 1)
+		free(str);
+    return (sub);
+}
 
 char *ft_substr(char *str, int start, int len)
 {
@@ -43,13 +67,14 @@ t_line	*ft_lstnew(char *str, int start, int end)
 	new = (t_line *)malloc(sizeof(t_line));
 	new->status = (t_status *)malloc(sizeof(t_status));
 	new->status->index = 0;
+	new->status->lastdir = NULL;
 	new->deja = 0;
 	new->token = NONE;
 	if (!new)
 		return (NULL);
-    new->str = ft_substr(str, start, end - start);
+    new->str = ft_substr1(str, start, end - start, 0);
 	if (new->str == NULL)
-		printf("here\n");
+		exit(0);
 	new->next = NULL;
 	return (new);
 }
@@ -71,7 +96,7 @@ void	add_list(t_line **lst, char *str, int start, int end)
 	{
         if (*lst)
 		    temp = *lst;
-		while (temp->next)
+		while (temp && temp->next)
 		{
 			temp = temp->next;
 		}

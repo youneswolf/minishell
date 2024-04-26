@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/18 17:17:24 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/26 11:52:43 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,21 +88,3 @@ char    *ft_remove_here(char *str)
     str_ret = ft_remove_utils2_here(str_ret, str, j, i);
     return (str_ret);
 }
-
-// void    ft_remove_quote_here(char *str, char *line)
-// {
-//     int     i;
-
-//     i = 0;
-//     while (tmp)
-//     {
-//         if (tmp && (tmp->token == CMD || tmp->token == ARGS))
-//         {
-//             // if (tmp->token == DELIMITER)
-//             //     tmp->delimiter_quote = 1;
-//             // free(tmp->str);
-//             tmp->str = ft_remove(tmp, line);
-//         }
-//         tmp = tmp->next;
-//     }
-// }

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 15:28:37 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/26 13:25:57 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,32 @@
 #include <readline/readline.h>
 #include <dirent.h>
 #include <readline/history.h>
+#include <libc.h>
+
+FILE	*gfp;
+
+static void	*__malloc(size_t size, int line, const char *file)
+{
+	void	*ptr;
+
+	ptr = malloc(size);
+	fprintf(gfp, "dct[%p] = ['malloc', '%p', %i, '%s']\n",
+		ptr, ptr, line, file);
+	fflush(gfp);
+	return (ptr);
+}
+
+static void	__free(void *ptr, int line, const char *file)
+{
+	fprintf(gfp, "dct[%p] = ['free', '%p', %i, '%s']\n",
+		ptr, ptr, line, file);
+	fflush(gfp);
+	free(ptr);
+}
+/**/
+# define malloc(x) __malloc(x, __LINE__, __FILE__)
+# define free(x) __free(x, __LINE__, __FILE__)
+
 #define NONE -1
 #define CMD 0
 #define PIPE 1
@@ -126,6 +152,8 @@ extern	struct termios    attr;
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
 int				ft_oppen_files(t_holder *node);
+char			*ft_substr1(char *str, int start, int len, int not_);
+void			ft_free_holder(t_holder **str);
 int				ft_isalnum_str(char *str);
 char    		*ft_remove3(char *line);
 char			*ft_remove_utils4(char *line, char *str, int j, int i);

@@ -407,7 +407,7 @@ char *handle_expand(char *line_str, t_env **env)
 		}
 		split = split->next;
 	}
-	ft_free_list(&node);
+	// ft_free_list(&node);
 	if (!join)
 		return ("");
 			// printf("%s\n",join);

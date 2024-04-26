@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 16:23:57 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:25:13 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -662,13 +662,16 @@ void	ft_handle_issue_herdoc(t_line *str)
 			s1 = ft_strdup(tmp->next->str);
 			tmp->next->str = ft_remove3(tmp->next->str);
 			if ((s1[0] == '\'' || s1[0] == '"') && s1[1] == '$')
+			{
+				free (s1);
 				return ;
+			}
 			else if (!ft_strcmp(s1, tmp->next->str))
 			{
 				if (tmp->next->str[0] == '$')
 				{
 					tmp->deja = 1;
-					tmp->next->str = ft_substr(tmp->next->str, 1, ft_strlen(tmp->next->str));
+					tmp->next->str = ft_substr1(tmp->next->str, 1, ft_strlen(tmp->next->str), 1);
 					// printf("----DELIMITER %s -----\n", tmp->next->str);
 				}
 				return ;
@@ -693,13 +696,27 @@ void	ft_set_token_to_none(t_line *str)
 void	ft_skip_empty_expand(t_line **node)
 {
 	t_line	*head;
+	t_line	*tmp;
 	t_line	*previous;
 
 	if ((*node) && (*node)->flag == 1 && !(*node)->str[0])
 	{
+		previous = (*node);
 		(*node) = (*node)->next;
+		free(previous->str);
+		free(previous->status);
+		free(previous);
 		while ((*node) && (*node)->flag == 1 && !(*node)->str[0])
+		{
+			previous = (*node);
 			(*node) = (*node)->next;
+			free(previous->str);
+			free(previous->status);
+			free(previous);
+		}
+		free(previous->str);
+		free(previous->status);
+		free(previous);
 	}
 	head = *node;
 	previous = *node;
@@ -710,7 +727,13 @@ void	ft_skip_empty_expand(t_line **node)
 			if (head && head->flag == 1 && head->str[0] == '\0')
 			{
 				while (head && head->flag == 1 && !head->str[0])
+				{
+					tmp = head;
 					head = head->next;
+					free(tmp->str);
+					free(tmp->status);
+					free(tmp);
+				}
 				previous->next = head;
 			}
 			if (head)
@@ -722,32 +745,6 @@ void	ft_skip_empty_expand(t_line **node)
 	}
 }
 
-// void ft_skip_nodes(t_line* head_ref)
-// {
-//     t_line *current = head_ref;
-//     t_line *temp = NULL;
-
-//     while (current != NULL && current->flag == 1 && !current->str[0]) {
-//         temp = current;
-//         head_ref = current->next;
-//         // free(temp);
-//         current = head_ref;
-//     }
-
-//     while (current != NULL) {
-//         while (current != NULL && current->flag != 1 && !current->str[0]) {
-//             temp = current;
-//             current = current->next;
-//         }
-
-//         if (current == NULL)
-//             return;
-
-//         temp->next = current->next;
-//         // free(current);
-//         current = temp->next;
-//     }
-// }
 int is_between_quotes(char *str)
 {
 	int i = 0;
@@ -762,8 +759,18 @@ int is_between_quotes(char *str)
 	}
 	return (0);
 }
+void	leaks()
+{
+	fclose(gfp);
+	system("leaks minishell");
+	usleep(1000 * 100 *10000);
+}
+
 int main(int ac, char **av, char **env)
 {
+	gfp = fopen("leaks.t", "w");
+	atexit(leaks);
+	
 	if (isatty(0) == -1)
 		printf("============="), perror("isatty");
     if (tcgetattr(STDIN_FILENO, &attr) == -1)
@@ -794,6 +801,7 @@ int main(int ac, char **av, char **env)
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line);
+		//checked leaks for add space
 		// if (!line)
 			// str->status = 255;
 		ft_put(line, &str);
@@ -801,8 +809,8 @@ int main(int ac, char **av, char **env)
 		ft_is_buil(str);
 		if (ft_syntax(str))
 		{
-			// ft_handle_issue_herdoc(str);
-			ft_print_tokens(str);
+			ft_handle_issue_herdoc(str);
+			// ft_print_tokens(str);
 			old = str;
 			while (str)
 			{
@@ -816,12 +824,11 @@ int main(int ac, char **av, char **env)
 						str->is_between_quote = 1;
 					}
 					// free(str->str);
-					printf("str = %s\n", str->str);
 				}
 				str = str->next;
 			}
 			str = old;
-			ft_skip_empty_expand(&str);
+			// ft_skip_empty_expand(&str);
 			ft_set_token_to_none(str);
 			ft_give_token(str);
 			ft_is_buil(str);
@@ -831,8 +838,10 @@ int main(int ac, char **av, char **env)
 			if (ft_oppen_files(tmp))
 				execution(&tmp, mini_env);
 		}
-		// ft_free_list(&str);
+		ft_free_list(&str);
+		ft_free_holder(&tmp);
 		str = NULL;
+		tmp = NULL;
 		free(line);
 	}
 }

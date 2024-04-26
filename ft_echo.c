@@ -8,21 +8,21 @@ void exec_echo(t_holder *holder)
 		i++;
 		while (holder->args_built_in[i + 1])
 		{
-			printf("%s ",holder->args_built_in[i]);
+			write(1 ,holder->args_built_in[i], 1);
 			i++;
 		}
 		if (holder->args_built_in[i])
-			printf("%s", holder->args_built_in[i]);
+			write(1, holder->args_built_in[i], 1);
 	}
 	else
 	{
 		while (holder->args_built_in[j + 2])
 		{
-			printf("%s ",holder->args_built_in[j + 1]);
+			write(1 ,holder->args_built_in[j + 1], 1);
 			j++;
 		}
 		if (holder->args_built_in[j + 1])
-			printf("%s", holder->args_built_in[j + 1]);
-		printf("\n");
+			write(1, holder->args_built_in[j + 1], 1);
+		write(1, "\n", 1);
 	}
 }

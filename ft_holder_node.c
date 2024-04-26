@@ -180,13 +180,13 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 								new->args[j++] = ft_strdup(a[ee]);
 								ee++;
 							}
-							// ft_free_2d(a);
+							ft_free_2d(a);
 						}
 					}
 					else
 					{
-						new->cmd = tmp->str;
-						new->args[j++] = tmp->str;
+						new->cmd = ft_strdup(tmp->str);
+						new->args[j++] = ft_strdup(tmp->str);
 					}
 					new->args[j] = NULL;
 					flag = 0;
@@ -227,13 +227,13 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 								new->args[z++] = ft_strdup(a[ee]);
 								ee++;
 							}
-							// ft_free_2d(a);
+							ft_free_2d(a);
 						}
 					}
 					else
 					{
-						new->args_built_in[z++] = tmp->str;
-						new->cmd_built_in = tmp->str;
+						new->args_built_in[z++] = ft_strdup(tmp->str);
+						new->cmd_built_in = ft_strdup(tmp->str);
 					}
 					new->args_built_in[z] = NULL;
 				}
@@ -253,12 +253,12 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							new->args[j++] = ft_strdup(a[ee]);
 							ee++;
 						}
-						// ft_free_2d(a);
+						ft_free_2d(a);
 					}
 				}
 				else
 				{
-					new->args[j++] = tmp->str;
+					new->args[j++] = ft_strdup(tmp->str);
 				}
 				new->args[j] = NULL;
 			}
@@ -277,12 +277,12 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							printf("--{%s}--\n", a[ee]);
 							ee++;
 						}
-						// ft_free_2d(a);
+						ft_free_2d(a);
 					}
 				}
 				else
 				{
-                	new->args_built_in[z++] = tmp->str;
+                	new->args_built_in[z++] = ft_strdup(tmp->str);
 					// printf("new->args %s\n", tmp->str);
 				}
 				new->args_built_in[z] = NULL;
@@ -303,12 +303,12 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							new->nbr_file++;
 							ee++;
 						}
-						// ft_free_2d(a);
+						ft_free_2d(a);
 					}
 				}
 				else
 				{
-					new->file_out[k++] = tmp->str;
+					new->file_out[k++] = ft_strdup(tmp->str);
 					new->outfile_index[zzz++] = tmp->status->index;
 					new->nbr_file++;
 				}
@@ -331,12 +331,12 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 							new->nbr_file++;
 							new->infile_index[sss++] = tmp->status->index;
 						}
-						// ft_free_2d(a);
+						ft_free_2d(a);
 					}
 				}
 				else
 				{
-					new->file_in[n++] = tmp->str;
+					new->file_in[n++] = ft_strdup(tmp->str);
 					new->infile_index[sss++] = tmp->status->index;
 					new->nbr_file++;
 				}
@@ -361,12 +361,12 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 								new->nbr_file++;
 							}
 						}
-						// ft_free_2d(aa);
+						ft_free_2d(aa);
 					}
 					else
 						{
 							new->append_index[www++] = tmp->status->index;
-							new->append[a++] = tmp->next->str;
+							new->append[a++] = ft_strdup(tmp->next->str);
 							new->nbr_file++;
 						}
 					new->append[a] = NULL;
@@ -375,7 +375,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			if (tmp->token == HERDOC && a < 1024)
 			{
 				if (tmp->next)
-					new->her_doc[l++] = tmp->next->str;
+					new->her_doc[l++] = ft_strdup(tmp->next->str);
 			}
 			tmp = tmp->next;
 		}
