@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 17:58:19 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/28 13:46:55 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,56 @@ int ft_strcmp(char *str, char *str1)
     return (1);
 }
 
+void    ft_give_token_else(t_line *tmp , int *flag1)
+{
+    if (tmp->token == ARGS || tmp->token == FILE || tmp->token == DELIMITER 
+        || tmp->token == IN_FILE || tmp->token == OUT_FILE)
+    {
+        if ((tmp->token == IN_FILE || tmp->token == OUT_FILE
+            || tmp->token == FILE || tmp->token == DELIMITER) && tmp->next && *flag1 == 1)
+            tmp->next->token = ARGS;
+        else if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
+            tmp->next->token = CMD;
+        else if (tmp->next && tmp->token == ARGS)
+            tmp->next->token = ARGS;
+    }
+    else
+    {
+        *flag1 = 1;
+        tmp->token = CMD;
+        if (tmp->next != NULL)
+            tmp->next->token = ARGS;
+    }
+}
+
+void    ft_give_redire(t_line *tmp, int *flag1, int *index)
+{
+    if (ft_strcmp(tmp->str, ">>"))
+    {
+        tmp->token = APPEND;
+        if (tmp->next != NULL)
+        {
+            tmp->next->status->index = *index + 1;
+            tmp->next->token = FILE;
+        }
+    }
+    else if (ft_strcmp(tmp->str, "<<"))
+    {
+        tmp->token = HERDOC;
+        if (tmp->next != NULL)
+            tmp->next->token = DELIMITER;
+    }
+    else
+        ft_give_token_else(tmp, flag1);
+}
+
 void    ft_give_token(t_line *head)
 {
     t_line  *tmp;
+    int     index;
+    int     flag1;
 
     tmp = head;
-    int index;
-    int flag1;
-
     flag1 = 0;
     index = 0;
     while (tmp)
@@ -44,69 +86,16 @@ void    ft_give_token(t_line *head)
         {
             tmp->token = OUT_REDIR;
             if (tmp->next != NULL)
-            {
-                tmp->next->status->index = index++;
-                tmp->next->token = OUT_FILE;
-            }
+                (1) && (tmp->next->status->index = index++, tmp->next->token = OUT_FILE);
         }
         else if (ft_strcmp(tmp->str, "<"))
         {
             tmp->token = IN_REDIR;
             if (tmp->next != NULL)
-            {
-                tmp->next->status->index = index++;
-                tmp->next->token = IN_FILE;
-            }
-        }
-        else if (ft_strcmp(tmp->str, ">>"))
-        {
-            tmp->token = APPEND;
-            if (tmp->next != NULL)
-            {
-                tmp->next->status->index = index++;
-                tmp->next->token = FILE;
-            }
-        }
-        else if (ft_strcmp(tmp->str, "<<"))
-        {
-            // flag1 = 0;
-            tmp->token = HERDOC;
-            if (tmp->next != NULL)
-                tmp->next->token = DELIMITER;
+                (1) && (tmp->next->status->index = index++, tmp->next->token = IN_FILE);
         }
         else
-        {
-            if (tmp->token == ARGS || tmp->token == FILE || tmp->token == DELIMITER 
-             || tmp->token == IN_FILE || tmp->token == OUT_FILE)
-            {
-                if ((tmp->token == IN_FILE || tmp->token == OUT_FILE
-                    || tmp->token == FILE || tmp->token == DELIMITER) && tmp->next && flag1 == 1)
-                {
-                    tmp->next->token = ARGS;
-                }
-                else if (tmp->next && tmp->token != ARGS && tmp->next->token != ARGS)
-                {
-                    tmp->next->token = CMD;
-                    // if (ft_cmp_built_in(tmp->next->str))
-                    //     tmp->next->is_it_built_in = 1;
-                    // else if (!ft_cmp_built_in(tmp->next->str))
-                    //     tmp->next->is_it_built_in = 0;
-                }
-                else if (tmp->next && tmp->token == ARGS)
-                    tmp->next->token = ARGS;
-            }
-            else
-            {
-                flag1 = 1;
-                tmp->token = CMD;
-                // if (ft_cmp_built_in(tmp->str))
-                //     tmp->is_it_built_in = 1;
-                // else if (!ft_cmp_built_in(tmp->str))
-                //     tmp->is_it_built_in = 0;
-                if (tmp->next != NULL)
-                    tmp->next->token = ARGS;
-            }
-        }
+            ft_give_redire(tmp, &flag1, &index);
         tmp = tmp->next;
     }
 }

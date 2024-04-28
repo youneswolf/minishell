@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/26 15:22:02 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/28 13:32:07 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,16 @@ char *ft_substr1(char *str, int start, int len, int not_)
 {
 	char	*sub;
 	int		i;
+	int		str_len;
 
 	i = 0;
-    // if (str == NULL || start < 0 || len < 0)
-    //     return NULL;
-    int str_len = ft_strlen(str);
-    // if (start >= str_len)
-    //     return NULL;
+    str_len = ft_strlen(str);
     if (start + len > str_len)
         len = str_len - start;
     sub = (char *)malloc((len + 1) * sizeof(char));
-    // if (sub == NULL)
-    //     return (NULL);
 	while (i < len)
 		sub[i++] = str[start++];
     sub[len] = '\0';
-	// printf("---%s---\n", sub);
 	if (not_ == 1)
 		free(str);
     return (sub);
@@ -41,22 +35,16 @@ char *ft_substr(char *str, int start, int len)
 {
 	char	*sub;
 	int		i;
+	int str_len;
 
 	i = 0;
-    // if (str == NULL || start < 0 || len < 0)
-    //     return NULL;
-    int str_len = ft_strlen(str);
-    // if (start >= str_len)
-    //     return NULL;
+    str_len = ft_strlen(str);
     if (start + len > str_len)
         len = str_len - start;
     sub = (char *)malloc((len + 1) * sizeof(char));
-    // if (sub == NULL)
-    //     return (NULL);
 	while (i < len)
 		sub[i++] = str[start++];
     sub[len] = '\0';
-	// printf("---%s---\n", sub);
     return (sub);
 }
 
@@ -97,9 +85,7 @@ void	add_list(t_line **lst, char *str, int start, int end)
         if (*lst)
 		    temp = *lst;
 		while (temp && temp->next)
-		{
 			temp = temp->next;
-		}
 		temp->next = new;
 	}
 }
@@ -118,12 +104,21 @@ int		ft_strchr1(char *str, char c)
 	return (0);
 }
 
+int	ft_put_utils(char *str, int j, int i, t_line **head)
+{
+	if (i == j)
+		return (0);
+	add_list(head, str, j, i);
+	if (!str[i])
+		return (0);
+	return (1);
+}
+
 void	ft_put(char *str, t_line **head)
 {
 	int        flag;
 	int			i;
 	int			j;
-	t_status	*status;
 
     (1) && (i = 0, j = 0, flag = 0);
     while (str && str[i])
@@ -143,12 +138,9 @@ void	ft_put(char *str, t_line **head)
                 if (str[i] == flag)
                     flag = 0;
             }
-            i++;
+			i++;
         }
-		if (i == j)
+		if (!ft_put_utils(str, j, i, head))
 			break;
-        add_list(head, str, j, i);
-        if (!str[i])
-            break ;
     }
 }

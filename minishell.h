@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/26 13:25:57 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/28 17:42:54 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,29 +26,29 @@
 #include <readline/history.h>
 #include <libc.h>
 
-FILE	*gfp;
+// FILE	*gfp;
 
-static void	*__malloc(size_t size, int line, const char *file)
-{
-	void	*ptr;
+// static void	*__malloc(size_t size, int line, const char *file)
+// {
+// 	void	*ptr;
 
-	ptr = malloc(size);
-	fprintf(gfp, "dct[%p] = ['malloc', '%p', %i, '%s']\n",
-		ptr, ptr, line, file);
-	fflush(gfp);
-	return (ptr);
-}
+// 	ptr = malloc(size);
+// 	fprintf(gfp, "dct[%p] = ['malloc', '%p', %i, '%s']\n",
+// 		ptr, ptr, line, file);
+// 	fflush(gfp);
+// 	return (ptr);
+// }
 
-static void	__free(void *ptr, int line, const char *file)
-{
-	fprintf(gfp, "dct[%p] = ['free', '%p', %i, '%s']\n",
-		ptr, ptr, line, file);
-	fflush(gfp);
-	free(ptr);
-}
-/**/
-# define malloc(x) __malloc(x, __LINE__, __FILE__)
-# define free(x) __free(x, __LINE__, __FILE__)
+// static void	__free(void *ptr, int line, const char *file)
+// {
+// 	fprintf(gfp, "dct[%p] = ['free', '%p', %i, '%s']\n",
+// 		ptr, ptr, line, file);
+// 	fflush(gfp);
+// 	free(ptr);
+// }
+// /**/
+// # define malloc(x) __malloc(x, __LINE__, __FILE__)
+// # define free(x) __free(x, __LINE__, __FILE__)
 
 #define NONE -1
 #define CMD 0
@@ -77,6 +77,25 @@ typedef struct s_status
     char    *lastdir;
 	int		index;
 }           t_status;
+
+typedef struct s_long
+{
+	int j; 
+	int	k; 
+	int	w;
+	int a;
+	int n;
+	int l;
+	int	sss;
+	int	www;
+	int	zzz;
+	int z;
+	int zz;
+	int flag;
+	int	mm;
+	int	i;
+	int	c;
+}	t_long;
 typedef struct s_line
 {
     char            *str;
@@ -277,6 +296,7 @@ char 			*expand_here(char *str, t_env **env);
 int 			count_sgl_quote(char *str);
 char			**ft_split1(const char *str, char c);
 static char		**alloc1(int l);
+void    ft_free_list2(t_line **str);
 static int		ft_free(char **array, const char *str, char c, int a);
 static char		*word1(const char *str, char c);
 static int		count1(const char *s, char c);

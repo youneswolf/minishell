@@ -6,15 +6,12 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/26 16:15:22 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/28 17:39:12 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
-#include <stdio.h>
-#include <sys/signal.h>
-#include <unistd.h>
 
 struct termios    attr;
 
@@ -247,55 +244,72 @@ char **ft_put_env_string(char **array, t_env *env)
     return (array);
 }
 
+int is_slash(char *str)
+{
+    int    i;
+
+    i = 0;
+    while (str && str[i])
+    {
+        if (str[i] == '/')
+            return (1);
+        i++;
+    }
+    return (0);
+}
 void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k)
 {
-	char *path;
-	char **array;
+    char *path;
+    char **array;
 
-	// if (pipe(pipe_fd) == -1)
-	// 	perror("pipe");
-	// if (holder->out[j] && holder->out[j] == -7)
-	// 	exit(1);
-	// else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
-	// 	exit(1);
-	if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
-	{
-		redirect_input(holder->in[i]);
-	}
-	if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
-	{
-		while (holder->out[j] != -42)
-			j++;
-		redirect_output(holder->out[j-1]);
-	}
-	if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
-	{
-		while (holder->ap[k] != -42)
-			k++;
-		redirect_append(holder->ap[k-1]);
-	}
-	else if (holder->next)
-	{
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-	}
-
-	if (!access(holder->args[0], X_OK))
-	{
-		path = holder->args[0];
-	}
-	else
-		path = get_path(env, holder->args[0]);
-	if (!path)
-	{
-		printf("bash: %s: command not found\n", holder->args[0]);
-		exit(127);
-	}
-	array = ft_put_env_string(array, env);
+    // if (pipe(pipe_fd) == -1)
+    //     perror("pipe");
+    // if (holder->out[j] && holder->out[j] == -7)
+    //     exit(1);
+    // else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
+    //     exit(1);
+    if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
+    {
+        redirect_input(holder->in[i]);
+    }
+    if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
+    {
+        while (holder->out[j] != -42)
+            j++;
+        redirect_output(holder->out[j-1]);
+    }
+    if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
+    {
+        while (holder->ap[k] != -42)
+            k++;
+        redirect_append(holder->ap[k-1]);
+    }
+    else if (holder->next)
+    {
+        dup2(pipe_fd[1], STDOUT_FILENO);
+        close(pipe_fd[0]);
+        close(pipe_fd[1]);
+    }
+    if (is_slash(holder->args[0]))
+    {
+    if (!access(holder->args[0], X_OK))
+    {
+        path = holder->args[0];
+    }
+    else
+        (printf("bash: %s: No such file or directory\n",holder->args[0]), exit(127));
+    }
+    else
+        path = get_path(env, holder->args[0]);
+    if (!path)
+    {
+        printf("bash: %s: command not found\n", holder->args[0]);
+        exit(127);
+    }
+    array = ft_put_env_string(array, env);
     execve(path, holder->args, array);
     ft_free_2d(array);
-	exit(1);
+    exit(1);
 }
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
@@ -354,38 +368,68 @@ int is_quote(char *str)
 	}
 	return (0);
 }
+char *ft_remove_dollar(char *str)
+{
+    int i = 1;
+    char *new_str;
+
+    if ((str && str[0] == '$') && (str[1] && str[1] == 39 || str[1] && str[1] == 34))
+    {
+        new_str = malloc(ft_strlen(str));
+        while (str && str[i])
+        {
+            new_str[i-1] = str[i];
+            i++;
+        }
+        new_str[i-1] = '\0';
+        free(str);
+    return (new_str);
+    }
+    return (str);
+
+}
+
 void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in)
 {
-	char	*line;
-	char	*str;
-	int		i = 42;
-	// write(1, "here_doc> ", 11);
-	// dup2(origin_in, STDIN_FILENO);
-	// if (signal(SIGINT, ft_handler_ctrt_herdoc) == SIG_ERR)
+    char    *line;
+    char    *str;
+    int        i = 42;
+    // write(1, "here_doc> ", 11);
+    // dup2(origin_in, STDIN_FILENO);
+    // if (signal(SIGINT, ft_handler_ctrt_herdoc) == SIG_ERR)
     //     exit(255);
-	line = readline("here_doc> ");
-	i = is_quote(lim);
-	if (i == 1)
-	{
-		lim = ft_remove_here(lim);
-	}
-	while (ft_strncmp(lim, line, ft_strlen(line))
-		|| ft_strlen(line) != ft_strlen(lim))
-	{
-		// write(1, "here_doc> ", 11);
-		if (if_dollar(line) && !i)
-		{
-			line = handle_expand_here(line, env);
-		}
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
-		free(line);
-		line = readline("here_doc> ");
-		if (!line)
-			exit(2) ;
-	}
-	free(line);
-	exit(1);
+    line = readline("here_doc> ");
+    i = if_dollar(lim);
+    printf("%s\n",lim);
+    if (i == 1)
+    {
+        lim = ft_remove_dollar(lim);
+        printf("%s\n",lim);
+    }
+    i = 42;
+    i = is_quote(lim);
+    if (i == 1)
+    {
+        lim = ft_remove_here(lim);
+    }
+    while (ft_strncmp(lim, line, ft_strlen(lim))
+        || ft_strlen(line) != ft_strlen(lim))
+    {
+        // write(1, "here_doc> ", 11);
+        // if (if_dollar(line) && !i)
+        // {
+        //     line = handle_expand_here(line, env);
+        // }
+        write(pipe_fd[1], line, ft_strlen(line));
+        write(pipe_fd[1], "\n", 1);
+        free(line);
+        line = readline("here_doc> ");
+        if (!line)
+            exit(2) ;
+    }
+    free(line);
+    free(lim);
+    exit(1);
 }
 
 void execution(t_holder **holder ,t_env *env)
@@ -441,11 +485,12 @@ void execution(t_holder **holder ,t_env *env)
 			if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
 				(perror("dup2 doc"));
 			close(pipe_fd[0]);
+			pipe(pipe_fd);
 			}
 			else
 			{
 				close(pipe_fd[ 1]);
-				dup2(pipe_fd[0], STDIN_FILENO);
+				dup2(origin_in, STDERR_FILENO);
 				pipe(pipe_fd);
 			}
 			}
@@ -575,7 +620,6 @@ void	ft_is_buil(t_line *str)
 			tmp->is_it_built_in = 1;
 		tmp = tmp->next;
 	}
-	// ft_print_tokens(str);
 }
 
 void lek()
@@ -650,8 +694,8 @@ void	ft_handle_issue_herdoc(t_line *str)
 				{
 					tmp->deja = 1;
 					tmp->next->str = ft_substr1(tmp->next->str, 1, ft_strlen(tmp->next->str), 1);
-					// printf("----DELIMITER %s -----\n", tmp->next->str);
 				}
+				free(s1);
 				return ;
 			}
 		}
@@ -736,22 +780,22 @@ int is_between_quotes(char *str)
 	}
 	return (0);
 }
-void	leaks()
-{
-	fclose(gfp);
-	system("leaks minishell");
-	usleep(1000 * 100 *10000);
-}
+// void	leaks()
+// {
+// 	fclose(gfp);
+// 	system("leaks minishell");
+// 	usleep(1000 * 100 *10000);
+// }
 
 int main(int ac, char **av, char **env)
 {
-	gfp = fopen("leaks.t", "w");
-	atexit(leaks);
+	// gfp = fopen("leaks.t", "w");
+	// atexit(leaks);
 	
-	if (isatty(0) == -1)
-		perror("isatty");
-    if (tcgetattr(STDIN_FILENO, &attr) == -1)
-		perror("tcgetattr");
+	// if (isatty(0) == -1)
+	// 	perror("isatty");
+    // if (tcgetattr(STDIN_FILENO, &attr) == -1)
+	// 	perror("tcgetattr");
 	t_line  *str;
 	int     i = 0;
 	char    *line;
@@ -805,11 +849,36 @@ int main(int ac, char **av, char **env)
 			ft_is_buil(str);
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
-			if (ft_oppen_files(tmp))
-				execution(&tmp, mini_env);
+			// if (ft_oppen_files(tmp))
+			ft_checking_files(tmp);
+			execution(&tmp, mini_env);
 		}
 		ft_free_list(&str);
 		str = NULL;
 		free(line);
+	}
+}
+void	ft_print_holder(t_holder *tmp)
+{
+	t_holder *tmp1 = tmp;
+	while (tmp1)
+	{
+		int kk = 0;
+		if (tmp1->cmd)
+			printf("holder cmd %s\n", tmp1->cmd);
+		if (tmp1->cmd_built_in)
+			printf("holder cmd %s\n", tmp1->cmd_built_in);
+		while (tmp1->args_built_in[kk])
+		{
+			printf("holder args_buit_in %s", tmp1->args_built_in[kk]);
+			kk++;
+		}
+		kk = 0;
+		while (tmp1->args[kk])
+		{
+			printf("holder args %s", tmp1->args[kk]);
+			kk++;
+		}
+		tmp1 = tmp1->next;
 	}
 }

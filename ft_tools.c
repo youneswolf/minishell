@@ -664,9 +664,12 @@ void fiLL_env(t_env **mini_env, char **env)
 int is_sgl_quote(char *str)
 {
 	int i = 0;
+	int j = 0;
 	while (str && str[i])
 	{
 		if (str[i] == 39)
+			j = 1;
+		if (str[i] == '$' && j)
 			return (1);
 		i++;
 	}
