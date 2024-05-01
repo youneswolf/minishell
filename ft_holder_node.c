@@ -418,7 +418,7 @@ void	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
 		ft_create_holder_infile(tmp, new, &t->n, &t->sss);
 	if (tmp->token == APPEND)
 		ft_create_holder_append(tmp, new, &t->a, &t->www);
-	if (tmp->token == HERDOC && t->a < 1024)
+	if (tmp->token == HERDOC && t->a < 1024) // && t->a < 1024
 		if (tmp->next)
 			new->her_doc[t->l++] = ft_strdup(tmp->next->str);
 }

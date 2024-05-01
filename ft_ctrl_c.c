@@ -6,21 +6,24 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 21:08:37 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/20 16:03:26 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:11:07 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void    ft_f(int signum)
+{
+    (void) signum;
+    return;
+}
 
 void    ft_handler_ctrl_c(int signum)
 {
     if (signum == SIGINT)
     {
         if (waitpid(-1, NULL, WNOHANG) == 0)
-        {
-            printf("\n");
             return ;
-        }
         printf("\n");
         rl_replace_line("", 1);
         rl_on_new_line();

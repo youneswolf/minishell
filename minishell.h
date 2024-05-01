@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/28 17:42:54 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/04/30 22:29:02 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ extern	struct termios    attr;
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
 int				ft_oppen_files(t_holder *node);
+void    		ft_f(int signum);
 char			*ft_substr1(char *str, int start, int len, int not_);
 void			ft_free_holder(t_holder **str);
 int				ft_isalnum_str(char *str);

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/28 17:39:12 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:57:28 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -425,7 +425,7 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
         free(line);
         line = readline("here_doc> ");
         if (!line)
-            exit(2) ;
+            (exit(2));
     }
     free(line);
     free(lim);
@@ -455,46 +455,45 @@ void execution(t_holder **holder ,t_env *env)
 			while (tmp->her_doc[n])
 			{
 				dup2(origin_in, STDIN_FILENO);
-				
-			if (n > 0)
-				pipe(pipe_fd);
-			pid = fork();
-			if (!pid)
-			{
-				signal(SIGINT, SIG_DFL);
-				signal(SIGQUIT, SIG_DFL);
-				ft_here_doc(tmp->her_doc[n], pipe_fd, tmp, &env, origin_in);
-			}
-			else
-			{
-				waitpid(pid, &child_stat, 0);
-				if (WIFSIGNALED(child_stat) && WTERMSIG(child_stat) == SIGINT)
-					break ;
-				if (WIFEXITED(child_stat))
+				if (n > 0)
+					pipe(pipe_fd);
+				pid = fork();
+				if (!pid)
 				{
-        			int exit_status = WEXITSTATUS(child_stat);
-					if (exit_status == 255)
+					signal(SIGINT, SIG_DFL);
+					signal(SIGQUIT, &ft_f);
+					ft_here_doc(tmp->her_doc[n], pipe_fd, tmp, &env, origin_in);
+				}
+				else
+				{
+					waitpid(pid, &child_stat, 0);
+					if (WIFSIGNALED(child_stat) && WTERMSIG(child_stat) == SIGINT)
+						break ;
+					if (WIFEXITED(child_stat))
 					{
-						tmp = tmp->next;
-						break;
+						int exit_status = WEXITSTATUS(child_stat);
+						if (exit_status == 255)
+						{
+							tmp = tmp->next;
+							break;
+						}
+					}
+					close(pipe_fd[1]);
+					if (tmp->cmd)
+					{
+						if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+							(perror("dup2 doc"));
+						close(pipe_fd[0]);
+						pipe(pipe_fd);
+					}
+					else
+					{
+						close(pipe_fd[1]);
+						dup2(origin_in, STDERR_FILENO);
+						pipe(pipe_fd);
 					}
 				}
-			close(pipe_fd[1]);
-			if (tmp->cmd)
-			{
-			if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-				(perror("dup2 doc"));
-			close(pipe_fd[0]);
-			pipe(pipe_fd);
-			}
-			else
-			{
-				close(pipe_fd[ 1]);
-				dup2(origin_in, STDERR_FILENO);
-				pipe(pipe_fd);
-			}
-			}
-				n++;
+					n++;
 			}
  		}
 		if ((tmp->cmd_built_in &&tmp->file_out[j]) || (tmp->args_built_in[0] && tmp->cmd_built_in))
@@ -578,7 +577,8 @@ void execution(t_holder **holder ,t_env *env)
 		close(pipe_fd[0]);
 	// if (WIFSIGNALED(child_stat) && (WTERMSIG(child_stat) == SIGINT) || WTERMSIG(child_stat) == SIGQUIT)
     // {
-    //     tcsetattr(STDIN_FILENO, TCSANOW, &attr);
+	// 	printf("\n");
+    //     // tcsetattr(STDIN_FILENO, TCSANOW, &attr);
     // }
 	// ft_free_list(&str);
 	ft_free_holder(holder);
@@ -647,17 +647,17 @@ void	ft_print_tokens(t_line *node)
 		else if (head->token == OUT_FILE && head->str)
 		{
 			printf(MAGENTA"[%s]"RESET, "OUT_FILE");
-			printf("----index {%d}---\n", head->status->index);
+			// printf("----index {%d}---\n", head->status->index);
 		}
 		else if (head->token == IN_FILE && head->str)
 		{
 			printf(YELLOW"[%s]"RESET, "IN_FILE");
-			printf("---index {%d}---", head->status->index);
+			// printf("---index {%d}---", head->status->index);
 		}
 		else if (head->token == FILE && head->str)
 		{
 			printf(YELLOW"[%s]"RESET, "FILE");
-			printf("---index {%d}---", head->status->index);
+			// printf("---index {%d}---", head->status->index);
 		}
 		else if (head->token == APPEND && head->str)
 			printf(YELLOW"[%s]"RESET, "APPEND");
@@ -787,7 +787,7 @@ int is_between_quotes(char *str)
 // 	usleep(1000 * 100 *10000);
 // }
 
-int main(int ac, char **av, char **env)
+int main(int ac, char **av, char **env) // status code and singal in herdoc and singal in ./minishell ./minishell
 {
 	// gfp = fopen("leaks.t", "w");
 	// atexit(leaks);
@@ -825,6 +825,7 @@ int main(int ac, char **av, char **env)
 			// str->status = 255;
 		ft_put(line, &str);
 		ft_give_token(str);
+		// ft_print_tokens(str);
 		ft_is_buil(str);
 		if (ft_syntax(str))
 		{
