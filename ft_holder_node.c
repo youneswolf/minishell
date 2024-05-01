@@ -305,7 +305,7 @@ void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz)
 			while (a && a[ee])
 			{
 				new->file_out[(*k)++] = ft_strdup(a[ee]);
-				new->outfile_index[(*zzz)++] = tmp->status->index;
+				// new->outfile_index[(*zzz)++] = tmp->status->index;
 				new->nbr_file++;
 				ee++;
 			}
@@ -315,7 +315,7 @@ void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz)
 	else
 	{
 		new->file_out[(*k)++] = ft_strdup(tmp->str);
-		new->outfile_index[(*zzz)++] = tmp->status->index;
+		// new->outfile_index[(*zzz)++] = tmp->status->index;
 		new->nbr_file++;
 	}
 }
@@ -336,7 +336,7 @@ void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss)
 				new->file_in[(*n)++] = ft_strdup(a[ee]);
 				ee++;
 				new->nbr_file++;
-				new->infile_index[(*sss)++] = tmp->status->index;
+				// new->infile_index[(*sss)++] = tmp->status->index;
 			}
 			ft_free_2d(a);
 		}
@@ -344,7 +344,7 @@ void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss)
 	else
 	{
 		new->file_in[(*n)++] = ft_strdup(tmp->str);
-		new->infile_index[(*sss)++] = tmp->status->index;
+		// new->infile_index[(*sss)++] = tmp->status->index;
 		new->nbr_file++;
 	}
 }
@@ -365,14 +365,14 @@ void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www)
 				while (aa[ee++])
 				{
 					new->append[(*a)++] = ft_strdup(aa[ee]);
-					new->append_index[(*www)++] = tmp->status->index;
+					// new->append_index[(*www)++] = tmp->status->index;
 				}
 				ft_free_2d(aa);
 			}
 		}
 		else
 			{
-				new->append_index[(*www)++] = tmp->status->index;
+				// new->append_index[(*www)++] = tmp->status->index;
 				new->append[(*a)++] = ft_strdup(tmp->next->str);
 			}
 			new->nbr_file++;

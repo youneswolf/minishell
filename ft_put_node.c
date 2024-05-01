@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/28 13:32:07 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/01 15:05:38 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,17 @@ t_line	*ft_lstnew(char *str, int start, int end)
 	t_line	*new;
 
 	new = (t_line *)malloc(sizeof(t_line));
-	new->status = (t_status *)malloc(sizeof(t_status));
-	new->status->index = 0;
-	new->status->lastdir = NULL;
+	// new->status = (t_status *)malloc(sizeof(t_status));
+	// new->status->index = 0;
+	// new->status->status = 0;
+	// new->status->lastdir = NULL;
 	new->deja = 0;
 	new->token = NONE;
 	if (!new)
 		return (NULL);
     new->str = ft_substr1(str, start, end - start, 0);
 	if (new->str == NULL)
-		exit(0);
+		return (NULL);
 	new->next = NULL;
 	return (new);
 }
@@ -74,7 +75,7 @@ void	add_list(t_line **lst, char *str, int start, int end)
 
 	new = ft_lstnew(str, start, end);
 	if (!new)
-		(*lst)->status->status = 255;
+		return ;
 	if (*lst == NULL)
 	{
 		*lst = new;

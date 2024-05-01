@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/28 13:46:55 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/01 15:01:52 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ void    ft_give_token_else(t_line *tmp , int *flag1)
     }
 }
 
-void    ft_give_redire(t_line *tmp, int *flag1, int *index)
+void    ft_give_redire(t_line *tmp, int *flag1, int *index, t_status *status)
 {
     if (ft_strcmp(tmp->str, ">>"))
     {
         tmp->token = APPEND;
         if (tmp->next != NULL)
         {
-            tmp->next->status->index = *index + 1;
+            status->index = *index + 1;
             tmp->next->token = FILE;
         }
     }
@@ -69,7 +69,7 @@ void    ft_give_redire(t_line *tmp, int *flag1, int *index)
         ft_give_token_else(tmp, flag1);
 }
 
-void    ft_give_token(t_line *head)
+void    ft_give_token(t_line *head, t_status *status)
 {
     t_line  *tmp;
     int     index;
@@ -86,16 +86,16 @@ void    ft_give_token(t_line *head)
         {
             tmp->token = OUT_REDIR;
             if (tmp->next != NULL)
-                (1) && (tmp->next->status->index = index++, tmp->next->token = OUT_FILE);
+                (1) && (status->index = index++, tmp->next->token = OUT_FILE);
         }
         else if (ft_strcmp(tmp->str, "<"))
         {
             tmp->token = IN_REDIR;
             if (tmp->next != NULL)
-                (1) && (tmp->next->status->index = index++, tmp->next->token = IN_FILE);
+                (1) && (status->index = index++, tmp->next->token = IN_FILE);
         }
         else
-            ft_give_redire(tmp, &flag1, &index);
+            ft_give_redire(tmp, &flag1, &index, status);
         tmp = tmp->next;
     }
 }

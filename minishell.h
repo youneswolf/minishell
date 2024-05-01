@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/30 22:29:02 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/01 15:38:32 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,6 @@
 # define CYAN        "\x1b[36m"
 # define WHT        "\e[0;37m"
 # define RESET        "\x1b[0m"
-typedef struct s_status
-{
-    int     status;
-    int     quote;
-    char    *lastdir;
-	int		index;
-}           t_status;
 
 typedef struct s_long
 {
@@ -96,6 +89,7 @@ typedef struct s_long
 	int	i;
 	int	c;
 }	t_long;
+
 typedef struct s_line
 {
     char            *str;
@@ -106,9 +100,18 @@ typedef struct s_line
     int             flag;
 	int 			is_between_quote;
     int             is_it_built_in;
-    struct s_status *status;
     struct s_line   *next;
 }                   t_line;
+
+typedef struct s_status
+{
+    int     status;
+    int     quote;
+    char    *lastdir;
+	int		index;
+	t_line	*node;
+}           t_status;
+
 typedef struct s_start_end
 {
 	int    start;
@@ -195,7 +198,7 @@ void       		ft_pwd();
 void        	ft_execute_cmd(t_line *head);
 int				ft_isalpha(int c);
 char			*ft_sub_str(char *s, unsigned int start, size_t len, int is_free);
-void        	ft_give_token(t_line *head);
+// void        	ft_give_token(t_line *head);
 char	    	*ft_strdup(char *s1);
 char			*ft_strjoin(char *static_str, char *buff, int is_free);
 // char	        *ft_strjoin(char *s1, char *s2);
@@ -203,7 +206,7 @@ size_t	    	ft_strlen(const char *s);
 // char	        *ft_strjoin(char *s1, char *s2);
 int	        	count(char *s, char c);
 char	        *word(char *str, char c);
-int             ft_syntax(t_line *head);
+int				ft_syntax(t_line *head, t_status *status);
 char	        **alloc(int l);
 char	        **ft_split(char *str, char c);
 int             ft_cd(char *str, t_env *mini_env, t_line *head);
@@ -232,7 +235,7 @@ int				ft_strcmp(char *s1,  char *s2);
 int		        ft_cmp_built_in(char *str);
 void            ft_handler_ctrl_c(int signum);
 void	        ft_free_2d(char **array);
-void            ft_free_list(t_line **str);
+void            ft_free_list(t_line **str, t_status *status);
 void    		redirect_append(int fd);
 void    		redirect_output(int fd);
 void    		redirect_input(int fd);
@@ -262,7 +265,7 @@ int     		ft_count_pipe(t_line *head);
 void    		ft_pwd();
 int 			is_sgl_quote(char *str);
 void    		ft_execute_cmd(t_line *head);
-void    		ft_give_token(t_line *head);
+void			ft_give_token(t_line *head, t_status *status);
 char			*ft_strdup(char *s1);
 // char	*ft_strjoin(char *s1, char *s2);
 size_t			ft_strlen(const char *s);

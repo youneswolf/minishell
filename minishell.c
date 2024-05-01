@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 13:57:28 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/01 15:45:45 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -627,19 +627,28 @@ void lek()
 	system("leaks minishell");
 }
 
-void	ft_print_tokens(t_line *node)
+void	ft_print_tokens(t_line *node, t_status *status)
 {
 	t_line *head = node;
 	while (head)
 	{
 		if (head->token == CMD && head->str)
+		{
 			printf(BLUE"[%s]"RESET, "CMD");
+			printf("status %d\n", status->status);
+		}
 		else if (head->token == ARGS && head->str)
 			printf(YELLOW"[%s]"RESET, "ARGS");
 		else if (head->token == PIPE && head->str)
+		{
 			printf(MAGENTA"[%s]"RESET, "PIPE");
+			printf("status %d\n", status->status);
+		}
 		else if (head->token == IN_REDIR && head->str)
+		{
 			printf(CYAN"[%s]"RESET, "IN_REDIR");
+			printf("status %d\n", status->status);
+		}
 		else if (head->token == OUT_REDIR && head->str)
 			printf(WHT"[%s]"RESET, "OUT_REDIR");
 		else if (head->token == HERDOC && head->str)
@@ -726,19 +735,16 @@ void	ft_skip_empty_expand(t_line **node)
 		previous = (*node);
 		(*node) = (*node)->next;
 		// free(previous->str);
-		free(previous->status);
+		// free(previous->status);
 		free(previous);
 		while ((*node) && (*node)->flag == 1 && !(*node)->str[0])
 		{
 			previous = (*node);
 			(*node) = (*node)->next;
 			free(previous->str);
-			free(previous->status);
+			// free(previous->status);
 			free(previous);
 		}
-		// free(previous->str);
-		// free(previous->status);
-		// free(previous);
 	}
 	head = *node;
 	previous = *node;
@@ -752,7 +758,7 @@ void	ft_skip_empty_expand(t_line **node)
 				{
 					tmp = head;
 					head = head->next;
-					free(tmp->status);
+					// free(tmp->status);
 					free(tmp);
 				}
 				previous->next = head;
@@ -817,20 +823,21 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 	{
 		line = readline(RED"minishell$ "RESET);
 		if (line == NULL || (is_there_exit(line) && ft_strlen(line) == 4))
-				(ft_free_list(&str), free(line), printf("exit!\n"), exit(0));
+				(ft_free_list(&str, NULL), free(line), printf("exit!\n"), exit(0));
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line);
-		// if (!line)
-			// str->status = 255;
 		ft_put(line, &str);
-		ft_give_token(str);
+		t_status *status = malloc(sizeof(t_status));
+		status->node = str;
+		status->status = 0;
+		ft_give_token(str, status);
 		// ft_print_tokens(str);
 		ft_is_buil(str);
-		if (ft_syntax(str))
+		if (ft_syntax(str, status))
 		{
 			ft_handle_issue_herdoc(str);
-			ft_print_tokens(str);
+			ft_print_tokens(str, status);
 			old = str;
 			while (str)
 			{
@@ -846,7 +853,7 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 			str = old;
 			ft_skip_empty_expand(&str);
 			ft_set_token_to_none(str);
-			ft_give_token(str);
+			ft_give_token(str, status);
 			ft_is_buil(str);
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
@@ -854,7 +861,8 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 			ft_checking_files(tmp);
 			execution(&tmp, mini_env);
 		}
-		ft_free_list(&str);
+		ft_print_tokens(str, status);
+		ft_free_list(&str, status);
 		str = NULL;
 		free(line);
 	}
