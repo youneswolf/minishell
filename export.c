@@ -68,7 +68,33 @@ void declare_export(t_env *env)
 	// ft_free_env(&node);
 }
 
-
+char *ft_add_quotes(char *str)
+{
+	if (str)
+	{
+	int i = 1;
+	int j = 2;
+	char *new_value;
+	new_value = malloc(ft_strlen(str) + 3);
+	if (!new_value)
+		return (NULL);
+	new_value[0] = '=';
+	new_value[1] = 34;
+	
+	while (str && str[i] && str[i] != '=')
+	{
+		new_value[j] = str[i];
+		i++;
+		j++;
+	}
+	new_value[j++] = 34;
+	new_value[j] = '\0';
+	// printf("enter\n");
+	free(str);
+	return (new_value);
+	}
+	return (str);
+}
 void exec_export(t_holder **holder, t_env **env)
 {
 	int i;
@@ -104,7 +130,7 @@ void exec_export(t_holder **holder, t_env **env)
 		if (line_tmp->args_built_in[j][i] == '.' || line_tmp->args_built_in[j][i] == ',' ||
 		 line_tmp->args_built_in[j][i] == '/' || line_tmp->args_built_in[j][i] == '-' || line_tmp->args_built_in[j][i] == ':')
 		 {
-			printf("bash: export: `%s' not a valid identifipper\n",line_tmp->args_built_in[j]);
+			printf("bash: export: `%s' not a valid identifier\n",line_tmp->args_built_in[j]);
 			j++;
 			i = 0;
 			is_invalid = 1;
@@ -125,6 +151,7 @@ void exec_export(t_holder **holder, t_env **env)
 		if (!ft_strncmp(var_name, (*env)->env, ft_strlen(var_name)))
 		{
 			value = ft_substr(line_tmp->args_built_in[j], i+1, ft_strlen(line_tmp->args_built_in[j]) - i-1);
+			value = ft_add_quotes(value);
 			// join = ft_strjoin(var_name, value,2);
 			// free(tmp->env); 
 			(*env)->env = ft_strjoin((*env)->env, value,2);
@@ -142,6 +169,8 @@ void exec_export(t_holder **holder, t_env **env)
 		if (!ft_strncmp(var_name, (*env)->env, ft_strlen(var_name)))
 		{
 			value = ft_substr(line_tmp->args_built_in[j], i, ft_strlen(line_tmp->args_built_in[j]) - i);
+			value = ft_add_quotes(value);
+			printf("|%s|\n",value);
 			// value = ft_strjoin("\"",value,3);
 			// value = ft_strjoin(value, "\"",1);
 			join = ft_strjoin(var_name, value,2);
@@ -160,6 +189,7 @@ void exec_export(t_holder **holder, t_env **env)
 		(*env) = (*env)->next;
 	}
 		value = ft_substr(line_tmp->args_built_in[1], i, ft_strlen(line_tmp->args_built_in[1]) - i);
+			value = ft_add_quotes(value);
 		// value = ft_strjoin("\"",value,3);
 		// value = ft_strjoin(value, "\"",1);
 		join = ft_strjoin(var_name, value,2);

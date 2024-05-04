@@ -291,7 +291,7 @@ void	ft_create_holder_args1(t_line *tmp, t_holder *new, int *z)
 		new->args_built_in[(*z)++] = ft_strdup(tmp->str);
 }
 
-void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz, int *index)
+int	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz, int *index)
 {
 	int		qq;
 	char	**a;
@@ -305,12 +305,14 @@ void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz, int 
 			while (a && a[ee])
 			{
 				new->file_out[(*k)++] = ft_strdup(a[ee]);
+				ee++;
+				new->nbr_file++;
 				new->outfile_index[(*zzz)++] = *index;
 				(*index)++;
-				new->nbr_file++;
-				ee++;
 			}
 			ft_free_2d(a);
+			if (ee >= 1)
+				return (printf("bash: ambiguous redirect\n"), 0);
 		}
 	}
 	else
@@ -320,8 +322,9 @@ void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz, int 
 		(*index)++;
 		new->nbr_file++;
 	}
+	return (1);
 }
-void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss, int *index)
+int	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss, int *index)
 {
 	int		qq;
 	int		ee;
@@ -341,6 +344,8 @@ void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss, int *
 				new->infile_index[(*sss)++] = *index;
 				(*index)++;
 			}
+			if (ee >= 1)
+				return (ft_free_2d(a), printf("bash: ambiguous redirect\n"), 0);
 			ft_free_2d(a);
 		}
 	}
@@ -351,9 +356,10 @@ void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss, int *
 		(*index)++;
 		new->nbr_file++;
 	}
+	return (1);
 }
 
-void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www, int *index)
+int	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www, int *index)
 {
 	char	**aa;
 	int		qq;
@@ -373,6 +379,8 @@ void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www, int *
 					(*index)++;
 				}
 				ft_free_2d(aa);
+				if (ee > 1)
+					return (printf("bash: ambiguous redirect\n"), 0);
 			}
 		}
 		else
@@ -383,11 +391,13 @@ void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www, int *
 			}
 			new->nbr_file++;
 	}
+	return (1);
 }
 
 void	ft_ini(t_long *t)
 {
 	t->a = 0;
+	t->is_out = 0;
 	t->index = 0;
 	t->flag = 1;
 	t->j = 0;
@@ -405,7 +415,7 @@ void	ft_ini(t_long *t)
 	t->i = 0;
 }
 
-void	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
+int	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
 {
 	if (tmp->token == CMD && tmp->is_it_built_in == 1)
 	{
@@ -420,14 +430,24 @@ void	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
 	else if(tmp->token == ARGS && t->flag == 1)
 		ft_create_holder_args1(tmp, new, &t->z);
 	else if (tmp->token == OUT_FILE)
-		ft_create_holder_outfile(tmp, new, &t->k, &t->zzz, &t->index);
+	{
+		if (!ft_create_holder_outfile(tmp, new, &t->k, &t->zzz, &t->index))
+			return (0);
+	}
 	else if (tmp->token == IN_FILE)
-		ft_create_holder_infile(tmp, new, &t->n, &t->sss, &t->index);
+	{
+		if (!ft_create_holder_infile(tmp, new, &t->n, &t->sss, &t->index))
+			return (0);
+	}
 	else if (tmp->token == APPEND)
-		ft_create_holder_append(tmp, new, &t->a, &t->www, &t->index);
+	{
+		if (!ft_create_holder_append(tmp, new, &t->a, &t->www, &t->index))
+			return (0);
+	}
 	else if (tmp->token == HERDOC && t->a < 1024)
 		if (tmp->next)
 			new->her_doc[t->l++] = ft_strdup(tmp->next->str);
+	return (1);
 }
 
 t_holder    *ft_create_holder_node(t_line *node, char *line)
@@ -441,7 +461,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 		t.c = ft_count_pipe(node), holder = NULL);
 	while (t.i++ <= t.c)
 	{
-		(1) && (t.j = 0, t.flag = 0, t.index = 0);
+		(1) && (t.j = 0, t.flag = 0, t.index = 0, t.is_out = 0);
 		new = add_list_holder(&holder, line);
 		while (tmp)
 		{
@@ -458,7 +478,8 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 					ft_create_holder_utils1(new, tmp, &t.j, &t.flag);
 				t.flag = 0;
 			}
-			ft_utils_norm(tmp, new, &t);
+			if (!ft_utils_norm(tmp, new, &t))
+				return (ft_free_holder(&holder), NULL);
 			tmp = tmp->next;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 23:57:13 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 15:38:11 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/04 19:25:07 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void    ft_free_list(t_line **str, t_status *status)
 		prev = to_be_free;
 		to_be_free = to_be_free->next;
 		free(prev->str);
+		free(prev->status1);
 		// if (prev->status->lastdir)
 		// 	free(prev->status->lastdir);
 		// free(prev->status);

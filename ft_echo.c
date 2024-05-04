@@ -22,20 +22,30 @@ void exec_echo(t_holder *holder)
         while (holder->args_built_in[i + 1])
         {
             ft_put_str(holder->args_built_in[i]);
+            write(1, " ", 1);
             i++;
         }
         if (holder->args_built_in[i])
+        {
+            if (i > 2)
+                write(1, " ", 1);
             ft_put_str(holder->args_built_in[i]);
+        }
     }
     else
     {
         while (holder->args_built_in[j + 2])
         {
             ft_put_str(holder->args_built_in[j + 1]);
+            write(1, " ", 1);
             j++;
         }
         if (holder->args_built_in[j + 1])
+        {
+            if (i > 2)
+                write(1, " ", 1);
             ft_put_str(holder->args_built_in[j + 1]);
+        }
         write(1, "\n", 1);
     }
 }

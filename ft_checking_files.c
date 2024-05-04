@@ -516,7 +516,41 @@ int is_ambiguous(char *str)
 // 	}
 // }
 
+void	ft_free_2d_am(char **array)
+{
+	int	i;
 
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+}
+
+void ft_null_tmp(t_holder **tmp)
+{
+    if ((*tmp)->cmd)
+    {
+        free((*tmp)->cmd);
+        (*tmp)->cmd = NULL;
+    }
+    if ((*tmp)->args[0])
+    {
+    ft_free_2d_am((*tmp)->args);
+    (*tmp)->args[0] = NULL;
+    }
+    if ((*tmp)->cmd_built_in)
+    {
+        free((*tmp)->cmd_built_in);
+        (*tmp)->cmd_built_in = NULL;
+    }
+    if ((*tmp)->args_built_in[0])
+    {
+        ft_free_2d_am((*tmp)->args_built_in);
+        (*tmp)->args_built_in[0] = NULL;
+    }
+}
 int    ft_oppen_files(t_holder *node)
 {
     t_holder    *tmp;
@@ -546,8 +580,8 @@ int    ft_oppen_files(t_holder *node)
         }
         else
         {
-            printf("bash: %s: ambiguous redirect\n", tmp->file_out[b]);
-            tmp->out[b] = -7;
+            write(2,"sdssssssss",10);
+            ft_null_tmp(&tmp);
         }
         }
         else if (tmp->infile_index[z] == i)
@@ -565,7 +599,7 @@ int    ft_oppen_files(t_holder *node)
             else
             {
                 printf("bash: %s: ambiguous redirect\n", tmp->file_in[z]);
-                 tmp->in[z] = -7;
+                ft_null_tmp(&tmp);
 
             }
         }
@@ -584,7 +618,7 @@ int    ft_oppen_files(t_holder *node)
             else
             {
                  printf("bash: %s: ambiguous redirect\n", tmp->append[q]);
-                tmp->ap[q] = -7;
+                ft_null_tmp(&tmp);
                 
             }
         }  

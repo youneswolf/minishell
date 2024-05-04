@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/04 16:54:23 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/04 20:00:35 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -865,8 +865,11 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
 			// ft_print_holder(tmp);
-			if (ft_oppen_files(tmp))
-				execution(&tmp, mini_env);
+			if (tmp)
+			{
+				if (ft_oppen_files(tmp))
+					execution(&tmp, mini_env);
+			}
 			// ft_checking_files(tmp);
 		}
 		// ft_print_tokens(str, status);

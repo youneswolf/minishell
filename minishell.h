@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/04 17:18:11 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/04 20:00:46 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include <readline/readline.h>
 #include <dirent.h>
 #include <readline/history.h>
-#include <libc.h>
+// #include <libc.h>
 
 // FILE	*gfp;
 
@@ -74,6 +74,7 @@
 typedef struct s_long
 {
 	int j;
+	int	is_out;
 	int	index;
 	int	k; 
 	int	w;
@@ -210,6 +211,7 @@ extern	struct termios    attr;
 // echo $USER << 1 cat
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
+void			ft_free_holder(t_holder **str);
 int				ft_oppen_files(t_holder *node);
 void    		ft_f(int signum);
 char			*ft_substr1(char *str, int start, int len, int not_);

@@ -212,7 +212,7 @@ char	*ft_strdup(char *s1)
 		return (NULL);
 	}
 	i = 0;
-	while (s1[i])
+	while (s1 && s1[i])
 	{
 		dest[i] = s1[i];
 		i++;
@@ -398,8 +398,10 @@ void join_exp(t_exp *vars, t_env **env)
 void join_exp_1dollar(t_exp *vars, t_env **env)
 {
 	vars->join = ft_strjoin(vars->join, expand(vars->split->str, env),2);
-			if (vars->split->next)
-				vars->join = ft_strjoin(vars->join," ",1);
+	if (vars->split->next)
+	{
+		vars->join = ft_strjoin(vars->join," ",1);
+	}
 }
 char *handle_expand(char *line_str, t_env **env)
 {
@@ -607,8 +609,11 @@ int is_sgl_quote(char *str)
 {
 	int i = 0;
 	int j = 0;
+	int z = 0;
 	while (str && str[i])
 	{
+		if (str[i] == 34 && str[i + 1] == 39)
+			return (0);
 		if (str[i] == 39)
 			j = 1;
 		if (str[i] == '$' && j)
