@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 15:05:38 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/04 16:57:40 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ t_line	*ft_lstnew(char *str, int start, int end)
 	t_line	*new;
 
 	new = (t_line *)malloc(sizeof(t_line));
-	// new->status = (t_status *)malloc(sizeof(t_status));
+	new->status1 = malloc(sizeof(t_status1));
+	new->status1->index = 0;
 	// new->status->index = 0;
 	// new->status->status = 0;
 	// new->status->lastdir = NULL;

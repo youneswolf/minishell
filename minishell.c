@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 15:45:45 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/04 16:54:23 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -622,52 +622,29 @@ void	ft_is_buil(t_line *str)
 	}
 }
 
-void lek()
-{
-	system("leaks minishell");
-}
-
 void	ft_print_tokens(t_line *node, t_status *status)
 {
 	t_line *head = node;
 	while (head)
 	{
 		if (head->token == CMD && head->str)
-		{
 			printf(BLUE"[%s]"RESET, "CMD");
-			printf("status %d\n", status->status);
-		}
 		else if (head->token == ARGS && head->str)
 			printf(YELLOW"[%s]"RESET, "ARGS");
 		else if (head->token == PIPE && head->str)
-		{
 			printf(MAGENTA"[%s]"RESET, "PIPE");
-			printf("status %d\n", status->status);
-		}
 		else if (head->token == IN_REDIR && head->str)
-		{
 			printf(CYAN"[%s]"RESET, "IN_REDIR");
-			printf("status %d\n", status->status);
-		}
 		else if (head->token == OUT_REDIR && head->str)
 			printf(WHT"[%s]"RESET, "OUT_REDIR");
 		else if (head->token == HERDOC && head->str)
 			printf(GREEN"[%s]"RESET, "HERDOC");
 		else if (head->token == OUT_FILE && head->str)
-		{
 			printf(MAGENTA"[%s]"RESET, "OUT_FILE");
-			// printf("----index {%d}---\n", head->status->index);
-		}
 		else if (head->token == IN_FILE && head->str)
-		{
 			printf(YELLOW"[%s]"RESET, "IN_FILE");
-			// printf("---index {%d}---", head->status->index);
-		}
 		else if (head->token == FILE && head->str)
-		{
 			printf(YELLOW"[%s]"RESET, "FILE");
-			// printf("---index {%d}---", head->status->index);
-		}
 		else if (head->token == APPEND && head->str)
 			printf(YELLOW"[%s]"RESET, "APPEND");
 		else if (head->token == DELIMITER && head->str)
@@ -675,7 +652,6 @@ void	ft_print_tokens(t_line *node, t_status *status)
 		printf("{%s} index\n", head->str);
 		head = head->next;
 	}
-	printf("\n");
 }
 
 void	ft_handle_issue_herdoc(t_line *str)
@@ -793,6 +769,37 @@ int is_between_quotes(char *str)
 // 	usleep(1000 * 100 *10000);
 // }
 
+void	ft_print_holder(t_holder *tmp)
+{
+	t_holder *tmp1 = tmp;
+	while (tmp1)
+	{
+		int kk = 0;
+		int zz = 0;
+		if (tmp1->cmd)
+			printf("holder cmd %s\n", tmp1->cmd);
+		if (tmp1->cmd_built_in)
+			printf("holder cmd %s\n", tmp1->cmd_built_in);
+		while (tmp1->args_built_in[kk])
+		{
+			printf("holder args_buit_in %s\n", tmp1->args_built_in[kk]);
+			kk++;
+		}
+		kk = 0;
+		while (tmp1->args[kk])
+		{
+			printf("holder args %s\n", tmp1->args[kk]);
+			kk++;
+		}
+		while (tmp1->file_out[zz])
+		{
+			printf("holder outfile %s\n", tmp1->file_out[zz]);
+			zz++;
+		}
+		tmp1 = tmp1->next;
+	}
+}
+
 int main(int ac, char **av, char **env) // status code and singal in herdoc and singal in ./minishell ./minishell
 {
 	// gfp = fopen("leaks.t", "w");
@@ -857,37 +864,15 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 			ft_is_buil(str);
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
-			// if (ft_oppen_files(tmp))
-			ft_checking_files(tmp);
-			execution(&tmp, mini_env);
+			// ft_print_holder(tmp);
+			if (ft_oppen_files(tmp))
+				execution(&tmp, mini_env);
+			// ft_checking_files(tmp);
 		}
-		ft_print_tokens(str, status);
+		// ft_print_tokens(str, status);
 		ft_free_list(&str, status);
 		str = NULL;
 		free(line);
 	}
 }
-void	ft_print_holder(t_holder *tmp)
-{
-	t_holder *tmp1 = tmp;
-	while (tmp1)
-	{
-		int kk = 0;
-		if (tmp1->cmd)
-			printf("holder cmd %s\n", tmp1->cmd);
-		if (tmp1->cmd_built_in)
-			printf("holder cmd %s\n", tmp1->cmd_built_in);
-		while (tmp1->args_built_in[kk])
-		{
-			printf("holder args_buit_in %s", tmp1->args_built_in[kk]);
-			kk++;
-		}
-		kk = 0;
-		while (tmp1->args[kk])
-		{
-			printf("holder args %s", tmp1->args[kk]);
-			kk++;
-		}
-		tmp1 = tmp1->next;
-	}
-}
+

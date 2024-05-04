@@ -291,7 +291,7 @@ void	ft_create_holder_args1(t_line *tmp, t_holder *new, int *z)
 		new->args_built_in[(*z)++] = ft_strdup(tmp->str);
 }
 
-void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz)
+void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz, int *index)
 {
 	int		qq;
 	char	**a;
@@ -305,7 +305,8 @@ void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz)
 			while (a && a[ee])
 			{
 				new->file_out[(*k)++] = ft_strdup(a[ee]);
-				// new->outfile_index[(*zzz)++] = tmp->status->index;
+				new->outfile_index[(*zzz)++] = *index;
+				(*index)++;
 				new->nbr_file++;
 				ee++;
 			}
@@ -315,11 +316,12 @@ void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz)
 	else
 	{
 		new->file_out[(*k)++] = ft_strdup(tmp->str);
-		// new->outfile_index[(*zzz)++] = tmp->status->index;
+		new->outfile_index[(*zzz)++] = *index;
+		(*index)++;
 		new->nbr_file++;
 	}
 }
-void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss)
+void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss, int *index)
 {
 	int		qq;
 	int		ee;
@@ -336,7 +338,8 @@ void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss)
 				new->file_in[(*n)++] = ft_strdup(a[ee]);
 				ee++;
 				new->nbr_file++;
-				// new->infile_index[(*sss)++] = tmp->status->index;
+				new->infile_index[(*sss)++] = *index;
+				(*index)++;
 			}
 			ft_free_2d(a);
 		}
@@ -344,12 +347,13 @@ void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss)
 	else
 	{
 		new->file_in[(*n)++] = ft_strdup(tmp->str);
-		// new->infile_index[(*sss)++] = tmp->status->index;
+		new->infile_index[(*sss)++] = *index;
+		(*index)++;
 		new->nbr_file++;
 	}
 }
 
-void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www)
+void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www, int *index)
 {
 	char	**aa;
 	int		qq;
@@ -365,14 +369,16 @@ void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www)
 				while (aa[ee++])
 				{
 					new->append[(*a)++] = ft_strdup(aa[ee]);
-					// new->append_index[(*www)++] = tmp->status->index;
+					new->append_index[(*www)++] = *index;
+					(*index)++;
 				}
 				ft_free_2d(aa);
 			}
 		}
 		else
 			{
-				// new->append_index[(*www)++] = tmp->status->index;
+				new->append_index[(*www)++] = *index;
+				(*index)++;
 				new->append[(*a)++] = ft_strdup(tmp->next->str);
 			}
 			new->nbr_file++;
@@ -382,6 +388,7 @@ void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www)
 void	ft_ini(t_long *t)
 {
 	t->a = 0;
+	t->index = 0;
 	t->flag = 1;
 	t->j = 0;
 	t->k = 0;
@@ -408,17 +415,17 @@ void	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
 			ft_create_holder_utils3(tmp, new, &t->z);
 		t->flag = 1;
 	}
-	if (tmp->token == ARGS && t->flag == 0)
+	else if (tmp->token == ARGS && t->flag == 0)
 		ft_create_holder_args(tmp, new, &t->j);
-	if(tmp->token == ARGS && t->flag == 1)
+	else if(tmp->token == ARGS && t->flag == 1)
 		ft_create_holder_args1(tmp, new, &t->z);
-	if (tmp->token == OUT_FILE)
-		ft_create_holder_outfile(tmp, new, &t->k, &t->zzz);
-	if (tmp->token == IN_FILE)
-		ft_create_holder_infile(tmp, new, &t->n, &t->sss);
-	if (tmp->token == APPEND)
-		ft_create_holder_append(tmp, new, &t->a, &t->www);
-	if (tmp->token == HERDOC && t->a < 1024) // && t->a < 1024
+	else if (tmp->token == OUT_FILE)
+		ft_create_holder_outfile(tmp, new, &t->k, &t->zzz, &t->index);
+	else if (tmp->token == IN_FILE)
+		ft_create_holder_infile(tmp, new, &t->n, &t->sss, &t->index);
+	else if (tmp->token == APPEND)
+		ft_create_holder_append(tmp, new, &t->a, &t->www, &t->index);
+	else if (tmp->token == HERDOC && t->a < 1024)
 		if (tmp->next)
 			new->her_doc[t->l++] = ft_strdup(tmp->next->str);
 }
@@ -434,11 +441,11 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 		t.c = ft_count_pipe(node), holder = NULL);
 	while (t.i++ <= t.c)
 	{
-		(1) && (t.j = 0, t.flag = 0);
+		(1) && (t.j = 0, t.flag = 0, t.index = 0);
 		new = add_list_holder(&holder, line);
 		while (tmp)
 		{
-			if (tmp->next && tmp->str[0] == '|')
+			if (tmp->next && tmp->token == PIPE)
 			{
 				tmp = tmp->next;
 				break;

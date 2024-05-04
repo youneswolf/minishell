@@ -276,9 +276,34 @@
 //     return (0);
 // }
 
+int is_ambiguous(char *str)
+{
+    int i = 0;
+    int j = 0;
+    if (str && !str[0])
+        return (1);
+    if (str && str[0] == 32)
+    {
+        while(str[i] && str[i] == 32)
+            i++;
+        if (!str[i])
+            return (1);
+    }
+    i = 0;
+    while (str && str[i])
+    {
+        if (str[i] == ' ')
+            j = 1;
+        if (j == 1 && ft_isalnum(str[i]))
+            return (1);
+        i++;
+    }  
+    return (0);
+}
+
 // int    ft_oppen_files(t_holder *node)
 // {
-//     t_holder    *tmp;
+    // t_holder    *tmp;
 //     int         i;
 //     int         z;
 //     int         q;
@@ -445,7 +470,6 @@
 //     }
 // }
 
-#include "minishell.h"
 
 // void    ft_checking_files(t_holder *node)
 // {
@@ -491,30 +515,7 @@
 // 		tmp = tmp->next;
 // 	}
 // }
-int is_ambiguous(char *str)
-{
-    int i = 0;
-    int j = 0;
-    if (str && !str[0])
-        return (1);
-    if (str && str[0] == 32)
-    {
-        while(str[i] && str[i] == 32)
-            i++;
-        if (!str[i])
-            return (1);
-    }
-    i = 0;
-    while (str && str[i])
-    {
-        if (str[i] == ' ')
-            j = 1;
-        if (j == 1 && ft_isalnum(str[i]))
-            return (1);
-        i++;
-    }  
-    return (0);
-}
+
 
 int    ft_oppen_files(t_holder *node)
 {

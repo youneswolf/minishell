@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 15:38:32 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:18:11 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@
 
 typedef struct s_long
 {
-	int j; 
+	int j;
+	int	index;
 	int	k; 
 	int	w;
 	int a;
@@ -90,6 +91,14 @@ typedef struct s_long
 	int	c;
 }	t_long;
 
+typedef struct s_status1
+{
+    int     status;
+    int     quote;
+    // char    *lastdir;
+	int		index;
+}           t_status1;
+
 typedef struct s_line
 {
     char            *str;
@@ -99,6 +108,7 @@ typedef struct s_line
     int             type_quote;
     int             flag;
 	int 			is_between_quote;
+	t_status1		*status1;
     int             is_it_built_in;
     struct s_line   *next;
 }                   t_line;
@@ -147,6 +157,8 @@ typedef struct s_cmd
 // {
 
 // } t_herdoc;
+
+
 typedef struct s_holder
 {
 	char			*cmd;
@@ -164,9 +176,34 @@ typedef struct s_holder
 	char			**args_built_in;
 	char			*cmd_built_in;
 	int				nbr_file;
+	
 	struct s_holder	*next;
 }   				t_holder;
-
+typedef struct s_exp
+{
+    t_line *split;
+    t_line *node;
+    char *dollar_str_space;
+    char *spaces;
+    char *join;
+    char **str;
+    char **dollar_str;
+    char *expand_var;
+    int j;
+    int i;
+}t_exp;
+typedef struct s_expan
+{
+    t_env *tmp;
+    t_line *line_tmp;
+    char *special;
+    char *pre_special;
+    int i;
+    int j;
+    char *var;
+    char *sub ;
+    char *pre_var;
+}    t_expan;
 
 extern	struct termios    attr;
 
