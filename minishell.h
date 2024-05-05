@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/04 20:00:46 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/05 18:44:03 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@
 typedef struct s_long
 {
 	int j;
+	int	does;
 	int	is_out;
 	int	index;
 	int	k; 
@@ -91,6 +92,27 @@ typedef struct s_long
 	int	i;
 	int	c;
 }	t_long;
+
+
+// typedef struct s_long
+// {
+// 	int j;
+// 	int	does;
+// 	int	k; 
+// 	int	w;
+// 	int a;
+// 	int n;
+// 	int l;
+// 	int	sss;
+// 	int	www;
+// 	int	zzz;
+// 	int z;
+// 	int zz;
+// 	int flag;
+// 	int	mm;
+// 	int	i;
+// 	int	c;
+// }	t_long;
 
 typedef struct s_status1
 {
@@ -162,6 +184,7 @@ typedef struct s_cmd
 
 typedef struct s_holder
 {
+	int here;
 	char			*cmd;
 	char			**args;
 	char			**file_in;
@@ -205,7 +228,18 @@ typedef struct s_expan
     char *sub ;
     char *pre_var;
 }    t_expan;
-
+typedef struct s_execution
+{
+	t_holder *tmp;
+	int ppp;
+	int child_stat;
+	int pipe_fd[2];
+	int i ,j , k, n, wait_i;
+	int pid;
+	int origin_in;
+	int origin_out;;
+	t_holder *doc_tmp;
+}	t_execution;
 extern	struct termios    attr;
 
 // echo $USER << 1 cat

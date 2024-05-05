@@ -1,5 +1,38 @@
 #include "minishell.h"
 
+// void	ft_lstnew_holder_utils(t_holder *new)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < 1000)
+// 	{
+//         new->args_built_in[i] = NULL;
+// 		new->args[i] = NULL;
+// 		new->append_index[i] = -42;
+// 		new->file_in[i] = NULL;
+// 		new->file_out[i] = NULL;
+// 		new->infile_index[i] = -42;
+// 		new->append[i] = NULL;
+// 		new->ap[i] = -42;
+// 		new->outfile_index[i] = -42; 
+// 		new->in[i] = -42;
+// 		new->out[i] = -42;
+// 		new->her_doc[i] = NULL;
+// 		i++;
+// 	}
+// }
+
+// int		ft_lstnew_holder_check(t_holder *new)
+// {
+// 	if (!new || !new->args || !new->args_built_in || !new->file_in
+// 		|| !new->file_out || !new->append || !new->ap || !new->out
+// 		|| !new->outfile_index || !new->infile_index || !new->append_index
+// 		|| !new->in || new->her_doc)
+// 			return (0);
+// 	return(1);
+// }
+
 void	ft_lstnew_holder_utils(t_holder *new)
 {
 	int	i;
@@ -40,6 +73,7 @@ t_holder	*ft_lstnew_holder(char *line)
 	int i = 0;
 	new = (t_holder *)malloc(sizeof(t_holder));
 	new->cmd = NULL;
+	new->here = -42;
     new->cmd_built_in = NULL;
 	new->nbr_file = 0;
 	new->args = malloc(sizeof(char *) * 1000);
@@ -291,6 +325,36 @@ void	ft_create_holder_args1(t_line *tmp, t_holder *new, int *z)
 		new->args_built_in[(*z)++] = ft_strdup(tmp->str);
 }
 
+// herdoc makynx -42 herdoc1 1 herdoc2 0 
+// void	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz)
+// {
+// 	int		qq;
+// 	char	**a;
+// 	int		ee;
+
+// 	if (ft_is_there(tmp->str))
+// 	{
+// 		(1) && (ee = 0, qq = ft_count_2d(a), a = ft_does_it_matche(tmp->str));
+// 		if (qq >= 1)
+// 		{
+// 			while (a && a[ee])
+// 			{
+// 				new->file_out[(*k)++] = ft_strdup(a[ee]);
+// 				// new->outfile_index[(*zzz)++] = tmp->status->index;
+// 				new->nbr_file++;
+// 				ee++;
+// 			}
+// 			ft_free_2d(a);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		new->file_out[(*k)++] = ft_strdup(tmp->str);
+// 		// new->outfile_index[(*zzz)++] = tmp->status->index;
+// 		new->nbr_file++;
+// 	}
+// }
+
 int	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz, int *index)
 {
 	int		qq;
@@ -324,6 +388,37 @@ int	ft_create_holder_outfile(t_line *tmp, t_holder *new, int *k, int *zzz, int *
 	}
 	return (1);
 }
+
+// void	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss)
+// {
+// 	int		qq;
+// 	int		ee;
+// 	char	**a;
+// 	if (ft_is_there(tmp->str))
+// 	{
+// 		a = ft_does_it_matche(tmp->str);
+// 		qq = ft_count_2d(a);
+// 		ee = 0;
+// 		if (qq >= 1)
+// 		{
+// 			while (a[ee])
+// 			{
+// 				new->file_in[(*n)++] = ft_strdup(a[ee]);
+// 				ee++;
+// 				new->nbr_file++;
+// 				// new->infile_index[(*sss)++] = tmp->status->index;
+// 			}
+// 			ft_free_2d(a);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		new->file_in[(*n)++] = ft_strdup(tmp->str);
+// 		// new->infile_index[(*sss)++] = tmp->status->index;
+// 		new->nbr_file++;
+// 	}
+// }
+
 int	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss, int *index)
 {
 	int		qq;
@@ -359,7 +454,8 @@ int	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss, int *i
 	return (1);
 }
 
-int	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www, int *index)
+
+void	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www)
 {
 	char	**aa;
 	int		qq;
@@ -375,23 +471,18 @@ int	ft_create_holder_append(t_line *tmp, t_holder *new, int *a, int *www, int *i
 				while (aa[ee++])
 				{
 					new->append[(*a)++] = ft_strdup(aa[ee]);
-					new->append_index[(*www)++] = *index;
-					(*index)++;
+					// new->append_index[(*www)++] = tmp->status->index;
 				}
 				ft_free_2d(aa);
-				if (ee > 1)
-					return (printf("bash: ambiguous redirect\n"), 0);
 			}
 		}
 		else
 			{
-				new->append_index[(*www)++] = *index;
-				(*index)++;
+				// new->append_index[(*www)++] = tmp->status->index;
 				new->append[(*a)++] = ft_strdup(tmp->next->str);
 			}
 			new->nbr_file++;
 	}
-	return (1);
 }
 
 void	ft_ini(t_long *t)
@@ -399,6 +490,8 @@ void	ft_ini(t_long *t)
 	t->a = 0;
 	t->is_out = 0;
 	t->index = 0;
+	t->a = 0;
+	t->does = 0;
 	t->flag = 1;
 	t->j = 0;
 	t->k = 0;
@@ -426,9 +519,20 @@ int	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
 		t->flag = 1;
 	}
 	else if (tmp->token == ARGS && t->flag == 0)
+	{
 		ft_create_holder_args(tmp, new, &t->j);
+		t->does = 1;
+	}
 	else if(tmp->token == ARGS && t->flag == 1)
+	{
 		ft_create_holder_args1(tmp, new, &t->z);
+		t->does = 1;
+	}
+	// if (tmp->token == OUT_FILE)
+	// {
+	// 	ft_create_holder_outfile(tmp, new, &t->k, &t->zzz);
+	// 	t->does = 1;
+	// }
 	else if (tmp->token == OUT_FILE)
 	{
 		if (!ft_create_holder_outfile(tmp, new, &t->k, &t->zzz, &t->index))
@@ -439,14 +543,25 @@ int	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
 		if (!ft_create_holder_infile(tmp, new, &t->n, &t->sss, &t->index))
 			return (0);
 	}
+	// if (tmp->token == IN_FILE)
+	// {
+	// 	ft_create_holder_infile(tmp, new, &t->n, &t->sss);
+	// 	t->does = 1;
+	// }
 	else if (tmp->token == APPEND)
 	{
-		if (!ft_create_holder_append(tmp, new, &t->a, &t->www, &t->index))
-			return (0);
+		ft_create_holder_append(tmp, new, &t->a, &t->www);
+		t->does = 1;
 	}
-	else if (tmp->token == HERDOC && t->a < 1024)
+	else if (tmp->token == HERDOC && t->a < 1024) // && t->a < 1024
 		if (tmp->next)
+		{
+			if (t->does == 0)
+				new->here = 1;
+			else
+				new->here = 0;
 			new->her_doc[t->l++] = ft_strdup(tmp->next->str);
+		}
 	return (1);
 }
 
@@ -461,11 +576,11 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 		t.c = ft_count_pipe(node), holder = NULL);
 	while (t.i++ <= t.c)
 	{
-		(1) && (t.j = 0, t.flag = 0, t.index = 0, t.is_out = 0);
+		(1) && (t.j = 0, t.flag = 0);
 		new = add_list_holder(&holder, line);
 		while (tmp)
 		{
-			if (tmp->next && tmp->token == PIPE)
+			if (tmp->next && tmp->token == PIPE) // tmp->str[0] == '|'
 			{
 				tmp = tmp->next;
 				break;
@@ -473,7 +588,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			if (tmp->token == CMD && tmp->is_it_built_in == 0)
 			{
 				if (ft_create_holder_utils(new, tmp, &t.flag, &t.j))
-					;
+					t.does = 1;
 				else
 					ft_create_holder_utils1(new, tmp, &t.j, &t.flag);
 				t.flag = 0;

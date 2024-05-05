@@ -1,0 +1,19 @@
+bash-3.2$ ./ls
+bash: ./ls: Permission denied
+
+bash-3.2$ ls/
+bash: ls/: Not a directory
+
+
+
+Error ;l file descriptor: Bad file descriptor
+
+minishell$ c
+script.sh
+
+eirioqwuer | ls | jadsklfj | << dfa
+bash: eirioqwuer: command not found
+bash: jadsklfj: command not found
+
+
+< asdfdfa > adfas >> adsfasd < asdfas << e
