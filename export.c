@@ -151,7 +151,7 @@ void exec_export(t_holder **holder, t_env **env)
 		if (!ft_strncmp(var_name, (*env)->env, ft_strlen(var_name)))
 		{
 			value = ft_substr(line_tmp->args_built_in[j], i+1, ft_strlen(line_tmp->args_built_in[j]) - i-1);
-			value = ft_add_quotes(value);
+			// value = ft_add_quotes(value);
 			// join = ft_strjoin(var_name, value,2);
 			// free(tmp->env); 
 			(*env)->env = ft_strjoin((*env)->env, value,2);

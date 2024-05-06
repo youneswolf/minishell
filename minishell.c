@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/06 17:22:50 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/06 18:13:50 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -555,8 +555,8 @@ void built_in_exec(t_execution *vars, t_env *env)
 	if (vars->tmp->next)
 	{
 		dup2(vars->pipe_fd[1], STDOUT_FILENO);
-		close(vars->pipe_fd[0]);
-		close(vars->pipe_fd[1]);
+		// close(vars->pipe_fd[0]);
+		// close(vars->pipe_fd[1]);
 	}
 	if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "export"))
 		exec_export(&vars->tmp, &env);
@@ -574,12 +574,12 @@ void built_in_exec(t_execution *vars, t_env *env)
 	}
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "pwd"))
 	{
-		ft_pwd();
+		ft_pwd(env);
 	}
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "cd"))
 	{
 		if (vars->tmp->args_built_in[1])
-			ft_cd(vars->tmp->args_built_in[1], env);
+			ft_cd(vars->tmp->args_built_in[1], &env);
 	}
 	dup2(vars->origin_out, STDOUT_FILENO);
 }
@@ -615,13 +615,13 @@ void execution(t_holder **holder ,t_env *env)
 		vars.wait_i = 0;
 		// (vars.i = 0, vars.j = 0, vars.k = 0, vars.n = 0, vars.wait_i = 0);
 		pipe(vars.pipe_fd);
-		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || (vars.tmp->args_built_in[0] && vars.tmp->cmd_built_in))
-		{
-			built_in_exec(&vars, env);
-		}
 		if (vars.tmp->her_doc[vars.n])
 		{
 			here_doc_exec(&vars, env);
+		}
+		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || (vars.tmp->args_built_in[0] && vars.tmp->cmd_built_in))
+		{
+			built_in_exec(&vars, env);
 		}
 		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] ||vars.tmp->args[0] && vars.tmp->args[0][0])
 		{

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/06 17:14:00 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/06 18:14:02 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,7 @@ t_holder    	*ft_create_holder_node(t_line *node, char *line);
 int         	ft_count_pipe(t_line *head);
 // t_holder        *add_list_holder(t_holder **lst, char *line);
 // t_holder	    *ft_lstnew_holder(char *line);
-void       		ft_pwd();
+void       		ft_pwd(t_env *env);
 void        	ft_execute_cmd(t_line *head);
 int				ft_isalpha(int c);
 char			*ft_sub_str(char *s, unsigned int start, size_t len, int is_free);
@@ -289,7 +289,7 @@ char	        *word(char *str, char c);
 int				ft_syntax(t_line *head, t_status *status);
 char	        **alloc(int l);
 char	        **ft_split(char *str, char c);
-int             ft_cd(char *str, t_env *mini_env);//, t_line *head
+int             ft_cd(char *str, t_env **mini_env);//, t_line *head
 int				count_dollar(char *str);
 void            ft_put(char *str, t_line **head);
 void            ft_red_args(t_line *head);
