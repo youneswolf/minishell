@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 15:04:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:23:22 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 //     return (1);
 // }
 
-int    ft_cd(char *str, t_env *mini_env, t_line *head)
+int    ft_cd(char *str, t_env *mini_env) //, t_line *head
 {
     char buf[PATH_MAX];
     char    *str1;
@@ -37,7 +37,6 @@ int    ft_cd(char *str, t_env *mini_env, t_line *head)
 
     int i = 0;
     dir = opendir(str);
-    printf("------%s----\n", str);
     if (dir == NULL)
     {
         perror("path not found");
@@ -67,7 +66,7 @@ int    ft_cd(char *str, t_env *mini_env, t_line *head)
                 }
                 mini_env = mini_env->next;
             }
-            printf("Current working directory:%s\n", buf);
+            // printf("Current working directory:%s\n", buf);
         }
         else
         {

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 02:20:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/04 03:57:43 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:05:05 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,35 +60,37 @@ unsigned long  ft_atoi(char *str)
     return (j);
 }
 
-void    ft_exit(t_line *str)
+void    ft_exit(t_holder *str)
 {
-    t_line *tmp, *tmp1;
+    t_holder *tmp, *tmp1;
     unsigned long t;
     int     i;
     char *s;
 
-    tmp = str;
+    tmp1 = str;
     i = 0;
-    while (tmp)
-    {
-        if (tmp->token && tmp->is_it_built_in == 1 && ft_strlen(tmp->str) == 4
-            && ft_cmp("exit", tmp->str))
-        {
-            tmp1 = tmp->next;
-            s = tmp->next->str; 
-            while (tmp1 && tmp1->token == ARGS)
-                i++;
-            if (i == 0)
-                (printf("exit\n"), tmp->status->status = 0, exit(0));
-            else if (i != 1 && ft_is_numeric(s))
-                (write(2, "exit\n", 4), write(2, "bash: exit: too many arguments\n", 33), tmp->status->status = 1);
-            else if (s && !ft_is_numeric(s))
-                (printf("exit\n"), printf("exit: %s: numeric argument required", s), tmp->status->status = 255, exit(1));
-            else if (i == 1 && ft_is_numeric(s))
-                (printf("exit\n"), tmp->status->status = ft_atoi(tmp1->str), exit(0));
-            else if (s && ft_is_numeric(s) && (ft_atoi(s) > 9223372036854775807  || ft_atoi(s) < -922337203685477588))
-                (printf("exit\n"), printf("exit: %s: numeric argument required", s), tmp->status->status = 255, exit(1));
-        }
-        tmp = tmp->next;
-    }
+    // while (tmp)
+    // {
+    //     if (tmp->token && tmp->is_it_built_in == 1 && ft_strlen(tmp->str) == 4
+    //         && ft_cmp("exit", tmp->str))
+    //     {
+    // tmp1 = tmp->next;
+    // s = tmp->next->str;
+    while (tmp1 && tmp1->args_built_in[i])
+        i++;
+    if (i == 1)
+        (printf("exit\n"), exit(0)); //, tmp->status1->status = 0
+    else if (i > 2 && ft_is_numeric(tmp1->args_built_in[1]))
+        (write(2, "exit\n", 4), write(2, "bash: exit: too many arguments\n", 33)); //, tmp->status1->status = 1
+    else if (tmp1->args_built_in[1] && !ft_is_numeric(tmp1->args_built_in[1]))
+        (printf("exit\n"), printf("exit: %s: numeric argument required", s), exit(1)); //, tmp->status1->status = 255
+    else if (i == 2 && ft_is_numeric(tmp1->args_built_in[1])
+        && (ft_atoi(tmp1->args_built_in[1]) <= 9223372036854775807  || ft_atoi(tmp1->args_built_in[1]) >= -922337203685477588))
+        (printf("exit\n"), exit(0)); //, tmp->status1->status = ft_atoi(tmp1->str)
+    else if (tmp1->args_built_in[1] && ft_is_numeric(tmp1->args_built_in[1]) &&
+        (ft_atoi(tmp1->args_built_in[1]) > 9223372036854775807  || ft_atoi(tmp1->args_built_in[1]) < -922337203685477588))
+        (printf("exit\n"), printf("exit: %s: numeric argument required", s), exit(1)); //tmp->status1->status = 255,
+        // }
+        // tmp = tmp->next;
+    // }
 }

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/04 20:00:46 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:14:00 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@
 typedef struct s_long
 {
 	int j;
+	int	does;
 	int	is_out;
 	int	index;
 	int	k; 
@@ -91,6 +92,27 @@ typedef struct s_long
 	int	i;
 	int	c;
 }	t_long;
+
+
+// typedef struct s_long
+// {
+// 	int j;
+// 	int	does;
+// 	int	k; 
+// 	int	w;
+// 	int a;
+// 	int n;
+// 	int l;
+// 	int	sss;
+// 	int	www;
+// 	int	zzz;
+// 	int z;
+// 	int zz;
+// 	int flag;
+// 	int	mm;
+// 	int	i;
+// 	int	c;
+// }	t_long;
 
 typedef struct s_status1
 {
@@ -162,6 +184,7 @@ typedef struct s_cmd
 
 typedef struct s_holder
 {
+	int here;
 	char			*cmd;
 	char			**args;
 	char			**file_in;
@@ -206,11 +229,29 @@ typedef struct s_expan
     char *pre_var;
 }    t_expan;
 
+typedef struct s_execution
+{
+	t_holder *tmp;
+	// t_env* env;
+	int ppp;
+	int child_stat;
+	int pipe_fd[2];
+	int i ,j , k, n, wait_i;
+	int pid;
+	int origin_in;
+	int origin_out;
+	t_holder *doc_tmp;
+}	t_execution;
+
 extern	struct termios    attr;
 
 // echo $USER << 1 cat
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
+int     		ft_cmp(char *s, char *s1);
+int     		ft_is_numeric(char *str);
+unsigned long  	ft_atoi(char *str);
+void			ft_exit(t_holder *str);
 void			ft_free_holder(t_holder **str);
 int				ft_oppen_files(t_holder *node);
 void    		ft_f(int signum);
@@ -248,7 +289,7 @@ char	        *word(char *str, char c);
 int				ft_syntax(t_line *head, t_status *status);
 char	        **alloc(int l);
 char	        **ft_split(char *str, char c);
-int             ft_cd(char *str, t_env *mini_env, t_line *head);
+int             ft_cd(char *str, t_env *mini_env);//, t_line *head
 int				count_dollar(char *str);
 void            ft_put(char *str, t_line **head);
 void            ft_red_args(t_line *head);
