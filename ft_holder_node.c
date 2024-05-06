@@ -282,6 +282,7 @@ void	ft_create_holder_args1(t_line *tmp, t_holder *new, int *z)
 			while (a[ee])
 			{
 				new->args_built_in[(*z)++] = ft_strdup(a[ee]);
+				printf("---%s---\n", a[ee]);
 				ee++;
 			}
 			ft_free_2d(a);

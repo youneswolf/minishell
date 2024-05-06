@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 10:32:36 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/25 16:16:14 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/05 19:18:40 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ int ft_is_there_in_the_dir(char *pattern, char *text)
                 if (pattern[i] == '\0')
                     return 1;
                 while (text[j] && text[j] != pattern[i])
-                    j++; 
+                    j++;
             }
-            if (pattern[i] == text[j])
+            if (pattern[i] && pattern[i] == text[j])
                 (1) && (i++, j++);
             else
                 return 0;
@@ -226,6 +226,7 @@ char **ft_does_it_matche(char *str)
         {
             if (ft_is_there_in_the_dir(str, name->d_name) && name->d_name[0] != '.')
             {
+                printf("{%s}\n", name->d_name);
                 array[i] = ft_strdup(name->d_name);
                 i++;
             }
