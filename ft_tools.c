@@ -3,6 +3,7 @@
 #include <Kernel/sys/syslimits.h>
 #include <signal.h>
 #include <unistd.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <readline/readline.h>

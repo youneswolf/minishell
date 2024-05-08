@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 21:08:37 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/04/29 15:11:07 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/08 09:56:55 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void    ft_handler_ctrl_c(int signum)
         if (waitpid(-1, NULL, WNOHANG) == 0)
             return ;
         printf("\n");
-        rl_replace_line("", 1);
+        // rl_replace_line("", 1);
         rl_on_new_line();
         rl_redisplay();
     }

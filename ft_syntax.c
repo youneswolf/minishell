@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 15:10:52 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/08 10:06:08 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int     ft_her_doc(t_line *head)
     return (0);
 }
 
-int    ft_syntax(t_line *head, t_status *status)
+int    ft_syntax(t_line *head, t_last *status)
 {
     int i;
     int flag;
@@ -70,7 +70,7 @@ int    ft_syntax(t_line *head, t_status *status)
     while (tmp)
     {
         if (!ft_syntax_quote(tmp->str, i, count))
-            return (0);
+            return (status->status = 258, 0);
         flag = tmp->token;
         if (tmp->next && flag == tmp->next->token && flag != ARGS)
             return (status->status = 258, printf("error near `%s'\n", tmp->str), 0);

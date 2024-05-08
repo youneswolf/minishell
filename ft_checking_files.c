@@ -551,7 +551,7 @@ void ft_null_tmp(t_holder **tmp)
         (*tmp)->args_built_in[0] = NULL;
     }
 }
-int    ft_oppen_files(t_holder *node)
+int    ft_oppen_files(t_holder *node, t_last *status)
 {
     t_holder    *tmp;
     int         i;
@@ -574,7 +574,7 @@ int    ft_oppen_files(t_holder *node)
             if (tmp->out[b] == -1)
             {
                 write(2, "such file or directory\n", 26);
-                    return (0);
+                    return (status->status = 1, 0);
             }
             b++;
         }
@@ -592,7 +592,7 @@ int    ft_oppen_files(t_holder *node)
             if (tmp->in[z] == -1)
             {
                 write(2, "such file or directory\n", 24);
-                return (0);
+                return (status->status = 1, 0);
             }
             z++;
             }
@@ -600,7 +600,7 @@ int    ft_oppen_files(t_holder *node)
             {
                 printf("bash: %s: ambiguous redirect\n", tmp->file_in[z]);
                 ft_null_tmp(&tmp);
-
+                status->status = 1;
             }
         }
         else if (tmp->append_index[q] == i)
@@ -611,20 +611,20 @@ int    ft_oppen_files(t_holder *node)
             if (tmp->ap[q] == -1)
             {
                 write(2, "such file or directory\n", 26);
-                return (0);
+                return (status->status = 1, 0);
             }
             q++;
             }
             else
             {
-                 printf("bash: %s: ambiguous redirect\n", tmp->append[q]);
+                printf("bash: %s: ambiguous redirect\n", tmp->append[q]);
                 ft_null_tmp(&tmp);
-                
+                status->status = 1;
             }
         }  
         i++;
     }
-    return (1);
+    return (status->status = 0, 1);
 }
 
 void    ft_checking_files(t_holder *node)

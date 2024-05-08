@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/06 18:27:16 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/06 19:28:06 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int    ft_cd(char *str, t_env **mini_env) //, t_line *head
                 {
                     str1 = ft_strjoin((*mini_env)->env, "/", 1);
                     str1 = ft_strjoin(str1, str, 1);
+                    free((*mini_env)->env);
                     (*mini_env)->env = ft_strdup(str1);
                     // free(str1);
                     break;
@@ -73,6 +74,7 @@ int    ft_cd(char *str, t_env **mini_env) //, t_line *head
                     perror("error retrieving current directory: getcwd: cannot access parent directories: ");
                     str1 = ft_strjoin((*mini_env)->env, str, 1);
                     // str1 = ft_strjoin(str1, str, 1);
+                    free((*mini_env)->env);
                     (*mini_env)->env = ft_strdup(str1);
                     // free(str1);
                     break;

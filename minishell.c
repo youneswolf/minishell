@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/06 18:13:50 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/08 10:14:23 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,34 @@ int is_slash(char *str)
     }
     return (0);
 }
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		ft_putchar_fd(s[i], fd);
+		i++;
+	}
+}
+int is_dir(char *path)
+{
+	struct stat path_stat;
+    if (stat(path, &path_stat) == 0)
+	{
+    if (S_ISDIR(path_stat.st_mode))
+	{
+        return (1);
+    }
+	}
+    return (0);
+}
 void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k)
 {
     char *path;
@@ -291,10 +319,27 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
     }
     if (is_slash(holder->args[0]))
     {
+	if (is_dir(holder->args[0]))
+	{
+		ft_putstr_fd("bash: ",2);
+		ft_putstr_fd(holder->args[0],2);
+		ft_putstr_fd(" is a directory\n",2);
+		exit(126);
+	}
     if (!access(holder->args[0], X_OK))
     {
         path = holder->args[0];
     }
+	else if (!access(holder->args[0] ,F_OK))
+	{
+		if (access(holder->args[0], X_OK))
+		{
+			ft_putstr_fd("bash ",2);
+			ft_putstr_fd(holder->args[0],2);
+			ft_putstr_fd(" Permission denied\n",2);
+			exit(126);
+		}
+	}
     else
         (printf("bash: %s: No such file or directory\n",holder->args[0]), exit(127));
     }
@@ -584,7 +629,7 @@ void built_in_exec(t_execution *vars, t_env *env)
 	dup2(vars->origin_out, STDOUT_FILENO);
 }
 
-void execution_cmd(t_execution *vars, t_env *env)
+int	execution_cmd(t_execution *vars, t_env *env)
 {
 	if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
 		vars->i++;
@@ -595,10 +640,16 @@ void execution_cmd(t_execution *vars, t_env *env)
 	if (vars->tmp->ap[vars->k] != -42 && vars->tmp->ap[vars->k] != -1)
 		vars->k++;
 	vars->pid = fork();
+	if (vars->pid == -1)
+	{
+		//  printf("minishell: fork: Resource temporarily unavailable\n");
+		return(0) ;
+	}
 	if (!vars->pid)
 	{
 		exec_cmd(vars->tmp, env, vars->pipe_fd,vars->i-1,vars->j-1,vars->k-1);
 	}
+	return (1);
 }
 void execution(t_holder **holder ,t_env *env)
 {
@@ -625,7 +676,11 @@ void execution(t_holder **holder ,t_env *env)
 		}
 		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] ||vars.tmp->args[0] && vars.tmp->args[0][0])
 		{
-			execution_cmd(&vars, env);
+			if (!execution_cmd(&vars, env))
+			{
+				printf("minishell: fork: Resource temporarily unavailable\n");
+				break;
+			}
 		}
 		close (vars.pipe_fd[1]);
 		dup2 (vars.pipe_fd[0], STDIN_FILENO);
@@ -873,6 +928,7 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 	t_line  *str;
 	int     i = 0;
 	char    *line;
+	t_last 	t;
 	char 	*a;
 	char    *exp;
 	t_holder* tmp;
@@ -880,7 +936,9 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 	t_env *mini_env = NULL;
 	str = NULL;
 	tmp = NULL;
-	rl_catch_signals = 0;
+	// rl_catch_signals = 0;
+
+	t.status = -1337;
 	if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
         return (perror("signal"), 1);
     if (env[0])
@@ -900,12 +958,10 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 		status->node = str;
 		status->status = 0;
 		ft_give_token(str, status);
-		// ft_print_tokens(str);
 		ft_is_buil(str);
-		if (ft_syntax(str, status))
+		if (ft_syntax(str, &t))
 		{
 			ft_handle_issue_herdoc(str);
-			// ft_print_tokens(str, status);
 			old = str;
 			while (str)
 			{
@@ -925,27 +981,13 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 			ft_is_buil(str);
 			ft_remove_quote(&str, line);
 			tmp = ft_create_holder_node(str,line);
-			// ft_print_holder(tmp);
-			// while (tmp)
-			// {
-			// 	int kk = 0;
-			// 	if (tmp->cmd)
-			// 		printf("cmd = %s\n", tmp->cmd);	
-			// 	while (tmp->args[kk])
-			// 	{
-			// 		printf("aaegs = %s\n", tmp->args[kk]);
-			// 		kk++;
-			// 	}
-			// 	tmp = tmp->next;
-			// }
 			if (tmp)
 			{
-				if (ft_oppen_files(tmp))
-					execution(&tmp, mini_env);
+				if (ft_oppen_files(tmp, &t))
+					execution(&tmp, mini_env, &t);
 			}
 			// ft_checking_files(tmp);
 		}
-		// ft_print_tokens(str, status);
 		ft_free_list(&str, status);
 		str = NULL;
 		free(line);

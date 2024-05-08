@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/06 18:14:02 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/08 10:13:17 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <readline/readline.h>
 #include <dirent.h>
 #include <readline/history.h>
+#include <sys/stat.h>
 // #include <libc.h>
 
 // FILE	*gfp;
@@ -122,6 +123,7 @@ typedef struct s_status1
 	int		index;
 }           t_status1;
 
+
 typedef struct s_line
 {
     char            *str;
@@ -202,7 +204,13 @@ typedef struct s_holder
 	int				nbr_file;
 	
 	struct s_holder	*next;
-}   				t_holder;
+}
+   				t_holder;
+typedef struct s_last
+{
+    int     		status;
+}           t_last;
+
 typedef struct s_exp
 {
     t_line *split;
@@ -253,7 +261,7 @@ int     		ft_is_numeric(char *str);
 unsigned long  	ft_atoi(char *str);
 void			ft_exit(t_holder *str);
 void			ft_free_holder(t_holder **str);
-int				ft_oppen_files(t_holder *node);
+int				ft_oppen_files(t_holder *node, t_last *status);
 void    		ft_f(int signum);
 char			*ft_substr1(char *str, int start, int len, int not_);
 void			ft_free_holder(t_holder **str);
@@ -286,7 +294,7 @@ size_t	    	ft_strlen(const char *s);
 // char	        *ft_strjoin(char *s1, char *s2);
 int	        	count(char *s, char c);
 char	        *word(char *str, char c);
-int				ft_syntax(t_line *head, t_status *status);
+int				ft_syntax(t_line *head, t_last	*status);
 char	        **alloc(int l);
 char	        **ft_split(char *str, char c);
 int             ft_cd(char *str, t_env **mini_env);//, t_line *head
