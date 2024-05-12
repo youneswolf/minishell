@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 21:02:53 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 15:01:52 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/11 10:24:41 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,12 @@ void    ft_give_redire(t_line *tmp, int *flag1, int *index, t_status *status)
         if (tmp->next != NULL)
             tmp->next->token = DELIMITER;
     }
+    else if (ft_strcmp(tmp->str, "<"))
+    {
+        tmp->token = IN_REDIR;
+        if (tmp->next != NULL)
+            (1) && (status->index = (*index)++, tmp->next->token = IN_FILE);
+    }
     else
         ft_give_token_else(tmp, flag1);
 }
@@ -87,12 +93,6 @@ void    ft_give_token(t_line *head, t_status *status)
             tmp->token = OUT_REDIR;
             if (tmp->next != NULL)
                 (1) && (status->index = index++, tmp->next->token = OUT_FILE);
-        }
-        else if (ft_strcmp(tmp->str, "<"))
-        {
-            tmp->token = IN_REDIR;
-            if (tmp->next != NULL)
-                (1) && (status->index = index++, tmp->next->token = IN_FILE);
         }
         else
             ft_give_redire(tmp, &flag1, &index, status);

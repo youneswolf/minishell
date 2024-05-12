@@ -81,75 +81,66 @@ int count_sgl_quote(char *str)
 }
 char *handle_expand_here(char *line_str, t_env **env)
 {
-	t_line *split = NULL;
-	t_line *node;
-	char *dollar_str_space;
-	char *spaces;
-	char *join = NULL;
-	char **str = NULL;
-	char **dollar_str = NULL;
-	int i = 0;
-	int j = 0;
-		while (line_str && line_str[i])
-		{
-			if (line_str[i] == '$')
-			{
-				str = ft_split(line_str, 32);
-				while (str[j])
-				{
-					if (!split)
-						split = ft_lst_new(ft_strdup(str[j]));
-					else
-					{
-						node = get_last_l(&split);
-						node->next = ft_lst_new(ft_strdup(str[j]));
-					}
-					j++;
-				}
-				ft_free_2d(str);
-			}
-			i++;
-		}
-	j = 0;
-	free(line_str);
-	node = split;
-	while (split)
+	t_exp vars;
+	vars.i = 0;
+	vars.j = 0;
+	vars.split = get_exp_node(line_str);
+	vars.join = NULL;
+	vars.str = NULL;
+	vars.dollar_str = NULL;
+	vars.node = vars.split;
+	while (vars.split)
 	{
-		if (count_dollar(split->str) > 1)
+		if (count_dollar(vars.split->str) > 1)
 		{
-			i = 0;
-			dollar_str = ft_split(split->str, '$');
-			while(dollar_str[i])
-			{
-				j = 0;
-				// spaces = ft_substr(dollar_str[i], 0, ft_strlen(dollar_str[i] - j));
-				dollar_str_space = ft_strtrim(dollar_str[i], " ", 1);
-				dollar_str_space = ft_strjoin("$",dollar_str_space,3);
-				join = ft_strjoin(join, expand_here(dollar_str_space, env),2);
-				while (dollar_str[j] && dollar_str[i][j] == ' ')
-				{
-					join = ft_strjoin(join, " ",1);
-					j++;
-				}
-				i++;
-				free(dollar_str_space);
-			}
-			// printf("%s\n",join);
+			join_exp_here(&vars, env);
 		}
 		else 
 		{
-			j = 0;
-			// printf("else\n");
-			join = ft_strjoin(join, expand_here(split->str, env),2);
-			if (split->next)
-				join = ft_strjoin(join," ",1);
+			join_exp_1dollar_here(&vars, env);
 		}
-		split = split->next;
+		vars.split = vars.split->next;
 	}
-	ft_free_list2(&node);
-	if (!join)
+	ft_free_list3(&vars.node);
+	if (!vars.join)
 		return ("");
-	return (join);
+	return (vars.join);
+}
+void join_exp_here(t_exp *vars, t_env **env)
+{
+	vars->i = 0;
+	int check ;
+	vars->dollar_str = ft_split(vars->split->str, '$');
+	check  = check_for_first_elem(vars->dollar_str[0]);
+	while(vars->dollar_str[vars->i])
+	{
+		vars->j = 0;
+		vars->dollar_str_space = ft_strtrim(vars->dollar_str[vars->i], " ", 1);
+		if (vars->i == 0)
+		{
+			if (check == 0)
+				vars->dollar_str_space = ft_strjoin("$",vars->dollar_str_space,3);
+		}
+		else
+			vars->dollar_str_space = ft_strjoin("$",vars->dollar_str_space,3);
+		vars->join = ft_strjoin(vars->join, expand_here(vars->dollar_str_space, env),2);
+		while (vars->dollar_str[vars->i] &&vars->dollar_str[vars->i][vars->j]&&  vars->dollar_str[vars->i][vars->j] == ' ')
+		{
+			vars->join = ft_strjoin(vars->join, " ",1);
+			vars->j++;
+		}
+		vars->i++;
+		free(vars->dollar_str_space);
+	}
+		ft_free_2d(vars->dollar_str);
+}
+void join_exp_1dollar_here(t_exp *vars, t_env **env)
+{
+	vars->join = ft_strjoin(vars->join, expand_here(vars->split->str, env),2);
+	if (vars->split->next)
+	{
+		vars->join = ft_strjoin(vars->join," ",1);
+	}
 }
 char *expand_here(char *str, t_env **env)
 {
@@ -164,23 +155,6 @@ char *expand_here(char *str, t_env **env)
 	tmp = *env;
 	i = 0;
 	int j = 0;
-	// if ( str && (str[0] == 34 || str[ft_strlen(str) - 1] == 34))
-	// {
-	// 	// sub = ft_strtrim(str, "\"", 1);
-	// 	while (sub && sub[i] != '$')
-	// 		i++;
-	// 	if (i && i != ft_strlen(str))
-	// 	{
-	// 		pre_special = ft_substr(sub, 0, i);
-	// 	}
-	// 	if (str && str[0] == 34)
-	// 		sub = ft_substr(str, i+2, (ft_strlen(str) - i - 1));
-	// 	else 
-	// 		sub = ft_substr(str, i+1, (ft_strlen(str) - i - 1));
-	// 	sub = ft_strtrim(sub, "\"", 1);
-	// }
-	// else
-	// {
 		while (str && str[i] != '$')
 			i++;
 		if (i && i != ft_strlen(str))
@@ -188,12 +162,7 @@ char *expand_here(char *str, t_env **env)
 			pre_special = ft_substr(str, 0, i);
 		}
 		sub = ft_sub_str(str, i+1, (ft_strlen(str) - i -1),0);
-	// }
 	i = 0;
-	// if (count_sgl_quote(pre_special) % 2 != 0)
-	// {
-	// 	return (str);
-	// }
 	while (sub && sub[i])
 	{
 		if (sub[i] == '.' || sub[i] == ',' || sub[i] == '/' || sub[i] == '-' || sub[i] == ':' || sub[i] == '_' || sub[i] == 34 || sub[i] == 39)
@@ -229,29 +198,30 @@ char *expand_here(char *str, t_env **env)
 		}
 		tmp = tmp->next;
 	}
+	free(var);
 	i = 0;
 	j = 42;
-	if (if_dollar(str))
-	{
-		while (str[i] && str[i] != '$')
-		{
-			i++;
-		}
-		while (str[i])
-		{
-			if (ft_isalnum(str[i]) == 1)
-			{
-				return (pre_special);
-			}
-			else
-				return (str);
-		}
-		return ("");
-	}
-	if (str && str[0] == '$')
-	{
-		pre_var = ft_strjoin(pre_special, special,2);
-		return (ft_strjoin("$", pre_var,3));
-	}
+	// if (if_dollar(str))
+	// {
+	// 	while (str[i] && str[i] != '$')
+	// 	{
+	// 		i++;
+	// 	}
+	// 	while (str[i])
+	// 	{
+	// 		if (ft_isalnum(str[i]) == 1)
+	// 		{
+	// 			return (pre_special);
+	// 		}
+	// 		else
+	// 			return (str);
+	// 	}
+	// 	return ("");
+	// }
+	// if (str && str[0] == '$')
+	// {
+	// 	pre_var = ft_strjoin(pre_special, special,2);
+	// 	return (ft_strjoin("$", pre_var,3));
+	// }
 	return (ft_strjoin(pre_special, special,2));
 }

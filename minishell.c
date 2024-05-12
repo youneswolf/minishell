@@ -6,12 +6,13 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/08 10:14:23 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/11 18:31:40 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
+#include <sys/signal.h>
 
 struct termios    attr;
 
@@ -83,7 +84,6 @@ void	ft_add_space_utils(char *new_line, char *str, int quote, int i, int j)
 		if (str[i] && str[i] == quote)
 			(1) && (new_line[j] = str[i], i++, j++, flag = 0, quote = 0);
 	}
-	// return (new_line[j] = '\0', new_line);
 	new_line[j] = '\0';
 }
 
@@ -284,7 +284,7 @@ int is_dir(char *path)
 	}
     return (0);
 }
-void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k)
+void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k, t_last *status)
 {
     char *path;
     char **array;
@@ -295,6 +295,7 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
     //     exit(1);
     // else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
     //     exit(1);
+	status->status = 0;
     if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
     {
         redirect_input(holder->in[i]);
@@ -324,6 +325,7 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 		ft_putstr_fd("bash: ",2);
 		ft_putstr_fd(holder->args[0],2);
 		ft_putstr_fd(" is a directory\n",2);
+		status->status = 126;
 		exit(126);
 	}
     if (!access(holder->args[0], X_OK))
@@ -337,6 +339,7 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
 			ft_putstr_fd("bash ",2);
 			ft_putstr_fd(holder->args[0],2);
 			ft_putstr_fd(" Permission denied\n",2);
+			status->status = 126;
 			exit(126);
 		}
 	}
@@ -348,6 +351,7 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
     if (!path)
     {
         printf("bash: %s: command not found\n", holder->args[0]);
+		status->status= 127;
         exit(127);
     }
     array = ft_put_env_string(array, env);
@@ -440,44 +444,36 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
     int        i = 42;
     // write(1, "here_doc> ", 11);
     // dup2(origin_in, STDIN_FILENO);
-    // if (signal(SIGINT, ft_handler_ctrt_herdoc) == SIG_ERR)
+    // if (signal(SIGINT, ft_ctr) == SIG_ERR)
     //     exit(255);
     line = readline("here_doc> ");
     i = if_dollar(lim);
     if (i == 1)
-    {
         lim = ft_remove_dollar(lim);
-        printf("%s\n",lim);
-    }
     i = 42;
     i = is_quote(lim);
     if (i == 1)
-    {
         lim = ft_remove_here(lim);
-    }
     while (ft_strncmp(lim, line, ft_strlen(lim))
         || ft_strlen(line) != ft_strlen(lim))
     {
         // write(1, "here_doc> ", 11);
-        // if (if_dollar(line) && !i)
-        // {
-        //     line = handle_expand_here(line, env);
-        // }
+        if (if_dollar(line) && !i)
+            line = handle_expand_here(line, env);
         write(pipe_fd[1], line, ft_strlen(line));
         write(pipe_fd[1], "\n", 1);
-        free(line);
+        // free(line);
         line = readline("here_doc> ");
         if (!line)
-            (exit(2));
+            (exit(1));
     }
     free(line);
     free(lim);
     exit(1);
 }
-
 // 
 
-void here_doc_exec(t_execution *vars ,t_env *env)
+int here_doc_exec(t_execution *vars ,t_env *env)
 {
 	while (vars->tmp->her_doc[vars->n])
 	{
@@ -487,7 +483,7 @@ void here_doc_exec(t_execution *vars ,t_env *env)
 		vars->pid = fork();
 		if (!vars->pid)
 		{
-			signal(SIGINT, SIG_DFL);
+			signal(SIGINT, heredoc);
 			signal(SIGQUIT, &ft_f);
 			ft_here_doc(vars->tmp->her_doc[vars->n],vars-> pipe_fd, vars->tmp, &env, vars->origin_in);
 		}
@@ -495,16 +491,21 @@ void here_doc_exec(t_execution *vars ,t_env *env)
 		{
 			waitpid(vars->pid, &vars->child_stat, 0);
 			if (WIFSIGNALED(vars->child_stat) && WTERMSIG(vars->child_stat) == SIGINT)
+			{
 				break ;
+			}
 			if (WIFEXITED(vars->child_stat))
 			{
 				int exit_status = WEXITSTATUS(vars->child_stat);
+				if (exit_status == 100)
+					return (500);
 				if (exit_status == 255)
 				{
 					vars->tmp = vars->tmp->next;
 					break;
 				}
 			}
+			// break;
 			close(vars->pipe_fd[1]);
 			if (vars->tmp->cmd)
 			{
@@ -522,6 +523,9 @@ void here_doc_exec(t_execution *vars ,t_env *env)
 			}
 			vars->n++;
 		}
+		// if (!isatty(STDIN_FILENO))
+		// 	open(STDIN_FILENO, O_CREAT);
+		return (0);
 }
 
 void here_doc_exec_1(t_execution *vars ,t_env *env)
@@ -571,7 +575,7 @@ void here_doc_exec_1(t_execution *vars ,t_env *env)
 		}
 }
 
-void built_in_exec(t_execution *vars, t_env *env)
+void built_in_exec(t_execution *vars, t_env *env, t_last *status)
 {
 	int fd;
 	(vars->i = 0, vars->j = 0, vars->k = 0);
@@ -607,7 +611,7 @@ void built_in_exec(t_execution *vars, t_env *env)
 		exec_export(&vars->tmp, &env);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "echo"))
 	{
-		exec_echo(vars->tmp);
+		exec_echo(vars->tmp, status);
 	}
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "unset"))
 		exec_unset(&env, vars->tmp);
@@ -629,7 +633,7 @@ void built_in_exec(t_execution *vars, t_env *env)
 	dup2(vars->origin_out, STDOUT_FILENO);
 }
 
-int	execution_cmd(t_execution *vars, t_env *env)
+int	execution_cmd(t_execution *vars, t_env *env, t_last *status)
 {
 	if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
 		vars->i++;
@@ -647,11 +651,12 @@ int	execution_cmd(t_execution *vars, t_env *env)
 	}
 	if (!vars->pid)
 	{
-		exec_cmd(vars->tmp, env, vars->pipe_fd,vars->i-1,vars->j-1,vars->k-1);
+		exec_cmd(vars->tmp, env, vars->pipe_fd,vars->i-1,vars->j-1,vars->k-1, status);
 	}
 	return (1);
 }
-void execution(t_holder **holder ,t_env *env)
+
+void execution(t_holder **holder ,t_env *env, t_last *status)
 {
 	t_execution vars;
 	vars.ppp = 0;
@@ -661,6 +666,7 @@ void execution(t_holder **holder ,t_env *env)
 	vars.origin_in = dup(STDIN_FILENO);
 	vars.origin_out = dup(STDOUT_FILENO);
 	vars.tmp = *holder;
+	int s = 0;
 	while (vars.tmp)
 	{
 		vars.wait_i = 0;
@@ -668,15 +674,19 @@ void execution(t_holder **holder ,t_env *env)
 		pipe(vars.pipe_fd);
 		if (vars.tmp->her_doc[vars.n])
 		{
-			here_doc_exec(&vars, env);
+			s = here_doc_exec(&vars, env);
+			if (s == 500)
+			{
+				break ;
+			}
 		}
 		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || (vars.tmp->args_built_in[0] && vars.tmp->cmd_built_in))
 		{
-			built_in_exec(&vars, env);
+			built_in_exec(&vars, env, status);
 		}
 		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] ||vars.tmp->args[0] && vars.tmp->args[0][0])
 		{
-			if (!execution_cmd(&vars, env))
+			if (!execution_cmd(&vars, env,status))
 			{
 				printf("minishell: fork: Resource temporarily unavailable\n");
 				break;
@@ -684,20 +694,31 @@ void execution(t_holder **holder ,t_env *env)
 		}
 		close (vars.pipe_fd[1]);
 		dup2 (vars.pipe_fd[0], STDIN_FILENO);
-		close(vars.pipe_fd[0]);
+		close(vars.pipe_fd[0]); 
 		vars.tmp = vars.tmp->next;
 	}
 	vars.tmp = *holder;
-	while (vars.tmp)
-	{
-		wait(NULL);
-		vars.tmp = vars.tmp->next;
-	}
-	dup2(vars.origin_in, STDIN_FILENO);
-	close(vars.origin_in);
-	if (vars.pipe_fd[0])
-		close(vars.pipe_fd[0]);
-	ft_free_holder(holder);
+	 while (vars.tmp)
+    {
+        wait(&status->status);
+        if (WIFEXITED(status->status)) {
+            status->status = WEXITSTATUS(status->status);
+			ft_status(1, status->status);
+        }
+		else if (WIFSIGNALED(status->status) && WTERMSIG(status->status) == SIGINT)
+		{
+			if (WTERMSIG(status->status) == SIGINT)
+				ft_status(1, 130);
+			if (WTERMSIG(status->status) == SIGQUIT)
+				ft_status(1, 131);
+		}
+        vars.tmp = vars.tmp->next;
+    }
+		dup2(vars.origin_in, STDIN_FILENO);
+		close(vars.origin_in);
+		if (vars.pipe_fd[0])
+			close(vars.pipe_fd[0]);
+		ft_free_holder(holder);
 }
 
 int		ft_cmp_built_in(char *str)
@@ -770,6 +791,21 @@ void	ft_print_tokens(t_line *node, t_status *status)
 	}
 }
 
+int	ft_handle_issue_herdoc_utils(t_line *tmp, char *s1)
+{
+	if (!ft_strcmp(s1, tmp->next->str))
+	{
+		if (tmp->next->str[0] == '$')
+		{
+			tmp->deja = 1;
+			tmp->next->str = ft_substr1(tmp->next->str, 1, ft_strlen(tmp->next->str), 1);
+		}
+		free(s1);
+		return (0);
+	}
+	return (1);
+}
+
 void	ft_handle_issue_herdoc(t_line *str)
 {
 	t_line *tmp;
@@ -789,16 +825,8 @@ void	ft_handle_issue_herdoc(t_line *str)
 				free (s1);
 				return ;
 			}
-			else if (!ft_strcmp(s1, tmp->next->str))
-			{
-				if (tmp->next->str[0] == '$')
-				{
-					tmp->deja = 1;
-					tmp->next->str = ft_substr1(tmp->next->str, 1, ft_strlen(tmp->next->str), 1);
-				}
-				free(s1);
+			else if (!ft_handle_issue_herdoc_utils(tmp, s1))
 				return ;
-			}
 		}
 		tmp = tmp->next;
 	}
@@ -816,30 +844,8 @@ void	ft_set_token_to_none(t_line *str)
 	}
 }
 
-void	ft_skip_empty_expand(t_line **node)
+void	ft_skip_empty_expand_utils(t_line *head, t_line *previous, t_line *tmp)
 {
-	t_line	*head;
-	t_line	*tmp;
-	t_line	*previous;
-
-	if ((*node) && (*node)->flag == 1 && !(*node)->str[0])
-	{
-		previous = (*node);
-		(*node) = (*node)->next;
-		// free(previous->str);
-		// free(previous->status);
-		free(previous);
-		while ((*node) && (*node)->flag == 1 && !(*node)->str[0])
-		{
-			previous = (*node);
-			(*node) = (*node)->next;
-			free(previous->str);
-			// free(previous->status);
-			free(previous);
-		}
-	}
-	head = *node;
-	previous = *node;
 	if (head)
 	{
 		while (head)
@@ -850,7 +856,7 @@ void	ft_skip_empty_expand(t_line **node)
 				{
 					tmp = head;
 					head = head->next;
-					// free(tmp->status);
+					free(tmp->status1);
 					free(tmp);
 				}
 				previous->next = head;
@@ -862,6 +868,31 @@ void	ft_skip_empty_expand(t_line **node)
 			}
 		}
 	}
+}
+
+void	ft_skip_empty_expand(t_line **node)
+{
+	t_line	*head;
+	t_line	*tmp;
+	t_line	*previous;
+
+	if ((*node) && (*node)->flag == 1 && !(*node)->str[0])
+	{
+		previous = (*node);
+		(*node) = (*node)->next;
+		free(previous->status1);
+		free(previous);
+		while ((*node) && (*node)->flag == 1 && !(*node)->str[0])
+		{
+			previous = (*node);
+			(*node) = (*node)->next;
+			free(previous->status1);
+			free(previous);
+		}
+	}
+	head = *node;
+	previous = *node;
+	ft_skip_empty_expand_utils(head, previous, tmp);
 }
 
 int is_between_quotes(char *str)
@@ -916,15 +947,24 @@ void	ft_print_holder(t_holder *tmp)
 	}
 }
 
+int	ft_status(int a, int status)
+{
+	static	int	s;
+
+	if (a == 1)
+		s = status;
+	return (s);
+}
+
 int main(int ac, char **av, char **env) // status code and singal in herdoc and singal in ./minishell ./minishell
 {
 	// gfp = fopen("leaks.t", "w");
 	// atexit(leaks);
 	
-	// if (isatty(0) == -1)
-	// 	perror("isatty");
-    // if (tcgetattr(STDIN_FILENO, &attr) == -1)
-	// 	perror("tcgetattr");
+	struct termios    attr;
+    tcgetattr(STDIN_FILENO, &attr);
+	attr.c_lflag = ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &attr);
 	t_line  *str;
 	int     i = 0;
 	char    *line;
@@ -936,17 +976,16 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 	t_env *mini_env = NULL;
 	str = NULL;
 	tmp = NULL;
-	// rl_catch_signals = 0;
-
-	t.status = -1337;
-	if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
-        return (perror("signal"), 1);
+	t.status = ft_status(0, 1337);
     if (env[0])
         fiLL_env(&mini_env, env);
     else
         fill_null_env(&mini_env);
 	while (1)
 	{
+		if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
+			return (perror("signal"), 1);
+		t.status = ft_status(0, 1337);
 		line = readline(RED"minishell$ "RESET);
 		if (line == NULL)
 				(ft_free_list(&str, NULL), free(line), printf("exit\n"), exit(0));
@@ -954,9 +993,9 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 			add_history(line);
 		line = ft_add_space_to_command(line);
 		ft_put(line, &str);
-		t_status *status = malloc(sizeof(t_status));
-		status->node = str;
-		status->status = 0;
+		t_status *status = malloc(sizeof(t_status)); 
+		// status->node = str;
+		status->status = 1337;
 		ft_give_token(str, status);
 		ft_is_buil(str);
 		if (ft_syntax(str, &t))
@@ -965,7 +1004,7 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 			old = str;
 			while (str)
 			{
-				if (if_dollar(str->str) && str->token != DELIMITER)
+				if (if_dollar(str->str) && str->token != DELIMITER && ft_strcmp_asd(str->str, "$?"))
 				{
 					str->str = handle_expand(str->str, &mini_env);
 					str->flag = 1;
@@ -986,7 +1025,7 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 				if (ft_oppen_files(tmp, &t))
 					execution(&tmp, mini_env, &t);
 			}
-			// ft_checking_files(tmp);
+			tcsetattr(STDIN_FILENO, TCSANOW, &attr);
 		}
 		ft_free_list(&str, status);
 		str = NULL;

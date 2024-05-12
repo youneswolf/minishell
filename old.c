@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   old.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/05 19:27:05 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/09 14:27:54 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -931,10 +931,10 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 	// gfp = fopen("leaks.t", "w");
 	// atexit(leaks);
 	
-	// if (isatty(0) == -1)
-	// 	perror("isatty");
-    // if (tcgetattr(STDIN_FILENO, &attr) == -1)
-	// 	perror("tcgetattr");
+	if (isatty(0) == -1)
+		perror("isatty");
+    if (tcgetattr(STDIN_FILENO, &attr) == -1)
+		perror("tcgetattr");
 	t_line  *str;
 	int     i = 0;
 	char    *line;

@@ -14,8 +14,6 @@ require "utils/shared_audits"
 
 module Cask
   # Audit a cask for various problems.
-  #
-  # @api private
   class Audit
     include SystemCommand::Mixin
     include ::Utils::Curl
@@ -291,7 +289,7 @@ module Cask
 
     sig { params(livecheck_result: T.any(NilClass, T::Boolean, Symbol)).void }
     def audit_hosting_with_livecheck(livecheck_result: audit_livecheck_version)
-      return if cask.discontinued? || cask.deprecated? || cask.disabled?
+      return if cask.deprecated? || cask.disabled?
       return if cask.version&.latest?
       return unless cask.url
       return if block_url_offline?
@@ -432,7 +430,7 @@ module Cask
       add_error "cask token contains .app" if token.end_with? ".app"
 
       match_data = /-(?<designation>alpha|beta|rc|release-candidate)$/.match(cask.token)
-      if match_data && cask.tap&.official? && cask.tap != "homebrew/cask-versions"
+      if match_data && cask.tap&.official?
         add_error "cask token contains version designation '#{match_data[:designation]}'"
       end
 
@@ -492,7 +490,7 @@ module Cask
 
           next if result.success?
 
-          add_error <<~EOS, location: cask.url.location
+          add_error <<~EOS, location: cask.url.location, strict_only: true
             Signature verification failed:
             #{result.merged_output}
             macOS on ARM requires software to be signed.
@@ -658,8 +656,6 @@ module Cask
 
     sig { void }
     def audit_github_prerelease_version
-      return if cask.tap == "homebrew/cask-versions"
-
       odebug "Auditing GitHub prerelease"
       user, repo = get_repo_data(%r{https?://github\.com/([^/]+)/([^/]+)/?.*}) if online?
       return if user.nil?
@@ -672,8 +668,6 @@ module Cask
 
     sig { void }
     def audit_gitlab_prerelease_version
-      return if cask.tap == "homebrew/cask-versions"
-
       user, repo = get_repo_data(%r{https?://gitlab\.com/([^/]+)/([^/]+)/?.*}) if online?
       return if user.nil?
 
@@ -687,8 +681,8 @@ module Cask
 
     sig { void }
     def audit_github_repository_archived
-      # Deprecated/disabled casks may have an archived repo.
-      return if cask.discontinued? || cask.deprecated? || cask.disabled?
+      # Deprecated/disabled casks may have an archived repository.
+      return if cask.deprecated? || cask.disabled?
 
       user, repo = get_repo_data(%r{https?://github\.com/([^/]+)/([^/]+)/?.*}) if online?
       return if user.nil?
@@ -701,8 +695,8 @@ module Cask
 
     sig { void }
     def audit_gitlab_repository_archived
-      # Deprecated/disabled casks may have an archived repo.
-      return if cask.discontinued? || cask.deprecated? || cask.disabled?
+      # Deprecated/disabled casks may have an archived repository.
+      return if cask.deprecated? || cask.disabled?
 
       user, repo = get_repo_data(%r{https?://gitlab\.com/([^/]+)/([^/]+)/?.*}) if online?
       return if user.nil?
@@ -874,7 +868,7 @@ module Cask
 
     sig { returns(T::Boolean) }
     def bad_sourceforge_url?
-      bad_url_format?(/sourceforge/,
+      bad_url_format?(%r{((downloads|\.dl)\.|//)sourceforge},
                       [
                         %r{\Ahttps://sourceforge\.net/projects/[^/]+/files/latest/download\Z},
                         %r{\Ahttps://downloads\.sourceforge\.net/(?!(project|sourceforge)/)},

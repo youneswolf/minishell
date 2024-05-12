@@ -6,7 +6,6 @@ gem:
     - json
     - msgpack
     # These aren't needed:
-    - byebug
     - coderay
     - commander
     - diff-lcs
@@ -29,6 +28,7 @@ gem:
     - rubocop-md
     - rubocop-performance
     - rubocop-rspec
+    - rubocop-rspec_rails
     - rubocop-sorbet
     - ruby-prof
     - simplecov_json_formatter

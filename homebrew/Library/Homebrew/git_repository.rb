@@ -6,7 +6,6 @@ require "utils/popen"
 
 # Given a {Pathname}, provides methods for querying Git repository information.
 # @see Utils::Git
-# @api private
 class GitRepository
   sig { returns(Pathname) }
   attr_reader :pathname
@@ -108,9 +107,7 @@ class GitRepository
   end
 
   sig { returns(String) }
-  def to_s
-    pathname.to_s
-  end
+  def to_s = pathname.to_s
 
   private
 

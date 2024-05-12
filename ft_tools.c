@@ -291,7 +291,7 @@ t_line *ft_lst_new(char *str)
 	
 	line = malloc(sizeof(t_line));
 	if (!line)
-		exit(0);
+		return (NULL);
 	line->str = str;
 	line->next = NULL;
 	return (line);
@@ -320,6 +320,33 @@ int is_char(char *str)
 		i++;
 	}
 	return (0);
+}
+void    ft_free_list3(t_line **str)
+{
+	t_line *to_be_free;
+	t_line	*prev;
+	to_be_free = *str;
+	while (to_be_free)
+	{
+		prev = to_be_free;
+		to_be_free = to_be_free->next;
+		// free(prev->str);
+		free(prev);
+	}
+	// free(str);
+	// t_line *next;
+
+	// to_be_free = *str;
+	// while (to_be_free)
+	// {
+	// 	if (to_be_free->next)
+	// 		next = to_be_free->next;
+	// 	free(to_be_free->str);
+	// 	free(to_be_free);
+	// 	to_be_free = next;
+	// }
+	// // free(to_be_free);
+	// free(str);
 }
 void    ft_free_list2(t_line **str)
 {
@@ -376,15 +403,46 @@ t_line *get_exp_node(char *line_str)
 		}
 	return (vars.split);
 }
+// int     ft_isalpha(int c)
+// {
+//         if (((unsigned char )c >= 65 && (unsigned char )c <= 90) 
+//                 || ((unsigned char )c >= 97 && (unsigned char )c <= 122))
+//         {
+//                 return (1);
+//         }
+//         return (0);
+// }
+
+int check_for_first_elem(char *str)
+{
+	int i;
+
+	i = 0;
+	while(str[i] && str[i] != '$')
+	{
+		if (ft_isalpha(str[i]))
+			return (1);		
+		i++;
+	}
+	return (0);
+}
 void join_exp(t_exp *vars, t_env **env)
 {
 	vars->i = 0;
+	int check ;
 	vars->dollar_str = ft_split(vars->split->str, '$');
+	check  = check_for_first_elem(vars->dollar_str[0]);
 	while(vars->dollar_str[vars->i])
 	{
 		vars->j = 0;
 		vars->dollar_str_space = ft_strtrim(vars->dollar_str[vars->i], " ", 1);
-		vars->dollar_str_space = ft_strjoin("$",vars->dollar_str_space,3);
+		if (vars->i == 0)
+		{
+			if (check == 0)
+				vars->dollar_str_space = ft_strjoin("$",vars->dollar_str_space,3);
+		}
+		else
+			vars->dollar_str_space = ft_strjoin("$",vars->dollar_str_space,3);
 		vars->join = ft_strjoin(vars->join, expand(vars->dollar_str_space, env),2);
 		while (vars->dollar_str[vars->i] &&vars->dollar_str[vars->i][vars->j]&&  vars->dollar_str[vars->i][vars->j] == ' ')
 		{

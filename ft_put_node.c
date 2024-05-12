@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/04 16:57:40 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/11 11:12:52 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,6 @@ t_line	*ft_lstnew(char *str, int start, int end)
 	new = (t_line *)malloc(sizeof(t_line));
 	new->status1 = malloc(sizeof(t_status1));
 	new->status1->index = 0;
-	// new->status->index = 0;
-	// new->status->status = 0;
-	// new->status->lastdir = NULL;
 	new->deja = 0;
 	new->token = NONE;
 	if (!new)
@@ -111,38 +108,36 @@ int	ft_put_utils(char *str, int j, int i, t_line **head)
 	if (i == j)
 		return (0);
 	add_list(head, str, j, i);
-	if (!str[i])
+	if (str && !str[i])
 		return (0);
 	return (1);
 }
 
 void	ft_put(char *str, t_line **head)
 {
-	int        flag;
-	int			i;
-	int			j;
+	t_put	t;
 
-    (1) && (i = 0, j = 0, flag = 0);
-    while (str && str[i])
+    (1) && (t.i = 0, t.j = 0, t.flag = 0);
+    while (str && str[t.i])
     {
-        while (str[i] && ft_strchr1(" \t\n\v\f\r", str[i]))
-            i++;
-        j = i;
-        while (str[i] && !ft_strchr1(" \t\n\v\f\r", str[i]))
+        while (str[t.i] && ft_strchr1(" \t\n\v\f\r", str[t.i]))
+            t.i++;
+        t.j = t.i;
+        while (str[t.i] && !ft_strchr1(" \t\n\v\f\r", str[t.i]))
         {
-            if (str[i] && (str[i] == '\"' || str[i] == '\''))
+            if (str[t.i] && (str[t.i] == '\"' || str[t.i] == '\''))
             {
-                flag = str[i++];
-                while (str[i] && str[i] != flag)
-                    i++;
-				if (str[i] == '\0')
+                t.flag = str[t.i++];
+                while (str[t.i] && str[t.i] != t.flag)
+                    t.i++;
+				if (str[t.i] == '\0')
 					break;
-                if (str[i] == flag)
-                    flag = 0;
+                if (str[t.i] == t.flag)
+                    t.flag = 0;
             }
-			i++;
+			t.i++;
         }
-		if (!ft_put_utils(str, j, i, head))
+		if (!ft_put_utils(str, t.j, t.i, head))
 			break;
     }
 }

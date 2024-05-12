@@ -8,8 +8,6 @@ require "system_command"
 
 module Utils
   # Helper function for interacting with `curl`.
-  #
-  # @api private
   module Curl
     include SystemCommand::Mixin
     extend SystemCommand::Mixin
@@ -335,7 +333,7 @@ module Utils
         # GitHub does not authorize access to the web UI using token
         #
         # Strategy:
-        # If the `:homepage` 404s, it's a GitHub link, and we have a token then
+        # If the `:homepage` 404s, it's a GitHub link and we have a token then
         # check the API (which does use tokens) for the repository
         repo_details = url.match(%r{https?://github\.com/(?<user>[^/]+)/(?<repo>[^/]+)/?.*})
         check_github_api = url_type == SharedAudits::URL_TYPE_HOMEPAGE &&
@@ -485,7 +483,7 @@ module Utils
 
     # Separates the output text from `curl` into an array of HTTP responses and
     # the final response body (i.e. content). Response hashes contain the
-    # `:status_code`, `:status_text`, and `:headers`.
+    # `:status_code`, `:status_text` and `:headers`.
     # @param output [String] The output text from `curl` containing HTTP
     #   responses, body content, or both.
     # @param max_iterations [Integer] The maximum number of iterations for the

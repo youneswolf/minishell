@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 02:20:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/06 17:05:05 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/08 11:47:29 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,13 @@ void    ft_exit(t_holder *str)
     else if (i > 2 && ft_is_numeric(tmp1->args_built_in[1]))
         (write(2, "exit\n", 4), write(2, "bash: exit: too many arguments\n", 33)); //, tmp->status1->status = 1
     else if (tmp1->args_built_in[1] && !ft_is_numeric(tmp1->args_built_in[1]))
-        (printf("exit\n"), printf("exit: %s: numeric argument required", s), exit(1)); //, tmp->status1->status = 255
+        (printf("exit\n"), printf("exit: : numeric argument required"), exit(1)); //, tmp->status1->status = 255
     else if (i == 2 && ft_is_numeric(tmp1->args_built_in[1])
-        && (ft_atoi(tmp1->args_built_in[1]) <= 9223372036854775807  || ft_atoi(tmp1->args_built_in[1]) >= -922337203685477588))
+        && ((size_t)ft_atoi(tmp1->args_built_in[1]) <= 9223372036854775807  || (size_t)ft_atoi(tmp1->args_built_in[1]) >= -922337203685477588))
         (printf("exit\n"), exit(0)); //, tmp->status1->status = ft_atoi(tmp1->str)
     else if (tmp1->args_built_in[1] && ft_is_numeric(tmp1->args_built_in[1]) &&
-        (ft_atoi(tmp1->args_built_in[1]) > 9223372036854775807  || ft_atoi(tmp1->args_built_in[1]) < -922337203685477588))
-        (printf("exit\n"), printf("exit: %s: numeric argument required", s), exit(1)); //tmp->status1->status = 255,
+        ((size_t)ft_atoi(tmp1->args_built_in[1]) > 9223372036854775807  || (size_t)ft_atoi(tmp1->args_built_in[1]) < -922337203685477588))
+        (printf("exit\n"), printf("exit: : numeric argument required"), exit(1)); //tmp->status1->status = 255,
         // }
         // tmp = tmp->next;
     // }

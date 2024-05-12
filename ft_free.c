@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 23:57:13 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/04 19:25:07 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/11 11:06:58 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,15 @@ void    ft_free_list(t_line **str, t_status *status)
 	t_line *to_be_free;
 	t_line	*prev;
 	to_be_free = *str;
-	free(status);
 	while (to_be_free)
 	{
 		prev = to_be_free;
 		to_be_free = to_be_free->next;
 		free(prev->str);
 		free(prev->status1);
-		// if (prev->status->lastdir)
-		// 	free(prev->status->lastdir);
-		// free(prev->status);
 		free(prev);
 	}
+	free(status);
 }
 
 void	ft_free_holder(t_holder **str)
@@ -71,7 +68,6 @@ void	ft_free_holder(t_holder **str)
 		free(prev->append);
 		free(prev->her_doc);
 		free(prev->args_built_in);
-		
 		free(prev->cmd);
 		free(prev->infile_index);
 		free(prev->outfile_index);

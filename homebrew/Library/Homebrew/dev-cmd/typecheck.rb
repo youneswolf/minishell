@@ -43,9 +43,13 @@ module Homebrew
         groups = update ? Homebrew.valid_gem_groups : ["typecheck"]
         Homebrew.install_bundler_gems!(groups:)
 
+        # Sorbet doesn't use bash privileged mode so we align EUID and UID here.
+        Process::UID.change_privilege(Process.euid) if Process.euid != Process.uid
+
         HOMEBREW_LIBRARY_PATH.cd do
           if update
-            safe_system "bundle", "exec", "tapioca", "dsl"
+            workers = args.debug? ? ["--workers=1"] : []
+            safe_system "bundle", "exec", "tapioca", "dsl", *workers
             # Prefer adding args here: Library/Homebrew/sorbet/tapioca/config.yml
             tapioca_args = args.update_all? ? ["--all"] : []
 
@@ -56,7 +60,7 @@ module Homebrew
             if args.suggest_typed?
               ohai "Bumping Sorbet `typed` sigils..."
               # --sorbet needed because of https://github.com/Shopify/spoom/issues/488
-              safe_system "bundle", "exec", "spoom", "bump", "--dry", "--sorbet",
+              safe_system "bundle", "exec", "spoom", "srb", "bump", "--dry", "--sorbet",
                           "#{Gem.bin_path("sorbet", "srb")} tc"
             end
 

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/08 10:13:17 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/11 18:25:33 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #include <dirent.h>
 #include <readline/history.h>
 #include <sys/stat.h>
-// #include <libc.h>
+#include <libc.h>
 
 // FILE	*gfp;
 
@@ -71,6 +71,7 @@
 # define CYAN        "\x1b[36m"
 # define WHT        "\e[0;37m"
 # define RESET        "\x1b[0m"
+
 
 typedef struct s_long
 {
@@ -119,10 +120,36 @@ typedef struct s_status1
 {
     int     status;
     int     quote;
-    // char    *lastdir;
 	int		index;
 }           t_status1;
 
+typedef struct s_remove
+{
+   	int		count;
+    int		flag;
+    int		i;
+}           t_remove;
+
+typedef struct s_outfile
+{
+   	int		qq;
+	int		ee;
+}           t_outfile;
+
+typedef struct s_put
+{
+   	int			flag;
+	int			i;
+	int			j;
+}           t_put;
+
+typedef struct s_file
+{
+   	int         i;
+    int         z;
+    int         q;
+    int         b;
+}           t_file;
 
 typedef struct s_line
 {
@@ -142,7 +169,7 @@ typedef struct s_status
 {
     int     status;
     int     quote;
-    char    *lastdir;
+    // char    *lastdir;
 	int		index;
 	t_line	*node;
 }           t_status;
@@ -251,11 +278,27 @@ typedef struct s_execution
 	t_holder *doc_tmp;
 }	t_execution;
 
+typedef struct export
+{
+    int i;
+    char *node_env;
+    char *var_name;
+    char *value;
+    t_env *tmp;
+    t_env *node;
+    int is_invalid;
+    int j;
+    t_holder *line_tmp;
+    char *join;
+}    t_export;
+
 extern	struct termios    attr;
 
 // echo $USER << 1 cat
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
+void    		ft_putchar_fd(char c, int fd);
+void    		ft_putstr_fd(char *s, int fd);
 int     		ft_cmp(char *s, char *s1);
 int     		ft_is_numeric(char *str);
 unsigned long  	ft_atoi(char *str);
@@ -271,8 +314,8 @@ char			*ft_remove_utils4(char *line, char *str, int j, int i);
 int				ft_remove_utils3(char *str);
 void 			exec_env(t_env **mini_env );
 void 			exec_unset(t_env **mini_env, t_holder *holder);
-void 			exec_echo(t_holder *holder);
-int 			f_strcmp(char *str1, char *str2);
+void 			exec_echo(t_holder *holder, t_last *status);
+int				f_strcmp(char *str1, char *str2);
 void 			exec_export(t_holder **holder, t_env **env);
 void    		ft_handler_ctrt_herdoc(int signum);
 int 			f_strcmp(char *str1, char *str2);
@@ -388,7 +431,7 @@ char 			*expand_here(char *str, t_env **env);
 int 			count_sgl_quote(char *str);
 char			**ft_split1(const char *str, char c);
 static char		**alloc1(int l);
-void    ft_free_list2(t_line **str);
+void    		ft_free_list2(t_line **str);
 static int		ft_free(char **array, const char *str, char c, int a);
 static char		*word1(const char *str, char c);
 static int		count1(const char *s, char c);
@@ -397,5 +440,16 @@ int 			ft_is_there(char *str);
 int 			ft_is_there_in_the_dir(char *pattern, char *text);
 int    			ft_search_back(char *pattern, char *text, int l, int ll);
 int 			ft_str(char *str);
-//======================================================================
+int				ft_status(int a, int status);
+char *handle_expand(char *line_str, t_env **env);
+void join_exp(t_exp *vars, t_env **env);
+void join_exp_1dollar(t_exp *vars, t_env **env);
+void initialize_vars(t_expan *vars, t_env **env);
+t_line *get_exp_node(char *line_str);
+void join_exp_here(t_exp *vars, t_env **env);
+void join_exp_1dollar_here(t_exp *vars, t_env **env);
+int check_for_first_elem(char *str);
+void    ft_free_list3(t_line **str);
+// to add later
+void 			heredoc ();
 #endif

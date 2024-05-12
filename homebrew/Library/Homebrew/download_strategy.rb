@@ -23,8 +23,6 @@ require "utils/timer"
 require "github_packages"
 
 # @abstract Abstract superclass for all download strategies.
-#
-# @api private
 class AbstractDownloadStrategy
   extend Forwardable
   include FileUtils
@@ -32,8 +30,6 @@ class AbstractDownloadStrategy
   include SystemCommand::Mixin
 
   # Extension for bottle downloads.
-  #
-  # @api private
   module Pourable
     def stage
       ohai "Pouring #{basename}"
@@ -81,12 +77,9 @@ class AbstractDownloadStrategy
   end
 
   # Disable any output during downloading.
-  #
-  # @deprecated
-  # @api private
   sig { void }
   def shutup!
-    odeprecated "AbstractDownloadStrategy#shutup!", "AbstractDownloadStrategy#quiet!"
+    odisabled "`AbstractDownloadStrategy#shutup!`", "`AbstractDownloadStrategy#quiet!`"
     quiet!
   end
 
@@ -130,7 +123,6 @@ class AbstractDownloadStrategy
   end
   private :chdir
 
-  # @!attribute [r] source_modified_time
   # Returns the most recent modified time for all files in the current working directory after stage.
   #
   # @api public
@@ -188,8 +180,6 @@ class AbstractDownloadStrategy
 end
 
 # @abstract Abstract superclass for all download strategies downloading from a version control system.
-#
-# @api private
 class VCSDownloadStrategy < AbstractDownloadStrategy
   REF_TYPES = [:tag, :branch, :revisions, :revision].freeze
 
@@ -243,9 +233,7 @@ class VCSDownloadStrategy < AbstractDownloadStrategy
     version.respond_to?(:head?) && version.head?
   end
 
-  # @!attribute [r] last_commit
-  # Return last commit's unique identifier for the repository.
-  # Return most recent modified timestamp unless overridden.
+  # Return the most recent modified timestamp.
   #
   # @api public
   sig { returns(String) }
@@ -278,8 +266,6 @@ class VCSDownloadStrategy < AbstractDownloadStrategy
 end
 
 # @abstract Abstract superclass for all download strategies downloading a single file.
-#
-# @api private
 class AbstractFileDownloadStrategy < AbstractDownloadStrategy
   # Path for storing an incomplete download while the download is still in progress.
   #
@@ -716,8 +702,6 @@ class NoUnzipCurlDownloadStrategy < CurlDownloadStrategy
 end
 
 # Strategy for extracting local binary packages.
-#
-# @api private
 class LocalBottleDownloadStrategy < AbstractFileDownloadStrategy
   def initialize(path) # rubocop:disable Lint/MissingSuper
     @cached_location = path
@@ -744,7 +728,8 @@ class SubversionDownloadStrategy < VCSDownloadStrategy
     super
   end
 
-  # @see AbstractDownloadStrategy#source_modified_time
+  # Returns the most recent modified time for all files in the current working directory after stage.
+  #
   # @api public
   sig { returns(Time) }
   def source_modified_time
@@ -758,7 +743,8 @@ class SubversionDownloadStrategy < VCSDownloadStrategy
     Time.parse time
   end
 
-  # @see VCSDownloadStrategy#last_commit
+  # Return last commit's unique identifier for the repository.
+  #
   # @api public
   sig { returns(String) }
   def last_commit
@@ -858,7 +844,8 @@ class GitDownloadStrategy < VCSDownloadStrategy
     @ref ||= "master"
   end
 
-  # @see AbstractDownloadStrategy#source_modified_time
+  # Returns the most recent modified time for all files in the current working directory after stage.
+  #
   # @api public
   sig { returns(Time) }
   def source_modified_time
@@ -866,7 +853,8 @@ class GitDownloadStrategy < VCSDownloadStrategy
     Time.parse(out)
   end
 
-  # @see VCSDownloadStrategy#last_commit
+  # Return last commit's unique identifier for the repository.
+  #
   # @api public
   sig { returns(String) }
   def last_commit
@@ -943,8 +931,8 @@ class GitDownloadStrategy < VCSDownloadStrategy
 
     args << "--no-checkout" << "--filter=blob:none" if partial_clone_sparse_checkout?
 
-    args << "--config" << "advice.detachedHead=false" # silences detached head warning
-    args << "--config" << "core.fsmonitor=false" # prevent fsmonitor from watching this repo
+    args << "--config" << "advice.detachedHead=false" # Silences “detached head” warning.
+    args << "--config" << "core.fsmonitor=false" # Prevent `fsmonitor` from watching this repository.
     args << @url << cached_location.to_s
   end
 
@@ -1176,7 +1164,8 @@ class CVSDownloadStrategy < VCSDownloadStrategy
     end
   end
 
-  # @see AbstractDownloadStrategy#source_modified_time
+  # Returns the most recent modified time for all files in the current working directory after stage.
+  #
   # @api public
   sig { returns(Time) }
   def source_modified_time
@@ -1251,7 +1240,8 @@ class MercurialDownloadStrategy < VCSDownloadStrategy
     @url = @url.sub(%r{^hg://}, "")
   end
 
-  # @see AbstractDownloadStrategy#source_modified_time
+  # Returns the most recent modified time for all files in the current working directory after stage.
+  #
   # @api public
   sig { returns(Time) }
   def source_modified_time
@@ -1261,7 +1251,8 @@ class MercurialDownloadStrategy < VCSDownloadStrategy
     Time.parse(out)
   end
 
-  # @see VCSDownloadStrategy#last_commit
+  # Return last commit's unique identifier for the repository.
+  #
   # @api public
   sig { returns(String) }
   def last_commit
@@ -1338,7 +1329,8 @@ class BazaarDownloadStrategy < VCSDownloadStrategy
     @url = @url.sub(%r{^bzr://}, "")
   end
 
-  # @see AbstractDownloadStrategy#source_modified_time
+  # Returns the most recent modified time for all files in the current working directory after stage.
+  #
   # @api public
   sig { returns(Time) }
   def source_modified_time
@@ -1349,7 +1341,8 @@ class BazaarDownloadStrategy < VCSDownloadStrategy
     Time.parse(timestamp)
   end
 
-  # @see VCSDownloadStrategy#last_commit
+  # Return last commit's unique identifier for the repository.
+  #
   # @api public
   sig { returns(String) }
   def last_commit
@@ -1401,7 +1394,8 @@ class FossilDownloadStrategy < VCSDownloadStrategy
     @url = @url.sub(%r{^fossil://}, "")
   end
 
-  # @see AbstractDownloadStrategy#source_modified_time
+  # Returns the most recent modified time for all files in the current working directory after stage.
+  #
   # @api public
   sig { returns(Time) }
   def source_modified_time
@@ -1409,7 +1403,8 @@ class FossilDownloadStrategy < VCSDownloadStrategy
     Time.parse(out[/^uuid: +\h+ (.+)$/, 1])
   end
 
-  # @see VCSDownloadStrategy#last_commit
+  # Return last commit's unique identifier for the repository.
+  #
   # @api public
   sig { returns(String) }
   def last_commit
@@ -1444,8 +1439,6 @@ class FossilDownloadStrategy < VCSDownloadStrategy
 end
 
 # Helper class for detecting a download strategy from a URL.
-#
-# @api private
 class DownloadStrategyDetector
   def self.detect(url, using = nil)
     if using.nil?
@@ -1468,7 +1461,8 @@ class DownloadStrategyDetector
       GitHubGitDownloadStrategy
     when %r{^https?://.+\.git$},
          %r{^git://},
-         %r{^https?://git\.sr\.ht/[^/]+/[^/]+$}
+         %r{^https?://git\.sr\.ht/[^/]+/[^/]+$},
+         %r{^ssh://git}
       GitDownloadStrategy
     when %r{^https?://www\.apache\.org/dyn/closer\.cgi},
          %r{^https?://www\.apache\.org/dyn/closer\.lua}

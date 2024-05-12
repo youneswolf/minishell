@@ -61,13 +61,14 @@ jobs:
       - name: Check RuboCop filepaths
         working-directory: ${{ steps.set-up-homebrew.outputs.repository-path }}/Library/Homebrew
         run: |
-          public_apis=$(git grep -l "@api public" -- :^sorbet/ :^vendor/ | wc -l | tr -d ' ')
-          rubocop_docs=$(yq '.Style/Documentation.Include' .rubocop.yml | wc -l | tr -d ' ')
-          if [[ public_apis -ne rubocop_docs ]]
-          then
-            echo "All public Homebrew APIs should be included in the Style/Documentation RuboCop."
-            echo "There were ${public_apis} '@api public' lines but ${rubocop_docs} filepaths for the 'Style/Documentation' RuboCop."
-            echo "Add or remove the filepaths from Library/Homebrew/.rubocop.yml as appropriate."
+          public_apis="$(git grep -l "@api public" -- :^sorbet/ :^vendor/ | sort)"
+          rubocop_docs="$(yq '.Style/Documentation.Include[]' .rubocop.yml | sort)"
+
+          if [[ "${public_apis}" != "${rubocop_docs}" ]]; then
+            echo "All public Homebrew APIs should be included in the \`Style/Documentation\` RuboCop."
+            echo "Add/remove the following paths from \`Library/Homebrew/.rubocop.yml\` as appropriate:"
+            echo "${public_apis} ${rubocop_docs}" | tr ' ' '\n' | sort | uniq -u
+
             exit 1
           fi
 
@@ -110,7 +111,6 @@ jobs:
           brew tap homebrew/aliases
           brew tap homebrew/bundle
           brew tap homebrew/cask-fonts
-          brew tap homebrew/cask-versions
           brew tap homebrew/command-not-found
           brew tap homebrew/formula-analytics
           brew tap homebrew/portable-ruby
@@ -133,8 +133,7 @@ jobs:
       - name: Run brew style on cask taps
         run: |
           brew style homebrew/cask \
-                     homebrew/cask-fonts \
-                     homebrew/cask-versions
+                     homebrew/cask-fonts
 
   formula-audit:
     name: formula audit
@@ -176,16 +175,14 @@ jobs:
       - name: Set up Homebrew all cask taps
         run: |
           brew tap homebrew/cask-fonts
-          brew tap homebrew/cask-versions
 
       - name: Run brew readall on all casks
-        run: brew readall --os=all --arch=all homebrew/cask homebrew/cask-fonts homebrew/cask-versions
+        run: brew readall --os=all --arch=all homebrew/cask homebrew/cask-fonts
 
       - name: Run brew audit --skip-style on casks
         run: |
           brew audit --skip-style --except=version --tap=homebrew/cask
           brew audit --skip-style --except=version --tap=homebrew/cask-fonts
-          brew audit --skip-style --except=version --tap=homebrew/cask-versions
 
       - name: Generate formula API
         run: brew generate-formula-api --dry-run
@@ -390,7 +387,7 @@ jobs:
           HOMEBREW_BUILDPULSE_ACCOUNT_ID: 1503512
           HOMEBREW_BUILDPULSE_REPOSITORY_ID: 53238813
 
-      - uses: codecov/codecov-action@c16abc29c95fcf9174b58eb7e1abf4c866893bc8 # v4.1.1
+      - uses: codecov/codecov-action@5ecb98a3c6b747ed38dc09f787459979aebb39be # v4.3.1
         with:
           working-directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
           files: Library/Homebrew/test/coverage/coverage.xml
@@ -413,6 +410,8 @@ jobs:
             runs-on: macos-13
           - name: test default formula (macOS 14 arm64)
             runs-on: macos-14
+    env:
+      HOMEBREW_TEST_BOT_ANALYTICS: 1
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew

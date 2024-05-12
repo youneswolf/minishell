@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/01 15:39:31 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/11 11:30:39 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,31 @@
 
 int ft_remove_utils(t_line *tmp)
 {
-    int count;
-    int flag;
-    int i;
+    t_remove    t;
 
-    count = ft_strlen(tmp->str);
-    i = 0;
-    while (tmp && tmp->str[i])
+    t.count = ft_strlen(tmp->str);
+    t.i = 0;
+    while (tmp && tmp->str[t.i])
     {
-        tmp->quote = 0;
-        tmp->type_quote = 0;
-        if (tmp->str[i] == '\"' || tmp->str[i] == '\'')
+        (1) && (tmp->quote = 0, tmp->type_quote = 0);
+        if (tmp->str[t.i] == '\"' || tmp->str[t.i] == '\'')
         {
-            tmp->quote = 1;
-            tmp->type_quote = tmp->str[i];
-            (1) && (flag = tmp->str[i], i++);
-            while (tmp->str[i])
+            (1) && (tmp->quote = 1, tmp->type_quote = tmp->str[t.i]);
+            (1) && (t.flag = tmp->str[t.i], t.i++);
+            while (tmp->str[t.i])
             {
-                if (tmp->str[i] == flag)
+                if (tmp->str[t.i] == t.flag)
                 {
-                    (1) && (count -= 2, flag = 0);
+                    (1) && (t.count -= 2, t.flag = 0);
                     break;
                 }
-                i++;
+                t.i++;
             }
         }
-        if(tmp->str[i])
-            i++;
+        if(tmp->str[t.i])
+            t.i++;
     }
-    return (count + 1);
+    return (t.count + 1);
 }
 
 char    *ft_remove_utils2(t_line *tmp, char *str, int j, int i)

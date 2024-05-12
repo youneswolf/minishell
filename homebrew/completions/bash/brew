@@ -741,6 +741,7 @@ _brew_deps() {
       __brewcomp "
       --HEAD
       --annotate
+      --arch
       --cask
       --debug
       --direct
@@ -757,6 +758,7 @@ _brew_deps() {
       --include-test
       --installed
       --missing
+      --os
       --quiet
       --skip-recommended
       --topological
@@ -1420,6 +1422,8 @@ _brew_list() {
       --formula
       --full-name
       --help
+      --installed-as-dependency
+      --installed-on-request
       --multiple
       --pinned
       --quiet
@@ -1522,6 +1526,8 @@ _brew_ls() {
       --formula
       --full-name
       --help
+      --installed-as-dependency
+      --installed-on-request
       --multiple
       --pinned
       --quiet
@@ -1676,22 +1682,6 @@ _brew_post_install() {
   __brew_complete_installed_formulae
 }
 
-_brew_postgresql_upgrade_database() {
-  local cur="${COMP_WORDS[COMP_CWORD]}"
-  case "${cur}" in
-    -*)
-      __brewcomp "
-      --debug
-      --help
-      --quiet
-      --verbose
-      "
-      return
-      ;;
-    *) ;;
-  esac
-}
-
 _brew_postinstall() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "${cur}" in
@@ -1760,7 +1750,7 @@ _brew_pr_pull() {
   case "${cur}" in
     -*)
       __brewcomp "
-      --artifact
+      --artifact-pattern
       --autosquash
       --branch-okay
       --clean
@@ -2022,6 +2012,24 @@ _brew_ruby() {
   __brew_complete_files
 }
 
+_brew_rubydoc() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  case "${cur}" in
+    -*)
+      __brewcomp "
+      --debug
+      --help
+      --only-public
+      --open
+      --quiet
+      --verbose
+      "
+      return
+      ;;
+    *) ;;
+  esac
+}
+
 _brew_search() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   case "${cur}" in
@@ -2107,9 +2115,7 @@ _brew_tap() {
       --debug
       --eval-all
       --force
-      --force-auto-update
       --help
-      --no-force-auto-update
       --quiet
       --repair
       --verbose
@@ -2210,7 +2216,6 @@ _brew_tests() {
   case "${cur}" in
     -*)
       __brewcomp "
-      --byebug
       --changed
       --coverage
       --debug
@@ -2741,7 +2746,6 @@ _brew() {
     outdated) _brew_outdated ;;
     pin) _brew_pin ;;
     post_install) _brew_post_install ;;
-    postgresql-upgrade-database) _brew_postgresql_upgrade_database ;;
     postinstall) _brew_postinstall ;;
     pr-automerge) _brew_pr_automerge ;;
     pr-publish) _brew_pr_publish ;;
@@ -2756,6 +2760,7 @@ _brew() {
     remove) _brew_remove ;;
     rm) _brew_rm ;;
     ruby) _brew_ruby ;;
+    rubydoc) _brew_rubydoc ;;
     search) _brew_search ;;
     sh) _brew_sh ;;
     style) _brew_style ;;
