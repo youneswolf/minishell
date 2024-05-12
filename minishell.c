@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/11 18:31:40 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/12 17:26:18 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -740,7 +740,7 @@ int		ft_cmp_built_in(char *str)
 	i = 0;
 	while (checker[i])
 	{
-		if (f_strcmp(checker[i], str))
+		if (f_strcmp(checker[i], str) && ft_strlen(checker[i]) == ft_strlen(str))
 			return (ft_free_2d(checker), 1);
 		i++;
 	}
