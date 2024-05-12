@@ -6,31 +6,37 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/08 12:06:30 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/12 19:23:55 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int     ft_cd_utils(char *str)
-// {
-//     DIR    *dir;
+void    ft_cd_utils(t_env **mini_env, char *str1, char *str)
+{
+    char *str2;
 
-//     dir = opendir(str);
-//     if (dir == NULL)
-//     {
-//         perror("path not found");
-//         return (0);
-//     }
-// }
+    while(mini_env)
+    {
+        if (f_strcmp((*mini_env)->env, "PWD"))
+        {
+            perror("error retrieving current directory: getcwd: cannot access parent directories: ");
+            str1 = ft_strjoin((*mini_env)->env, "/", 1);
+            str1 = ft_strjoin((*mini_env)->env, str, 1);
+            (*mini_env)->env = ft_strdup(str1);
+            free(str1);
+            break;
+        }
+        *mini_env = (*mini_env)->next;
+    }
+}
 
-int    ft_cd(char *str, t_env **mini_env) //, t_line *head
+int    ft_cd(char *str, t_env **mini_env)
 {
     char buf[PATH_MAX];
     char    *str1;
     DIR    *dir;
     char curdir[PATH_MAX];
-    // static char lastdir[PATH_MAX];
     char path[PATH_MAX];
 
     int i = 0;
@@ -42,12 +48,10 @@ int    ft_cd(char *str, t_env **mini_env) //, t_line *head
     }
     if (getcwd(curdir, sizeof curdir))
         *curdir = '\0';
-        /* current directory might be unreachable: not an error */
     if (str == NULL || str[0] == '\0')
         str = getenv("HOME");
     else if (chdir(str) == 0)
     {
-        // Get the current working directory
         closedir(dir);
         if (getcwd(buf, sizeof(buf)) != NULL)
         {
@@ -57,7 +61,6 @@ int    ft_cd(char *str, t_env **mini_env) //, t_line *head
                 {
                     str1 = ft_strjoin((*mini_env)->env, "/", 1);
                     str1 = ft_strjoin(str1, str, 1);
-                    // free((*mini_env)->env);
                     (*mini_env)->env = ft_strdup(str1);
                     free(str1);
                     break;
@@ -67,14 +70,14 @@ int    ft_cd(char *str, t_env **mini_env) //, t_line *head
         }
         else
         {
+            // ft_cd_utils(mini_env, str1, str);
             while(mini_env)
             {
                 if (f_strcmp((*mini_env)->env, "PWD"))
                 {
                     perror("error retrieving current directory: getcwd: cannot access parent directories: ");
-                    str1 = ft_strjoin((*mini_env)->env, str, 1);
-                    // str1 = ft_strjoin(str1, str, 1);
-                    // free((*mini_env)->env);
+                    str1 = ft_strjoin((*mini_env)->env, "/", 1);
+                    str1 = ft_strjoin(str1, str, 1);
                     (*mini_env)->env = ft_strdup(str1);
                     free(str1);
                     break;
@@ -85,6 +88,5 @@ int    ft_cd(char *str, t_env **mini_env) //, t_line *head
     }
     else
         perror("directory not found");
-    // head->status1->lastdir = ft_strdup(buf);
     return(1);
 }

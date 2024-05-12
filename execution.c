@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 15:41:25 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/03/06 20:10:06 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/12 17:56:28 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_cmd    *ft_set_cmd(t_line   *head)
         else if (head->token == OUT_FILE)
             cmd->outfile = head->str;
         i++;
-        head->next;
+        head = head->next;
     }
 }
 

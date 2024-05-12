@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/12 17:26:18 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/12 20:09:56 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "minishell.h"
 #include <sys/signal.h>
 
-struct termios    attr;
+// struct termios    attr;
 
 int f_strcmp(char *str1, char *str2)
 {
@@ -498,7 +498,7 @@ int here_doc_exec(t_execution *vars ,t_env *env)
 			{
 				int exit_status = WEXITSTATUS(vars->child_stat);
 				if (exit_status == 100)
-					return (500);
+					return (write(1, "\n", 1), 500);
 				if (exit_status == 255)
 				{
 					vars->tmp = vars->tmp->next;
@@ -577,6 +577,8 @@ void here_doc_exec_1(t_execution *vars ,t_env *env)
 
 void built_in_exec(t_execution *vars, t_env *env, t_last *status)
 {
+	// status->status = ft_status(0, 11);
+	// printf("=={%d}==\n", status->status);
 	int fd;
 	(vars->i = 0, vars->j = 0, vars->k = 0);
 	if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
@@ -658,6 +660,7 @@ int	execution_cmd(t_execution *vars, t_env *env, t_last *status)
 
 void execution(t_holder **holder ,t_env *env, t_last *status)
 {
+	status->status = ft_status(0, 1);
 	t_execution vars;
 	vars.ppp = 0;
 	(vars.i = 0, vars.j = 0, vars.k = 0, vars.n = 0, vars.wait_i = 0);
@@ -677,6 +680,7 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 			s = here_doc_exec(&vars, env);
 			if (s == 500)
 			{
+				// ft_status(1, 1);
 				break ;
 			}
 		}
@@ -705,12 +709,17 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
             status->status = WEXITSTATUS(status->status);
 			ft_status(1, status->status);
         }
-		else if (WIFSIGNALED(status->status) && WTERMSIG(status->status) == SIGINT)
+		else if (WIFSIGNALED(status->status) && (WTERMSIG(status->status) == SIGINT ||  WTERMSIG(status->status) == SIGQUIT))
 		{
-			if (WTERMSIG(status->status) == SIGINT)
-				ft_status(1, 130);
 			if (WTERMSIG(status->status) == SIGQUIT)
+			{
+				printf("Quit: 3\n");
 				ft_status(1, 131);
+			}
+			if (WTERMSIG(status->status) == SIGINT)
+			{
+				ft_status(1, 130);
+			}
 		}
         vars.tmp = vars.tmp->next;
     }
@@ -956,7 +965,63 @@ int	ft_status(int a, int status)
 	return (s);
 }
 
-int main(int ac, char **av, char **env) // status code and singal in herdoc and singal in ./minishell ./minishell
+static    int    int_len(int n)
+{
+    int        i;
+    long    num;
+
+    num = n;
+    i = 0;
+    if (num < 0)
+    {
+        num *= -1;
+        i++;
+    }
+    while (num > 0)
+    {
+        num = num / 10;
+        i++;
+    }
+    return (i);
+}
+
+static    char    *conv(int n)
+{
+    int        i;
+    char    *a;
+    long    num;
+
+    if (n == 0)
+        return (ft_strdup("0"));
+    i = int_len(n);
+    num = n;
+    a = (char *)malloc(sizeof(char) * (i + 1));
+    if (!a)
+        return (NULL);
+    a[i--] = '\0';
+    if (num < 0)
+    {
+        num *= -1;
+        a[0] = '-';
+    }
+    while (num > 0)
+    {
+        a[i] = num % 10 + 48;
+        num = num / 10;
+        i--;
+    }
+    return (a);
+}
+
+char    *ft_itoa(int n)
+{
+    char    *str;
+
+    str = conv(n);
+    return (str);
+}
+
+int main(int ac, char **av, char **env) // QUITE , exit status CTLC 
 {
 	// gfp = fopen("leaks.t", "w");
 	// atexit(leaks);
@@ -1003,22 +1068,24 @@ int main(int ac, char **av, char **env) // status code and singal in herdoc and 
 			ft_handle_issue_herdoc(str);
 			old = str;
 			while (str)
-			{
-				if (if_dollar(str->str) && str->token != DELIMITER && ft_strcmp_asd(str->str, "$?"))
-				{
-					str->str = handle_expand(str->str, &mini_env);
-					str->flag = 1;
-					if (is_between_quotes(str->str))
-						str->is_between_quote = 1;
-				}
-				str = str->next;
-			}
+            {
+                if (if_dollar(str->str) && str->token != DELIMITER && ft_strncmp(str->str, "$?", ft_strlen(str->str)))
+                {
+                    str->str = handle_expand(str->str, &mini_env);
+                    str->flag = 1;
+                    if (is_between_quotes(str->str))
+                        str->is_between_quote = 1;
+                }
+                if (!ft_strncmp(str->str, "$?", ft_strlen(str->str)))
+                    str->str = ft_itoa(ft_status(0, 1337));
+                str = str->next;
+            }
 			str = old;
 			ft_skip_empty_expand(&str);
 			ft_set_token_to_none(str);
 			ft_give_token(str, status);
-			ft_is_buil(str);
 			ft_remove_quote(&str, line);
+			ft_is_buil(str);
 			tmp = ft_create_holder_node(str,line);
 			if (tmp)
 			{
