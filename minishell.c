@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/13 13:47:20 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:25:37 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -706,32 +706,50 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 	}
 	status->status = ft_status(0, 1);
 	vars.tmp = *holder;
-	while (vars.tmp)
-    {
-        wait(&status->status);
-        if (WIFEXITED(status->status)) {
-            status->status = WEXITSTATUS(status->status);
-			ft_status(1, status->status);
-        }
-		else if (WIFSIGNALED(status->status) && (WTERMSIG(status->status) == SIGINT ||  WTERMSIG(status->status) == SIGQUIT))
+	// while (vars.tmp)
+    // {
+    //     wait(&status->status);
+    //     if (WIFEXITED(status->status)) {
+    //         status->status = WEXITSTATUS(status->status);
+	// 		ft_status(1, status->status);
+    //     }
+	// 	else if (WIFSIGNALED(status->status) && (WTERMSIG(status->status) == SIGINT ||  WTERMSIG(status->status) == SIGQUIT))
+	// 	{
+	// 		if (WTERMSIG(status->status) == SIGQUIT)
+	// 		{
+	// 			printf("Quit: 3\n");
+	// 			ft_status(1, 131);
+	// 		}
+	// 		if (WTERMSIG(status->status) == SIGINT)
+	// 		{
+	// 			ft_status(1, 130);
+	// 		}
+	// 	}
+    //     vars.tmp = vars.tmp->next;
+    // }
+	waitpid(vars.pid, &status->status, 0);
+	if (WIFEXITED(status->status)) {
+		status->status = WEXITSTATUS(status->status);
+		ft_status(1, status->status);
+	}
+	else if (WIFSIGNALED(status->status) && (WTERMSIG(status->status) == SIGINT ||  WTERMSIG(status->status) == SIGQUIT))
+	{
+		if (WTERMSIG(status->status) == SIGQUIT)
 		{
-			if (WTERMSIG(status->status) == SIGQUIT)
-			{
-				printf("Quit: 3\n");
-				ft_status(1, 131);
-			}
-			if (WTERMSIG(status->status) == SIGINT)
-			{
-				ft_status(1, 130);
-			}
+			printf("Quit: 3\n");
+			ft_status(1, 131);
 		}
-        vars.tmp = vars.tmp->next;
-    }
-		dup2(vars.origin_in, STDIN_FILENO);
-		close(vars.origin_in);
-		if (vars.pipe_fd[0])
-			close(vars.pipe_fd[0]);
-		ft_free_holder(holder);
+		if (WTERMSIG(status->status) == SIGINT)
+		{
+			ft_status(1, 130);
+		}
+	}
+	while (waitpid(-1, 0, 0) != -1);
+	dup2(vars.origin_in, STDIN_FILENO);
+	close(vars.origin_in);
+	if (vars.pipe_fd[0])
+		close(vars.pipe_fd[0]);
+	ft_free_holder(holder);
 }
 
 int		ft_cmp_built_in(char *str)
