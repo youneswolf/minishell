@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/12 20:09:56 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/13 13:47:20 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -632,11 +632,14 @@ void built_in_exec(t_execution *vars, t_env *env, t_last *status)
 		if (vars->tmp->args_built_in[1])
 			ft_cd(vars->tmp->args_built_in[1], &env);
 	}
+	status->status = ft_status(0, 1);
 	dup2(vars->origin_out, STDOUT_FILENO);
 }
 
 int	execution_cmd(t_execution *vars, t_env *env, t_last *status)
 {
+	status->status = ft_status(0, 1);
+	// printf("---%d---", status->status);
 	if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
 		vars->i++;
 	if (vars->tmp->out[vars->j] != -42 && vars->tmp->out[vars->j] != -1)
@@ -648,7 +651,7 @@ int	execution_cmd(t_execution *vars, t_env *env, t_last *status)
 	vars->pid = fork();
 	if (vars->pid == -1)
 	{
-		//  printf("minishell: fork: Resource temporarily unavailable\n");
+		printf("minishell: fork: Resource temporarily unavailable\n");
 		return(0) ;
 	}
 	if (!vars->pid)
@@ -680,7 +683,7 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 			s = here_doc_exec(&vars, env);
 			if (s == 500)
 			{
-				// ft_status(1, 1);
+				ft_status(1, 1);
 				break ;
 			}
 		}
@@ -701,8 +704,9 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 		close(vars.pipe_fd[0]); 
 		vars.tmp = vars.tmp->next;
 	}
+	status->status = ft_status(0, 1);
 	vars.tmp = *holder;
-	 while (vars.tmp)
+	while (vars.tmp)
     {
         wait(&status->status);
         if (WIFEXITED(status->status)) {

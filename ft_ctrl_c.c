@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 21:08:37 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/12 20:10:13 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/13 13:39:26 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void    ft_handler_ctrl_c(int signum)
             return ;
         printf("\n");
         ft_status(1, 1);
-        // printf("{%d}\n", ft_status(0, 1));
         rl_replace_line("", 1);
         rl_on_new_line();
         rl_redisplay();

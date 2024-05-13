@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 23:57:13 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/11 11:06:58 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/13 13:30:30 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_free_holder(t_holder **str)
 			free(prev->file_out[i]);
 			free(prev->append[i]);
 			free(prev->her_doc[i]);
-			free(prev->args_built_in[i]);
+			// free(prev->args_built_in[i]);
 			i++;
 		}
 		free(prev->args);

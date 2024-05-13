@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/11 17:06:58 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/13 13:35:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void    ft_oppen_files_utiles1(t_holder *tmp, t_file *t)
 
 int ft_oppen_files_utiles(t_file *t, t_holder *tmp)
 {
-    if (tmp->outfile_index[t->b] == t->i)
+    if (tmp->file_out[t->b] && tmp->outfile_index[t->b] == t->i)
     {
         if(!is_ambiguous(tmp->file_out[t->b]))
         {
@@ -93,7 +93,10 @@ int ft_oppen_files_utiles(t_file *t, t_holder *tmp)
             t->b++;
         }
         else
+        {
+            printf("bash: : No such file or directory\n");
             ft_null_tmp(&tmp);
+        }
     }
     else if (tmp->infile_index[t->z] == t->i)
     {
