@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/13 15:25:37 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:21:44 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,40 @@
 #include "minishell.h"
 #include <sys/signal.h>
 
+
+char *get_status_str(char *str, int i)
+{
+    char *status_str_pre;
+    char *status_str_after;
+    char *status;
+
+    status = ft_itoa(ft_status(0, 1337));
+    status_str_pre = ft_sub_str(str, 0, i - 1, 0);
+    if (!status_str_pre)
+        perror("malloc_error");
+    status_str_after = ft_sub_str(str, i + 2, ft_strlen(str) - i - 2, 0);
+    if (!status_str_after)
+        perror("malloc_error");
+    status = ft_strjoin(status_str_pre, status, 3);
+    status = ft_strjoin(status, status_str_after, 1);
+    printf("%s\n",status);
+    free(str);
+    return (status);
+}
+char *put_status_in_str(char *str)
+{
+    int    i;
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '$' && str[i + 1] && str[i + 1] == '?')
+        {
+            str = get_status_str(str, i);
+        }
+        i++;
+    }
+    return (str);
+}
 // struct termios    attr;
 
 int f_strcmp(char *str1, char *str2)
@@ -657,6 +691,7 @@ int	execution_cmd(t_execution *vars, t_env *env, t_last *status)
 	if (!vars->pid)
 	{
 		exec_cmd(vars->tmp, env, vars->pipe_fd,vars->i-1,vars->j-1,vars->k-1, status);
+		// printf("got here\n");
 	}
 	return (1);
 }
@@ -705,7 +740,7 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 		vars.tmp = vars.tmp->next;
 	}
 	status->status = ft_status(0, 1);
-	vars.tmp = *holder;
+	// vars.tmp = *holder;
 	// while (vars.tmp)
     // {
     //     wait(&status->status);
@@ -1041,8 +1076,34 @@ char    *ft_itoa(int n)
 
     str = conv(n);
     return (str);
-}
+}char    *ft_strnstr(const char *haystack, const char *needle, size_t len)
+{
+    size_t    i;
+    size_t    j;
+    char    *src;
 
+    src = (char *)haystack;
+    j = 0;
+    i = 0;
+    if (needle[0] == '\0')
+    {
+        return (src);
+    }
+    while (i < len && haystack[i])
+    {
+        j = 0;
+        while (haystack[i + j] == needle[j] && (i + j) < len)
+        {
+            if (needle[j + 1] == '\0')
+            {
+                return (&src[i]);
+            }
+            j++;
+        }
+        i++;
+    }
+    return (NULL);
+}
 int main(int ac, char **av, char **env) // QUITE , exit status CTLC 
 {
 	// gfp = fopen("leaks.t", "w");
@@ -1089,17 +1150,18 @@ int main(int ac, char **av, char **env) // QUITE , exit status CTLC
 		{
 			ft_handle_issue_herdoc(str);
 			old = str;
-			while (str)
+			            while (str)
             {
-                if (if_dollar(str->str) && str->token != DELIMITER && ft_strncmp(str->str, "$?", ft_strlen(str->str)))
+                if (if_dollar(str->str) && str->token != DELIMITER && !ft_strnstr(str->str, "$?", ft_strlen(str->str)))
                 {
+                    printf("enter\n");
                     str->str = handle_expand(str->str, &mini_env);
                     str->flag = 1;
                     if (is_between_quotes(str->str))
                         str->is_between_quote = 1;
                 }
-                if (!ft_strncmp(str->str, "$?", ft_strlen(str->str)))
-                    str->str = ft_itoa(ft_status(0, 1337));
+                if (ft_strnstr(str->str, "$?", ft_strlen(str->str)))
+                    str->str = put_status_in_str(str->str);
                 str = str->next;
             }
 			str = old;

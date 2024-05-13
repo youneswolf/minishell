@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/11 18:25:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/13 17:17:48 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,6 +320,7 @@ void 			exec_export(t_holder **holder, t_env **env);
 void    		ft_handler_ctrt_herdoc(int signum);
 int 			f_strcmp(char *str1, char *str2);
 int				ft_strcmp_asd(char *s1,  char *s2);
+char    *ft_itoa(int n);
 char    		*ft_remove_here(char *str);
 t_holder    	*ft_create_holder_node(t_line *node, char *line);
 int         	ft_count_pipe(t_line *head);

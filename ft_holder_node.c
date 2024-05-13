@@ -487,9 +487,9 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 
 	(1) && (t.i = 0, ft_ini(&t), tmp = node,
 		t.c = ft_count_pipe(node), holder = NULL);
-	while (t.i++ <= t.c)
+	while (tmp && (t.i++ <= t.c))
 	{
-		(1) && (t.j = 0, t.flag = 0);
+		(1) && (t.j = 0, t.flag = 0, t.index = 0);
 		new = add_list_holder(&holder, line);
 		while (tmp)
 		{

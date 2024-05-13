@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 10:32:36 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/05 19:18:40 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:49:55 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ char    *ft_remove_utils4(char *line, char *str, int j, int i)
         if (line[i])
             i++;
     }
-    return (str[j] = '\0', free(line), str);
+    return (free(line), str[j] = '\0', str);
 }
 
 char    *ft_remove3(char *line)
@@ -226,7 +226,6 @@ char **ft_does_it_matche(char *str)
         {
             if (ft_is_there_in_the_dir(str, name->d_name) && name->d_name[0] != '.')
             {
-                printf("{%s}\n", name->d_name);
                 array[i] = ft_strdup(name->d_name);
                 i++;
             }
