@@ -490,11 +490,26 @@ char *handle_expand(char *line_str, t_env **env)
 		return ("");
 	return (vars.join);
 }
+int is_number(char *str)
+{
+	if (str[1] && str[1] >= '0' && str[1] <= '9')
+		return (1);
+	return (0);
+}
+char *expand_nbr(char *str)
+{
+	char *expanded;
+
+	expanded = ft_sub_str(str, 2, ft_strlen(str) -2, 0);
+	if (!expanded)
+		return ("");
+	return (expanded);
+}
 void expand_vars(t_expan *vars)
 {
 	while (vars->sub && vars->sub[vars->i])
 	{
-		if (vars->sub[vars->i] == '.' || vars->sub[vars->i] == ',' || vars->sub[vars->i] == '/' || vars->sub[vars->i] == '-' || vars->sub[vars->i] == ':' || vars->sub[vars->i] == '_' || vars->sub[vars->i] == 34 || vars->sub[vars->i] == 39)
+		if (vars->sub[vars->i] == '.' || vars->sub[vars->i] == ',' || vars->sub[vars->i] == '/' || vars->sub[vars->i] == '-' || vars->sub[vars->i] == ':' || vars->sub[vars->i] == 34 || vars->sub[vars->i] == 39)
 		{
 			vars->j = vars->i;
 			while (vars->sub [vars->j] && vars->sub[vars->j] != '$')
@@ -543,12 +558,15 @@ char *expand(char *str, t_env **env)
 		return (ft_strdup(str));
 	if (!if_dollar(str))
 		return (ft_strdup(str));
+	if (is_number(str))
+		return (expand_nbr(str));
 	while (str && str[vars.i] && str[vars.i] != '$')
 		vars.i++;
 	if (vars.i && vars.i != ft_strlen(str))
 		vars.pre_special = ft_sub_str(str, 0, vars.i, 0);
 	vars.sub = ft_sub_str(str, vars.i+1, (ft_strlen(str) - vars.i -1),0);
-	vars.i = 0;expand_vars(&vars);
+	vars.i = 0;
+	expand_vars(&vars);
 	if (vars.pre_var)
 	{
 		vars.var = ft_strjoin(vars.pre_var, "=",1);
@@ -573,20 +591,11 @@ void fill_null_env(t_env **mini_env)
 	int i;
 
 	i = 0;
-	char first[1024] = "PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.";
+	char *first = ft_strdup("PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
 	node = malloc(sizeof(t_env));
 	if (!node)
 		(ft_free_nodes(mini_env), exit(1));
-	line = malloc(sizeof(char) * ft_strlen(first) + 1);
-	if (!line)
-		exit(1);
-	while (first[i])
-	{
-		line[i] = first[i];
-		i++;
-	}
-	line[i] = '\0';
-	node->env = line;
+	node->env = first;
 	node->printed = 0;
 	node->next = NULL;
 	*mini_env = node;
@@ -596,7 +605,8 @@ void fill_null_env(t_env **mini_env)
 void fill_second_null_env(t_env **mini_env)
 {
 	char	buf[1024];
-	char	var[5] = "PWD=";
+	char	*var = ft_strdup("PWD=");
+	char *final;
 	t_env *node;
 	char *line;
 	int i;
@@ -606,22 +616,8 @@ void fill_second_null_env(t_env **mini_env)
 	node = malloc(sizeof(t_env));
 	if (!node)
 		(ft_free_nodes(mini_env), exit(1));
-	line = malloc(sizeof(char) * ft_strlen(buf) + 5);
-	if (!line)
-		exit(0);
-	while (var[i])
-	{
-		line[i] = var[i];
-		i++;
-	}
-	i = 0;
-	while (buf[i])
-	{
-		line[i + 4] = buf[i];
-		i++;
-	}
-	line[i+4] = '\0';
-	node->env = line;
+	final = ft_strjoin(var, buf, 1);
+	node->env = final;
 	node->next = NULL;
 	(*mini_env)->next = node;
 }

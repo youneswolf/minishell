@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-#include "minishell.h"
 void    ft_putnbr_fd(int n, int fd)
 {
     long    num;
@@ -75,7 +74,7 @@ void exec_echo(t_holder *holder, t_last *status)
 {
     int    i = 1;
     int    j = 0;
-    if (!ft_strcmp_asd(holder->args_built_in[i], "-n"))
+    if (!ft_strncmp(holder->args_built_in[i], "-n",2))
         echo_no_new_line(holder, &i, status);
     else
     {

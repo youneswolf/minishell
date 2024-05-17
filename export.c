@@ -6,12 +6,22 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:32:00 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/11 16:32:42 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/16 12:33:46 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char *null_terminate(void)
+{
+	char *str;
+
+	str = malloc(1);
+	if (!str)
+		perror("malloc error");
+	str[0] = '\0';
+	return (str);
+}
 void	ft_putstr_export(char *s)
 {
 	int	i;
@@ -22,7 +32,7 @@ void	ft_putstr_export(char *s)
 	while (s[i])
 	{
 		ft_putchar_fd(s[i], 1);
-		if (s[i] == '=')
+		if (s[i] == '=' && !j)
 		{
 			j = 1;
 			write(1, "\"", 1);
@@ -169,6 +179,7 @@ void	if_not_in_env(t_export *vars, t_env **env)
 	}
 	vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j], vars->i,
 		ft_strlen(vars->line_tmp->args_built_in[vars->j]) - vars->i);
+			printf("%s\n",vars->value);
 	vars->join = ft_strjoin(vars->var_name, vars->value, 2);
 	vars->node = malloc(sizeof(t_env));
 	vars->node->env = vars->join;
@@ -204,6 +215,7 @@ void	add_vars(t_export *vars, t_env **env)
 			vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j],
 				vars->i, ft_strlen(vars->line_tmp->args_built_in[vars->j])
 				- vars->i);
+			printf("%s\n",vars->value);
 			vars->join = ft_strjoin(vars->var_name, vars->value, 2);
 			free((*env)->env);
 			(*env)->env = vars->join;
@@ -264,6 +276,7 @@ void	put_env_value(t_export *vars, t_env **env)
 			vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j],
 				vars->i + 1, ft_strlen(vars->line_tmp->args_built_in[vars->j])
 				- vars->i - 1);
+			printf("%s\n",vars->value);
 			(*env)->env = ft_strjoin((*env)->env, vars->value, 2);
 			free(vars->var_name);
 			i = 0;
@@ -284,6 +297,7 @@ void	export_vars(t_export *vars, t_holder **holder, t_env **env)
 	vars->is_invalid = 0;
 	vars->line_tmp = *holder;
 	vars->tmp = *env;
+	vars->value = NULL;
 	vars->i = 0;
 	vars->j = 1;
 }

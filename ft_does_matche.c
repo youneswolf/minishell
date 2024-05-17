@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 10:32:36 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/13 16:49:55 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:06:11 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int ft_str(char *str)
     i = 0;
     while (str && str[i])
         i++;
+    if (i == 1)
+        return (2);
     return (i);
 }
 
@@ -56,8 +58,8 @@ int ft_is_there_in_the_dir(char *pattern, char *text)
     int l;
     int ll;
 
-    (1) && (i = 0, j = 0, l = ft_str(pattern) - 1, ll = ft_str(text) - 1);
-    if (pattern[l] == '*')
+    (1) && (i = 0, j = 0, l = ft_str(pattern), ll = ft_str(text));
+    if (pattern && pattern[l] == '*')
         return (ft_search_back(pattern, text, l, ll));
     else
     {
@@ -154,7 +156,7 @@ char    *ft_remove_utils4(char *line, char *str, int j, int i)
         if (line[i])
             i++;
     }
-    return (free(line), str[j] = '\0', str);
+    return (str[j] = '\0', str); //free(line), 
 }
 
 char    *ft_remove3(char *line)
@@ -184,8 +186,8 @@ int ft_is_between_quotes(char *str)
     i = 0, quote = 0, flag = 0;
     while (str && str[i])
     {
-        if (str[i] == '"' || str[i] == '\'')
-            flag = 1, quote = str[i], i++;
+        if (str[i] == '\"' || str[i] == '\'')
+            (1) && (flag = 1, quote = str[i], i++);
         while (str[i] && flag == 1 && str[i] != quote)
         {
             if (str[i] == '*')
@@ -209,13 +211,14 @@ char **ft_does_it_matche(char *str)
     i = 0;
     if (ft_is_between_quotes(str))
     {
-        str = ft_remove3(str);
+        char *str1;
+        str1 = ft_remove3(str);
         char **array = malloc(sizeof(char *) * 2);
-        array[0] = str;
+        array[0] = str1;
         array[1] = NULL;
         return (array);
     }
-    if (ft_strchr1(str, '"') || ft_strchr1(str, '\''))
+    if (ft_strchr1(str, '\"') || ft_strchr1(str, '\''))
         str = ft_remove3(str);
     dir = opendir(".");
     if (dir)

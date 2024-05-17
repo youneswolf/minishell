@@ -180,8 +180,8 @@ void	ft_create_holder_utils1(t_holder *new, t_line *tmp, int *j, int *flag)
 			new->cmd = ft_strdup(a[0]);
 			while (a[ee])
 				(1) && (new->args[(*j)++] = ft_strdup(a[ee]), ee++);
-			ft_free_2d(a);
 		}
+		ft_free_2d(a);
 	}
 	else
 	{
@@ -208,6 +208,7 @@ int	ft_create_hoder_utils2(t_holder *new, t_line *tmp, int *flag, int *z)
 			new->cmd_built_in = ft_strdup(array[0]);
 			while (array[mm])
 			{
+				// printf("--%s--\n", array[mm]);
 				new->args_built_in[(*z)++] = ft_strdup(array[mm]);
 				mm++;
 			}
@@ -235,6 +236,7 @@ void	ft_create_holder_utils3(t_line *tmp, t_holder *new, int *z)
 			new->cmd = ft_strdup(a[0]);
 			while (a[ee])
 			{
+				printf("{%s}\n", a[ee]);
 				new->args[(*z)++] = ft_strdup(a[ee]);
 				ee++;
 			}
@@ -490,6 +492,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 	while (tmp && (t.i++ <= t.c))
 	{
 		(1) && (t.j = 0, t.flag = 0, t.index = 0);
+		ft_ini(&t);
 		new = add_list_holder(&holder, line);
 		while (tmp)
 		{

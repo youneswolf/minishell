@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/13 17:21:44 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:21:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,81 @@ int is_dir(char *path)
 	}
     return (0);
 }
+// void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k, t_last *status)
+// {
+//     char *path;
+//     char **array;
+
+//     // if (pipe(pipe_fd) == -1)
+//     //     perror("pipe");
+//     // if (holder->out[j] && holder->out[j] == -7)
+//     //     exit(1);
+//     // else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
+//     //     exit(1);
+// 	status->status = 0;
+//     if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
+//     {
+//         redirect_input(holder->in[i]);
+//     }
+//     if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
+//     {
+//         while (holder->out[j] != -42)
+//             j++;
+//         redirect_output(holder->out[j-1]);
+//     }
+//     if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
+//     {
+//         while (holder->ap[k] != -42)
+//             k++;
+//         redirect_append(holder->ap[k-1]);
+//     }
+//     else if (holder->next)
+//     {
+//         dup2(pipe_fd[1], STDOUT_FILENO);
+//         close(pipe_fd[0]);
+//         close(pipe_fd[1]);
+//     }
+//     if (is_slash(holder->args[0]))
+//     {
+// 	if (is_dir(holder->args[0]))
+// 	{
+// 		ft_putstr_fd("bash: ",2);
+// 		ft_putstr_fd(holder->args[0],2);
+// 		ft_putstr_fd(" is a directory\n",2);
+// 		status->status = 126;
+// 		exit(126);
+// 	}
+//     if (!access(holder->args[0], X_OK))
+//     {
+//         path = holder->args[0];
+//     }
+// 	else if (!access(holder->args[0] ,F_OK))
+// 	{
+// 		if (access(holder->args[0], X_OK))
+// 		{
+// 			ft_putstr_fd("bash ",2);
+// 			ft_putstr_fd(holder->args[0],2);
+// 			ft_putstr_fd(" Permission denied\n",2);
+// 			status->status = 126;
+// 			exit(126);
+// 		}
+// 	}
+//     else
+//         (printf("bash: %s: No such file or directory\n",holder->args[0]), exit(127));
+//     }
+//     else
+//         path = get_path(env, holder->args[0]);
+//     if (!path)
+//     {
+//         printf("bash: %s: command not found\n", holder->args[0]);
+// 		status->status= 127;
+//         exit(127);
+//     }
+//     array = ft_put_env_string(array, env);
+//     execve(path, holder->args, array);
+//     ft_free_2d(array);
+//     exit(1);
+// }
 void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k, t_last *status)
 {
     char *path;
@@ -329,7 +404,7 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
     //     exit(1);
     // else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
     //     exit(1);
-	status->status = 0;
+    status->status = 0;
     if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
     {
         redirect_input(holder->in[i]);
@@ -354,29 +429,29 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
     }
     if (is_slash(holder->args[0]))
     {
-	if (is_dir(holder->args[0]))
-	{
-		ft_putstr_fd("bash: ",2);
-		ft_putstr_fd(holder->args[0],2);
-		ft_putstr_fd(" is a directory\n",2);
-		status->status = 126;
-		exit(126);
-	}
+    if (is_dir(holder->args[0]))
+    {
+        ft_putstr_fd("bash: ",2);
+        ft_putstr_fd(holder->args[0],2);
+        ft_putstr_fd(" is a directory\n",2);
+        status->status = 126;
+        exit(126);
+    }
     if (!access(holder->args[0], X_OK))
     {
         path = holder->args[0];
     }
-	else if (!access(holder->args[0] ,F_OK))
-	{
-		if (access(holder->args[0], X_OK))
-		{
-			ft_putstr_fd("bash ",2);
-			ft_putstr_fd(holder->args[0],2);
-			ft_putstr_fd(" Permission denied\n",2);
-			status->status = 126;
-			exit(126);
-		}
-	}
+    else if (!access(holder->args[0] ,F_OK))
+    {
+        if (access(holder->args[0], X_OK))
+        {
+            ft_putstr_fd("bash ",2);
+            ft_putstr_fd(holder->args[0],2);
+            ft_putstr_fd(" Permission denied\n",2);
+            status->status = 126;
+            exit(126);
+        }
+    }
     else
         (printf("bash: %s: No such file or directory\n",holder->args[0]), exit(127));
     }
@@ -384,8 +459,10 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
         path = get_path(env, holder->args[0]);
     if (!path)
     {
-        printf("bash: %s: command not found\n", holder->args[0]);
-		status->status= 127;
+        ft_putstr_fd("bash ",2);
+        ft_putstr_fd(holder->args[0],2);
+        ft_putstr_fd(": command not found\n",2);
+        status->status= 127;
         exit(127);
     }
     array = ft_put_env_string(array, env);
@@ -393,7 +470,6 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
     ft_free_2d(array);
     exit(1);
 }
-
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
@@ -481,6 +557,8 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
     // if (signal(SIGINT, ft_ctr) == SIG_ERR)
     //     exit(255);
     line = readline("here_doc> ");
+	if (!line)
+            (exit(1));
     i = if_dollar(lim);
     if (i == 1)
         lim = ft_remove_dollar(lim);
@@ -722,7 +800,7 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 				break ;
 			}
 		}
-		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || (vars.tmp->args_built_in[0] && vars.tmp->cmd_built_in))
+		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || vars.tmp->cmd_built_in)
 		{
 			built_in_exec(&vars, env, status);
 		}
@@ -886,7 +964,7 @@ void	ft_handle_issue_herdoc(t_line *str)
 				return ;
 			s1 = ft_strdup(tmp->next->str);
 			tmp->next->str = ft_remove3(tmp->next->str);
-			if ((s1[0] == '\'' || s1[0] == '"') && s1[1] == '$')
+			if ((s1[0] == '\'' || s1[0] == '\"') && s1[1] == '$')
 			{
 				free (s1);
 				return ;
@@ -916,7 +994,9 @@ void	ft_skip_empty_expand_utils(t_line *head, t_line *previous, t_line *tmp)
 	{
 		while (head)
 		{
-			if (head && head->flag == 1 && head->str[0] == '\0')
+			if (head && head->flag == 1 && head->str[0] == '\0' && head->token != OUT_FILE
+				&& head->token != IN_FILE && head->token != APPEND
+				&& head->token != DELIMITER)
 			{
 				while (head && head->flag == 1 && !head->str[0])
 				{
@@ -942,7 +1022,8 @@ void	ft_skip_empty_expand(t_line **node)
 	t_line	*tmp;
 	t_line	*previous;
 
-	if ((*node) && (*node)->flag == 1 && !(*node)->str[0])
+	if ((*node) && (*node)->token != OUT_FILE && (*node)->token != IN_FILE && (*node)->token != APPEND
+		&& (*node)->token != DELIMITER && (*node)->flag == 1 && !(*node)->str[0])
 	{
 		previous = (*node);
 		(*node) = (*node)->next;
@@ -1133,10 +1214,9 @@ int main(int ac, char **av, char **env) // QUITE , exit status CTLC
 	{
 		if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
 			return (perror("signal"), 1);
-		t.status = ft_status(0, 1337);
-		line = readline(RED"minishell$ "RESET);
+		t.status = ft_status(0, 1337);		line = readline("minishell$ ");
 		if (line == NULL)
-				(ft_free_list(&str, NULL), free(line), printf("exit\n"), exit(0));
+				(ft_free_list(&str, NULL), free(line), printf("exit\n"), exit(ft_status(0, 1)));
 		if (ft_strlen(line) > 0)
 			add_history(line);
 		line = ft_add_space_to_command(line);
@@ -1148,7 +1228,7 @@ int main(int ac, char **av, char **env) // QUITE , exit status CTLC
 		ft_is_buil(str);
 		if (ft_syntax(str, &t))
 		{
-			ft_handle_issue_herdoc(str);
+			// ft_handle_issue_herdoc(str);
 			old = str;
 			            while (str)
             {
