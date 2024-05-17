@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 23:57:13 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/17 15:17:25 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:42:47 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,25 @@ void    ft_free_list(t_line **str, t_status *status)
 	free(status);
 }
 
+void	ft_free_holder_utils(t_holder *prev)
+{
+	free(prev->args);
+	free(prev->file_in);
+	free(prev->file_out);
+	free(prev->append);
+	free(prev->her_doc);
+	free(prev->args_built_in);
+	free(prev->cmd);
+	free(prev->infile_index);
+	free(prev->outfile_index);
+	free(prev->append_index);
+	free(prev->in);
+	free(prev->out);
+	free(prev->ap);
+	free(prev->cmd_built_in);
+	free(prev);
+}
+
 void	ft_free_holder(t_holder **str)
 {
 	t_holder	*to_be_free;
@@ -63,20 +82,6 @@ void	ft_free_holder(t_holder **str)
 			free(prev->args_built_in[i]);
 			i++;
 		}
-		free(prev->args);
-		free(prev->file_in);
-		free(prev->file_out);
-		free(prev->append);
-		free(prev->her_doc);
-		free(prev->args_built_in);
-		free(prev->cmd);
-		free(prev->infile_index);
-		free(prev->outfile_index);
-		free(prev->append_index);
-		free(prev->in);
-		free(prev->out);
-		free(prev->ap);
-		free(prev->cmd_built_in);
-		free(prev);
+		ft_free_holder_utils(prev);
 	}
 }

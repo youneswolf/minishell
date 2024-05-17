@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:39:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/06 18:24:28 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:40:59 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ void    ft_pwd(t_env *mini_env)
         {
             if (ft_strccmp(tmp->env, "PWD"))
             {
-                // while (mini_env->env[i])
-                //     i++;
                 printf("%s\n", &tmp->env[4]);
                 break;
             }

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/11 17:04:26 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:24:08 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int    ft_syntax_quote(char *str, int i, int count)
             i++;
     }
     if (count % 2 != 0)
-        return (printf("syntax error: double or single quote\n"), ft_status(1, 258), 0);
+        return (printf("syntax error: double or single quote\n"),
+            ft_status(1, 258), 0);
     return (1);
 }
 
