@@ -102,6 +102,7 @@ char *handle_expand_here(char *line_str, t_env **env)
 		vars.split = vars.split->next;
 	}
 	ft_free_list3(&vars.node);
+	free(line_str);
 	if (!vars.join)
 		return ("");
 	return (vars.join);
@@ -142,86 +143,48 @@ void join_exp_1dollar_here(t_exp *vars, t_env **env)
 		vars->join = ft_strjoin(vars->join," ",1);
 	}
 }
-char *expand_here(char *str, t_env **env)
+void isolate_specials_and_var(t_expan *vars)
 {
-	t_env *tmp;
-	t_line *line_tmp;
-	char *special = NULL;
-	char *pre_special = NULL;
-	int i;
-	char *var;
-	char *sub;
-	char *pre_var = NULL;
-	tmp = *env;
-	i = 0;
-	int j = 0;
-		while (str && str[i] != '$')
-			i++;
-		if (i && i != ft_strlen(str))
-		{
-			pre_special = ft_substr(str, 0, i);
-		}
-		sub = ft_sub_str(str, i+1, (ft_strlen(str) - i -1),0);
-	i = 0;
-	while (sub && sub[i])
+
+
+while (vars->sub && vars->sub[vars->i])
 	{
-		if (sub[i] == '.' || sub[i] == ',' || sub[i] == '/' || sub[i] == '-' || sub[i] == ':' || sub[i] == '_' || sub[i] == 34 || sub[i] == 39)
+		if (vars->sub[vars->i] == '.' || vars->sub[vars->i] == ',' || vars->sub[vars->i] == '/' || vars->sub[vars->i] == '-' || vars->sub[vars->i] == ':' || vars->sub[vars->i] == 34 || vars->sub[vars->i] == 39)
 		{
-			j = i;
-			while (sub [j] && sub[j] != '$')
-				j++;
-			special = ft_sub_str(sub, i, j - i,0);
-			pre_var = ft_sub_str(sub, 0, i,0);
+			vars->j = vars->i;
+			while (vars->sub [vars->j] && vars->sub[vars->j] != '$')
+				vars->j++;
+			vars->special = ft_sub_str(vars->sub, vars->i, vars->j - vars->i,0);
+			vars->pre_var = ft_sub_str(vars->sub, 0, vars->i,0);
 			break;
 		}
-		i++;
+		vars->i++;
 	}
-	if (pre_var)
+}
+char *expand_here(char *str, t_env **env)
+{
+	t_expan vars;
+	initialize_vars(&vars, env);
+		while (str && str[vars.i] != '$')
+			vars.i++;
+		if (vars.i && vars.i != ft_strlen(str))
+		{
+			vars.pre_special = ft_substr(str, 0, vars.i);
+		}
+		vars.sub = ft_sub_str(str, vars.i+1, (ft_strlen(str) - vars.i -1),0);
+	vars.i = 0;
+	isolate_specials_and_var(&vars);
+	if (vars.pre_var)
 	{
-		var = ft_strjoin(pre_var, "=",1);
-		free(sub);
+		vars.var = ft_strjoin(vars.pre_var, "=",1);
+		free(vars.sub);
 	}
 	else
-		var = ft_strjoin(sub, "=",1);
-	while ((tmp && pre_var) || (tmp && var))
-	{
-		if (!ft_strncmp(var, tmp->env, ft_strlen(var)))
-		{
-			i = 0;
-			free(var);
-			var = ft_strjoin(tmp->env,special,0);
-			while (var && var[i] != '=')
-				i++;
-			var = ft_sub_str(var, i + 1, ft_strlen(var) - i - 1,1);
-			var = ft_strjoin(pre_special,var,3);
-			return (var);
-		}
-		tmp = tmp->next;
-	}
-	free(var);
-	i = 0;
-	j = 42;
-	// if (if_dollar(str))
-	// {
-	// 	while (str[i] && str[i] != '$')
-	// 	{
-	// 		i++;
-	// 	}
-	// 	while (str[i])
-	// 	{
-	// 		if (ft_isalnum(str[i]) == 1)
-	// 		{
-	// 			return (pre_special);
-	// 		}
-	// 		else
-	// 			return (str);
-	// 	}
-	// 	return ("");
-	// }
-	// if (str && str[0] == '$')
-	// {
-	// 	pre_var = ft_strjoin(pre_special, special,2);
-	// 	return (ft_strjoin("$", pre_var,3));
-	// }
-	return (ft_strjoin(pre_special, special,2));
+		vars.var = ft_strjoin(vars.sub, "=",1);
+	if(expand_env(&vars))
+		return(vars.var);
+	free(vars.var);
+	vars.i = 0;
+	vars.j = 42;
+	return (ft_strjoin(vars.pre_special, vars.special,2));
 }

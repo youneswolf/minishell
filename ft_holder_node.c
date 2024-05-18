@@ -28,9 +28,9 @@ int		ft_lstnew_holder_check(t_holder *new)
 	if (!new || !new->args || !new->args_built_in || !new->file_in
 		|| !new->file_out || !new->append || !new->ap || !new->out
 		|| !new->outfile_index || !new->infile_index || !new->append_index
-		|| !new->in || new->her_doc)
-			return (0);
-	return(1);
+		|| !new->in || !new->her_doc)
+			return (1);
+	return(0);
 }
 
 t_holder	*ft_lstnew_holder(char *line)

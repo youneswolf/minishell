@@ -13,6 +13,8 @@ void remove_node(t_env **mini_env, int i)
 		if (j == i - 1)
 		{
 			join = (*mini_env)->next;
+			free(join->env);
+			free(join);
 			(*mini_env)->next = (*mini_env)->next->next;
 
 		}
@@ -40,6 +42,7 @@ void exec_unset(t_env **mini_env, t_holder *holder)
 		{
 			if (!ft_strncmp(value, tmp->env, ft_strlen(value)))
 			{
+				free(value);
 				remove_node(mini_env, i);
 			}
 			tmp = tmp->next;

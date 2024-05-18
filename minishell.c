@@ -6,35 +6,37 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/17 15:21:10 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/18 16:22:03 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
+#include <stdlib.h>
 #include <sys/signal.h>
 
 
-char *get_status_str(char *str, int i)
+char *get_status_str(char *str, int i, int status_int)
 {
     char *status_str_pre;
     char *status_str_after;
     char *status;
-
-    status = ft_itoa(ft_status(0, 1337));
+	if (status_int == 1337)
+    	status = ft_itoa(ft_status(0, 1337));
+	else
+	 	status = ft_itoa(status_int);
     status_str_pre = ft_sub_str(str, 0, i - 1, 0);
     if (!status_str_pre)
         perror("malloc_error");
     status_str_after = ft_sub_str(str, i + 2, ft_strlen(str) - i - 2, 0);
     if (!status_str_after)
         perror("malloc_error");
-    status = ft_strjoin(status_str_pre, status, 3);
-    status = ft_strjoin(status, status_str_after, 1);
-    printf("%s\n",status);
+    status = ft_strjoin(status_str_pre, status, 2);
+    status = ft_strjoin(status, status_str_after, 2);
     free(str);
     return (status);
 }
-char *put_status_in_str(char *str)
+char *put_status_in_str(char *str, int status_int)
 {
     int    i;
     i = 0;
@@ -42,7 +44,7 @@ char *put_status_in_str(char *str)
     {
         if (str[i] == '$' && str[i + 1] && str[i + 1] == '?')
         {
-            str = get_status_str(str, i);
+            str = get_status_str(str, i+1, status_int);
         }
         i++;
     }
@@ -547,34 +549,40 @@ char *ft_remove_dollar(char *str)
 
 }
 
-void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in)
+void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in, int status)
 {
     char    *line;
     char    *str;
     int        i = 42;
     // write(1, "here_doc> ", 11);
     // dup2(origin_in, STDIN_FILENO);
-    // if (signal(SIGINT, ft_ctr) == SIG_ERR)
+    // if (signal(SIGINT, ft_handler_ctrt_herdoc) == SIG_ERR)
     //     exit(255);
     line = readline("here_doc> ");
 	if (!line)
-            (exit(1));
+		exit(1);
     i = if_dollar(lim);
     if (i == 1)
+    {
         lim = ft_remove_dollar(lim);
+    }
     i = 42;
     i = is_quote(lim);
     if (i == 1)
+    {
         lim = ft_remove_here(lim);
+    }
     while (ft_strncmp(lim, line, ft_strlen(lim))
         || ft_strlen(line) != ft_strlen(lim))
     {
         // write(1, "here_doc> ", 11);
-        if (if_dollar(line) && !i)
-            line = handle_expand_here(line, env);
+        if (if_dollar(line) && !i && !ft_strnstr(line, "$?", ft_strlen(line)))
+        	line = handle_expand_here(line, env);
+		else if (ft_strnstr(line, "$?", ft_strlen(line)))
+			line = put_status_in_str(line, 0);
         write(pipe_fd[1], line, ft_strlen(line));
         write(pipe_fd[1], "\n", 1);
-        // free(line);
+        free(line);
         line = readline("here_doc> ");
         if (!line)
             (exit(1));
@@ -585,8 +593,10 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
 }
 // 
 
-int here_doc_exec(t_execution *vars ,t_env *env)
+int here_doc_exec(t_execution *vars ,t_env *env, int status)
 {
+	// status = ft_status(0, 1337);
+	// printf("%d\n",status);
 	while (vars->tmp->her_doc[vars->n])
 	{
 		dup2(vars->origin_in, STDIN_FILENO);
@@ -597,7 +607,7 @@ int here_doc_exec(t_execution *vars ,t_env *env)
 		{
 			signal(SIGINT, heredoc);
 			signal(SIGQUIT, &ft_f);
-			ft_here_doc(vars->tmp->her_doc[vars->n],vars-> pipe_fd, vars->tmp, &env, vars->origin_in);
+			ft_here_doc(vars->tmp->her_doc[vars->n],vars-> pipe_fd, vars->tmp, &env, vars->origin_in, status);
 		}
 		else
 		{
@@ -640,52 +650,52 @@ int here_doc_exec(t_execution *vars ,t_env *env)
 		return (0);
 }
 
-void here_doc_exec_1(t_execution *vars ,t_env *env)
-{
-	while (vars->tmp->her_doc[vars->n])
-	{
-		dup2(vars->origin_in, STDIN_FILENO);
-		// if (vars->n > 0)
-			pipe(vars->pipe_fd);
-		vars->pid = fork();
-		if (!vars->pid)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, &ft_f);
-			ft_here_doc(vars->tmp->her_doc[vars->n],vars-> pipe_fd, vars->tmp, &env, vars->origin_in);
-		}
-		else
-		{
-			waitpid(vars->pid, &vars->child_stat, 0);
-			if (WIFSIGNALED(vars->child_stat) && WTERMSIG(vars->child_stat) == SIGINT)
-				break ;
-			if (WIFEXITED(vars->child_stat))
-			{
-				int exit_status = WEXITSTATUS(vars->child_stat);
-				if (exit_status == 255)
-				{
-					vars->tmp = vars->tmp->next;
-					break;
-				}
-			}
-			close(vars->pipe_fd[1]);
-			if (vars->tmp->cmd)
-			{
-				if (dup2(vars->pipe_fd[0], STDIN_FILENO) == -1)
-					(perror("dup2 doc"));
-				close(vars->pipe_fd[0]);
-				// pipe(vars->pipe_fd);
-			}
-			else
-			{
-				close(vars->pipe_fd[1]);
-				dup2(vars->origin_in, STDIN_FILENO);
-				// pipe(vars->pipe_fd);
-			}
-			}
-			vars->n++;
-		}
-}
+// void here_doc_exec_1(t_execution *vars ,t_env *env)
+// {
+// 	while (vars->tmp->her_doc[vars->n])
+// 	{
+// 		dup2(vars->origin_in, STDIN_FILENO);
+// 		// if (vars->n > 0)
+// 			pipe(vars->pipe_fd);
+// 		vars->pid = fork();
+// 		if (!vars->pid)
+// 		{
+// 			signal(SIGINT, SIG_DFL);
+// 			signal(SIGQUIT, &ft_f);
+// 			ft_here_doc(vars->tmp->her_doc[vars->n],vars-> pipe_fd, vars->tmp, &env, vars->origin_in);
+// 		}
+// 		else
+// 		{
+// 			waitpid(vars->pid, &vars->child_stat, 0);
+// 			if (WIFSIGNALED(vars->child_stat) && WTERMSIG(vars->child_stat) == SIGINT)
+// 				break ;
+// 			if (WIFEXITED(vars->child_stat))
+// 			{
+// 				int exit_status = WEXITSTATUS(vars->child_stat);
+// 				if (exit_status == 255)
+// 				{
+// 					vars->tmp = vars->tmp->next;
+// 					break;
+// 				}
+// 			}
+// 			close(vars->pipe_fd[1]);
+// 			if (vars->tmp->cmd)
+// 			{
+// 				if (dup2(vars->pipe_fd[0], STDIN_FILENO) == -1)
+// 					(perror("dup2 doc"));
+// 				close(vars->pipe_fd[0]);
+// 				// pipe(vars->pipe_fd);
+// 			}
+// 			else
+// 			{
+// 				close(vars->pipe_fd[1]);
+// 				dup2(vars->origin_in, STDIN_FILENO);
+// 				// pipe(vars->pipe_fd);
+// 			}
+// 			}
+// 			vars->n++;
+// 		}
+// }
 
 void built_in_exec(t_execution *vars, t_env *env, t_last *status)
 {
@@ -748,30 +758,42 @@ void built_in_exec(t_execution *vars, t_env *env, t_last *status)
 	dup2(vars->origin_out, STDOUT_FILENO);
 }
 
-int	execution_cmd(t_execution *vars, t_env *env, t_last *status)
+int    execution_cmd(t_execution *vars, t_env *env, t_last *status)
 {
-	status->status = ft_status(0, 1);
-	// printf("---%d---", status->status);
-	if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
-		vars->i++;
-	if (vars->tmp->out[vars->j] != -42 && vars->tmp->out[vars->j] != -1)
-	{
-		vars->j++;
-	}
-	if (vars->tmp->ap[vars->k] != -42 && vars->tmp->ap[vars->k] != -1)
-		vars->k++;
-	vars->pid = fork();
-	if (vars->pid == -1)
-	{
-		printf("minishell: fork: Resource temporarily unavailable\n");
-		return(0) ;
-	}
-	if (!vars->pid)
-	{
-		exec_cmd(vars->tmp, env, vars->pipe_fd,vars->i-1,vars->j-1,vars->k-1, status);
-		// printf("got here\n");
-	}
-	return (1);
+    if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
+        vars->i++;
+    if (vars->tmp->out[vars->j] != -42 && vars->tmp->out[vars->j] != -1)
+    {
+        vars->j++;
+    }
+    if (vars->tmp->ap[vars->k] != -42 && vars->tmp->ap[vars->k] != -1)
+        vars->k++;
+    vars->pid = fork();
+    if (vars->pid == -1)
+    {
+        //  printf("minishell: fork: Resource temporarily unavailable\n");
+        return(0) ;
+    }
+    if (!vars->pid)
+    {
+        exec_cmd(vars->tmp, env, vars->pipe_fd,vars->i-1,vars->j-1,vars->k-1, status);
+    }
+	// while(vars->tmp->in[vars->i-1] != -42)
+	// {
+    // 	close(vars->tmp->in[vars->i-1]);
+	// 	vars->i++;
+	// }
+	// while(vars->tmp->out[vars->j-1] != -42)
+	// {
+    // 	 close(vars->tmp->out[vars->j-1]);
+	// 	vars->j++;
+	// }
+	// while(close(vars->tmp->ap[vars->k-1]) != -42)
+	// {
+   	//  close(vars->tmp->ap[vars->k-1]);
+	// 	vars->k++;
+	// }
+    return (1);
 }
 
 void execution(t_holder **holder ,t_env *env, t_last *status)
@@ -782,6 +804,7 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 	(vars.i = 0, vars.j = 0, vars.k = 0, vars.n = 0, vars.wait_i = 0);
 	int pid;
 	vars.tmp = *holder;
+	static int status_int;
 	vars.origin_in = dup(STDIN_FILENO);
 	vars.origin_out = dup(STDOUT_FILENO);
 	vars.tmp = *holder;
@@ -789,11 +812,12 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 	while (vars.tmp)
 	{
 		vars.wait_i = 0;
+		status->status = ft_status(0, 1);
 		// (vars.i = 0, vars.j = 0, vars.k = 0, vars.n = 0, vars.wait_i = 0);
 		pipe(vars.pipe_fd);
 		if (vars.tmp->her_doc[vars.n])
 		{
-			s = here_doc_exec(&vars, env);
+			s = here_doc_exec(&vars, env, status_int);
 			if (s == 500)
 			{
 				ft_status(1, 1);
@@ -818,28 +842,6 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 		vars.tmp = vars.tmp->next;
 	}
 	status->status = ft_status(0, 1);
-	// vars.tmp = *holder;
-	// while (vars.tmp)
-    // {
-    //     wait(&status->status);
-    //     if (WIFEXITED(status->status)) {
-    //         status->status = WEXITSTATUS(status->status);
-	// 		ft_status(1, status->status);
-    //     }
-	// 	else if (WIFSIGNALED(status->status) && (WTERMSIG(status->status) == SIGINT ||  WTERMSIG(status->status) == SIGQUIT))
-	// 	{
-	// 		if (WTERMSIG(status->status) == SIGQUIT)
-	// 		{
-	// 			printf("Quit: 3\n");
-	// 			ft_status(1, 131);
-	// 		}
-	// 		if (WTERMSIG(status->status) == SIGINT)
-	// 		{
-	// 			ft_status(1, 130);
-	// 		}
-	// 	}
-    //     vars.tmp = vars.tmp->next;
-    // }
 	waitpid(vars.pid, &status->status, 0);
 	if (WIFEXITED(status->status)) {
 		status->status = WEXITSTATUS(status->status);
@@ -857,13 +859,16 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 			ft_status(1, 130);
 		}
 	}
+	status_int = ft_status(0, 1);
 	while (waitpid(-1, 0, 0) != -1);
 	dup2(vars.origin_in, STDIN_FILENO);
 	close(vars.origin_in);
+    close(vars.origin_out);
 	if (vars.pipe_fd[0])
 		close(vars.pipe_fd[0]);
 	ft_free_holder(holder);
 }
+
 
 int		ft_cmp_built_in(char *str)
 {
@@ -1002,6 +1007,7 @@ void	ft_skip_empty_expand_utils(t_line *head, t_line *previous, t_line *tmp)
 				{
 					tmp = head;
 					head = head->next;
+					free(tmp->str);
 					free(tmp->status1);
 					free(tmp);
 				}
@@ -1027,12 +1033,14 @@ void	ft_skip_empty_expand(t_line **node)
 	{
 		previous = (*node);
 		(*node) = (*node)->next;
+		free(previous->str);
 		free(previous->status1);
 		free(previous);
 		while ((*node) && (*node)->flag == 1 && !(*node)->str[0])
 		{
 			previous = (*node);
 			(*node) = (*node)->next;
+			free(previous->str);
 			free(previous->status1);
 			free(previous);
 		}
@@ -1157,7 +1165,9 @@ char    *ft_itoa(int n)
 
     str = conv(n);
     return (str);
-}char    *ft_strnstr(const char *haystack, const char *needle, size_t len)
+}
+
+char    *ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
     size_t    i;
     size_t    j;
@@ -1185,26 +1195,94 @@ char    *ft_itoa(int n)
     }
     return (NULL);
 }
+
+void	main_utils1(t_line *str, t_env *mini_env)
+{
+	while (str)
+	{
+		if (if_dollar(str->str) && str->token != DELIMITER &&
+			!ft_strnstr(str->str, "$?", ft_strlen(str->str)))
+		{
+			str->str = handle_expand(str->str, &mini_env);
+			str->flag = 1;
+			if (is_between_quotes(str->str))
+				str->is_between_quote = 1;
+		}
+		if (ft_strnstr(str->str, "$?", ft_strlen(str->str)))
+			str->str = put_status_in_str(str->str, 1337);
+		str = str->next;
+	}
+}
+
+void	main_utils(t_line *str, t_last *t, t_status *status, t_env *mini_env)
+{
+	t_line		*old;
+	t_holder	*tmp;
+
+	tmp = NULL;
+	if (!ft_syntax(str, t))
+		return ;
+	old = str;
+	main_utils1(str, mini_env);
+	str = old;
+	ft_skip_empty_expand(&str);
+	ft_set_token_to_none(str);
+	ft_give_token(str, status);
+	ft_remove_quote(&str, t->line);
+	ft_is_buil(str);
+	tmp = ft_create_holder_node(str,t->line);
+	ft_free_list(&str, status);
+	if (tmp)
+	{
+		if (ft_oppen_files(tmp, t))
+			execution(&tmp, mini_env, t);
+	}
+}
+
+int	main_utils_1(t_line *str, t_env *mini_env)
+{
+	char *line;
+	t_last t;
+
+	if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
+		return (perror("signal"), 1);
+	t.status = ft_status(0, 1337);
+	line = readline("minishell$ ");
+	if (line == NULL)
+			(ft_free_list(&str, NULL), free(line), printf("exit\n"), exit(ft_status(0, 1)));
+	if (ft_strlen(line) > 0)
+		add_history(line);
+	line = ft_add_space_to_command(line);
+	ft_put(line, &str);
+	t_status *status = malloc(sizeof(t_status)); 
+	// status->node = str;
+	status->status = 1337;
+	t.line = line;
+	ft_give_token(str, status);
+	ft_is_buil(str);
+	main_utils(str, &t, status, mini_env);
+	str = NULL;
+	free(line);
+	return (0);
+}
+
 int main(int ac, char **av, char **env) // QUITE , exit status CTLC 
 {
 	// gfp = fopen("leaks.t", "w");
 	// atexit(leaks);
 	
+	t_line 		*str;
+	t_last		t;
+	t_holder	*tmp;
+	t_env		*mini_env;
 	struct termios    attr;
+
+	mini_env = NULL;
+	str = NULL;
+	tmp = NULL;
     tcgetattr(STDIN_FILENO, &attr);
 	attr.c_lflag = ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &attr);
-	t_line  *str;
-	int     i = 0;
-	char    *line;
-	t_last 	t;
-	char 	*a;
-	char    *exp;
-	t_holder* tmp;
-	t_line *old;
-	t_env *mini_env = NULL;
-	str = NULL;
-	tmp = NULL;
 	t.status = ft_status(0, 1337);
     if (env[0])
         fiLL_env(&mini_env, env);
@@ -1212,55 +1290,8 @@ int main(int ac, char **av, char **env) // QUITE , exit status CTLC
         fill_null_env(&mini_env);
 	while (1)
 	{
-		if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
-			return (perror("signal"), 1);
-		t.status = ft_status(0, 1337);		line = readline("minishell$ ");
-		if (line == NULL)
-				(ft_free_list(&str, NULL), free(line), printf("exit\n"), exit(ft_status(0, 1)));
-		if (ft_strlen(line) > 0)
-			add_history(line);
-		line = ft_add_space_to_command(line);
-		ft_put(line, &str);
-		t_status *status = malloc(sizeof(t_status)); 
-		// status->node = str;
-		status->status = 1337;
-		ft_give_token(str, status);
-		ft_is_buil(str);
-		if (ft_syntax(str, &t))
-		{
-			// ft_handle_issue_herdoc(str);
-			old = str;
-			            while (str)
-            {
-                if (if_dollar(str->str) && str->token != DELIMITER && !ft_strnstr(str->str, "$?", ft_strlen(str->str)))
-                {
-                    printf("enter\n");
-                    str->str = handle_expand(str->str, &mini_env);
-                    str->flag = 1;
-                    if (is_between_quotes(str->str))
-                        str->is_between_quote = 1;
-                }
-                if (ft_strnstr(str->str, "$?", ft_strlen(str->str)))
-                    str->str = put_status_in_str(str->str);
-                str = str->next;
-            }
-			str = old;
-			ft_skip_empty_expand(&str);
-			ft_set_token_to_none(str);
-			ft_give_token(str, status);
-			ft_remove_quote(&str, line);
-			ft_is_buil(str);
-			tmp = ft_create_holder_node(str,line);
-			if (tmp)
-			{
-				if (ft_oppen_files(tmp, &t))
-					execution(&tmp, mini_env, &t);
-			}
-			tcsetattr(STDIN_FILENO, TCSANOW, &attr);
-		}
-		ft_free_list(&str, status);
-		str = NULL;
-		free(line);
+		if (main_utils_1(str, mini_env))
+			perror("signal");
+		tcsetattr(STDIN_FILENO, TCSANOW, &attr);
 	}
 }
-

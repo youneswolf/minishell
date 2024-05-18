@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 23:57:13 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/17 15:42:47 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/17 19:47:04 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,16 @@ void	ft_free_2d(char **array)
 
 void    ft_free_list(t_line **str, t_status *status)
 {
-	t_line *to_be_free;
-	t_line	*prev;
-	to_be_free = *str;
-	while (to_be_free)
+	t_line	*to_be_freed;
+
+	while (*str)
 	{
-		prev = to_be_free;
-		to_be_free = to_be_free->next;
-		if (prev->str)
-			free(prev->str);
-		free(prev->status1);
-		free(prev);
+		to_be_freed = *str;
+		*str = (*str)->next;
+		if (to_be_freed->str)
+			free(to_be_freed->str);
+		free(to_be_freed->status1);
+		free(to_be_freed);
 	}
 	free(status);
 }

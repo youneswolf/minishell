@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/17 15:37:24 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:00:32 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int ft_oppen_files_utiles333(t_file *t, t_holder *tmp)
         }
         else
         {
-            printf("bash: : No such file or directory\n");
+            ft_oppen_files_utiles1(tmp, t);
             ft_null_tmp(&tmp);
         }
     }

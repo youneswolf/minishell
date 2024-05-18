@@ -69,7 +69,7 @@ char	*ft_strjoin(char *static_str, char *buff, int is_free)
 	size_t	len;
 
 	if (!static_str && !buff)
-		return (NULL);
+		return (ft_strdup(""));
 	len = ft_strlen(static_str);
 	str = malloc(sizeof(char) * (len + ft_strlen(buff)) + 1);
 	if (!str)
@@ -330,7 +330,7 @@ void    ft_free_list3(t_line **str)
 	{
 		prev = to_be_free;
 		to_be_free = to_be_free->next;
-		// free(prev->str);
+		free(prev->str);
 		free(prev);
 	}
 	// free(str);
@@ -418,7 +418,7 @@ int check_for_first_elem(char *str)
 	int i;
 
 	i = 0;
-	while(str[i] && str[i] != '$')
+	while(str && str[i] && str[i] != '$')
 	{
 		if (ft_isalpha(str[i]))
 			return (1);		
@@ -487,7 +487,7 @@ char *handle_expand(char *line_str, t_env **env)
 	}
 	ft_free_list2(&vars.node);
 	if (!vars.join)
-		return ("");
+		return (ft_strdup(""));
 	return (vars.join);
 }
 int is_number(char *str)

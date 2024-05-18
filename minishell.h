@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/13 17:17:48 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/18 16:03:54 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,27 +94,6 @@ typedef struct s_long
 	int	i;
 	int	c;
 }	t_long;
-
-
-// typedef struct s_long
-// {
-// 	int j;
-// 	int	does;
-// 	int	k; 
-// 	int	w;
-// 	int a;
-// 	int n;
-// 	int l;
-// 	int	sss;
-// 	int	www;
-// 	int	zzz;
-// 	int z;
-// 	int zz;
-// 	int flag;
-// 	int	mm;
-// 	int	i;
-// 	int	c;
-// }	t_long;
 
 typedef struct s_status1
 {
@@ -229,13 +208,12 @@ typedef struct s_holder
 	char			**args_built_in;
 	char			*cmd_built_in;
 	int				nbr_file;
-	
 	struct s_holder	*next;
-}
-   				t_holder;
+}	t_holder;
 typedef struct s_last
 {
-    int     		status;
+    int     status;
+	char	*line;
 }           t_last;
 
 typedef struct s_exp
@@ -278,7 +256,7 @@ typedef struct s_execution
 	t_holder *doc_tmp;
 }	t_execution;
 
-typedef struct export
+typedef struct s_export
 {
     int i;
     char *node_env;
@@ -297,6 +275,7 @@ extern	struct termios    attr;
 // echo $USER << 1 cat
 // echo "''''""$USER.$"'"$$USER"'"'"
 // echo "$"
+char			*expand_env(t_expan *vars);
 void    		ft_putchar_fd(char c, int fd);
 void    		ft_putstr_fd(char *s, int fd);
 int     		ft_cmp(char *s, char *s1);
@@ -320,10 +299,12 @@ void 			exec_export(t_holder **holder, t_env **env);
 void    		ft_handler_ctrt_herdoc(int signum);
 int 			f_strcmp(char *str1, char *str2);
 int				ft_strcmp_asd(char *s1,  char *s2);
-char    *ft_itoa(int n);
+char    		*ft_itoa(int n);
 char    		*ft_remove_here(char *str);
 t_holder    	*ft_create_holder_node(t_line *node, char *line);
 int         	ft_count_pipe(t_line *head);
+char			*ft_strnstr(const char *haystack, const char *needle, size_t len);
+char			*put_status_in_str(char *str, int status_int);
 // t_holder        *add_list_holder(t_holder **lst, char *line);
 // t_holder	    *ft_lstnew_holder(char *line);
 void       		ft_pwd(t_env *env);
@@ -442,15 +423,15 @@ int 			ft_is_there_in_the_dir(char *pattern, char *text);
 int    			ft_search_back(char *pattern, char *text, int l, int ll);
 int 			ft_str(char *str);
 int				ft_status(int a, int status);
-char *handle_expand(char *line_str, t_env **env);
-void join_exp(t_exp *vars, t_env **env);
-void join_exp_1dollar(t_exp *vars, t_env **env);
-void initialize_vars(t_expan *vars, t_env **env);
-t_line *get_exp_node(char *line_str);
-void join_exp_here(t_exp *vars, t_env **env);
-void join_exp_1dollar_here(t_exp *vars, t_env **env);
-int check_for_first_elem(char *str);
-void    ft_free_list3(t_line **str);
+char 			*handle_expand(char *line_str, t_env **env);
+void 			join_exp(t_exp *vars, t_env **env);
+void 			join_exp_1dollar(t_exp *vars, t_env **env);
+void 			initialize_vars(t_expan *vars, t_env **env);
+t_line 			*get_exp_node(char *line_str);
+void 			join_exp_here(t_exp *vars, t_env **env);
+void 			join_exp_1dollar_here(t_exp *vars, t_env **env);
+int 			check_for_first_elem(char *str);
+void    		ft_free_list3(t_line **str);
 // to add later
 void 			heredoc ();
 #endif
