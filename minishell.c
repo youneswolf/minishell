@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/20 20:30:14 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/21 10:14:31 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,13 +411,13 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
     {
         redirect_input(holder->in[i]);
     }
-    else if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
+     if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
     {
         while (holder->out[j] != -42)
             j++;
         redirect_output(holder->out[j-1]);
     }
-    else if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
+    if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
     {
         while (holder->ap[k] != -42)
             k++;
