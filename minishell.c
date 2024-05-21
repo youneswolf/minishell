@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/21 10:14:31 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/21 14:18:43 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -395,53 +395,19 @@ int is_dir(char *path)
 //     ft_free_2d(array);
 //     exit(1);
 // }
-void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k, t_last *status)
-{
-    char *path;
-    char **array;
 
-    // if (pipe(pipe_fd) == -1)
-    //     perror("pipe");
-    // if (holder->out[j] && holder->out[j] == -7)
-    //     exit(1);
-    // else if ((holder->in[i] && holder->in[i] == -7 )||( holder->ap[k] && holder->ap[k] == -7))
-    //     exit(1);
-    status->status = 0;
-    if (i >= 0 && j < 1024 && holder->in[i] != -42 && holder->in[i] != -1)
-    {
-        redirect_input(holder->in[i]);
-    }
-     if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
-    {
-        while (holder->out[j] != -42)
-            j++;
-        redirect_output(holder->out[j-1]);
-    }
-    if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
-    {
-        while (holder->ap[k] != -42)
-            k++;
-        redirect_append(holder->ap[k-1]);
-    }
-    else if (holder->next)
-    {
-        dup2(pipe_fd[1], STDOUT_FILENO);
-        close(pipe_fd[0]);
-        close(pipe_fd[1]);
-    }
-    if (is_slash(holder->args[0]))
-    {
-    if (is_dir(holder->args[0]))
+void cmd_file_stat(t_holder *holder, char **path)
+{
+	if (is_dir(holder->args[0]))
     {
         ft_putstr_fd("bash: ",2);
         ft_putstr_fd(holder->args[0],2);
         ft_putstr_fd(" is a directory\n",2);
-        status->status = 126;
         exit(126);
     }
     if (!access(holder->args[0], X_OK))
     {
-        path = holder->args[0];
+        *path = holder->args[0];
     }
     else if (!access(holder->args[0] ,F_OK))
     {
@@ -450,28 +416,78 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
             ft_putstr_fd("bash ",2);
             ft_putstr_fd(holder->args[0],2);
             ft_putstr_fd(" Permission denied\n",2);
-            status->status = 126;
             exit(126);
         }
-    }
-    else
+	}
+	 else
         (printf("bash: %s: No such file or directory\n",holder->args[0]), exit(127));
-    }
-    else
-        path = get_path(env, holder->args[0]);
-    if (!path)
+}
+
+void cmd_null_path(char *path, t_holder *holder)
+{
+ if (!path)
     {
         ft_putstr_fd("bash ",2);
         ft_putstr_fd(holder->args[0],2);
         ft_putstr_fd(": command not found\n",2);
-        status->status= 127;
         exit(127);
     }
+}
+void init_vars_cmd(t_execution *vars)
+{
+	vars->i--;
+	vars->k--;
+	vars->j--;
+}
+
+void cmd_piping(int pipe_fd[2])
+{
+ 	dup2(pipe_fd[1], STDOUT_FILENO);
+    close(pipe_fd[0]);
+    close(pipe_fd[1]);
+}
+void redirection_cmd(t_holder *holder , t_execution *vars, int pipe_fd[2])
+{
+	init_vars_cmd(vars);
+	if (vars->i >= 0 && vars->i < 1024 && holder->in[vars->i] != -42 && holder->in[vars->i] != -1)
+    {
+		while (holder->in[vars->i] != -42)
+			vars->i++;
+        redirect_input(holder->in[vars->i-1]);
+    }
+     if (vars->j  >= 0 && vars->j < 1024 && holder->out[vars->j] != -42 && holder->out[vars->j] != -1)
+    {
+        while (holder->out[vars->j] != -42)
+            vars->j++;
+        redirect_output(holder->out[vars->j-1]);
+    }
+    if (vars->k >= 0 && vars->k < 1024 && holder->ap[vars->k] != -42 && holder->ap[vars->k] != -1)
+    {
+        while (holder->ap[vars->k] != -42)
+            vars->k++;
+        redirect_append(holder->ap[vars->k-1]);
+    }
+    else if (holder->next)
+		cmd_piping(pipe_fd);
+}
+
+void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], t_execution *vars)
+{
+    char *path;
+    char **array;
+
+    redirection_cmd(holder, vars, pipe_fd);
+    if (is_slash(holder->args[0]))
+		cmd_file_stat(holder, &path);
+    else
+        path = get_path(env, holder->args[0]);
+	cmd_null_path(path, holder);
     array = ft_put_env_string(array, env);
     execve(path, holder->args, array);
     ft_free_2d(array);
     exit(1);
 }
+
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
@@ -549,41 +565,39 @@ char *ft_remove_dollar(char *str)
 
 }
 
-void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in)
+void here_doc_line(char *line, int pipe_fd[2], t_env **env, int i)
 {
-    char    *line;
-    char    *str;
-    int        i = 42;
-    // write(1, "here_doc> ", 11);
-    // dup2(origin_in, STDIN_FILENO);
-    // if (signal(SIGINT, ft_handler_ctrt_herdoc) == SIG_ERR)
-    //     exit(255);
-    line = readline("here_doc> ");
-	if (!line)
-		exit(1);
-    i = if_dollar(lim);
-    if (i == 1)
-    {
-        lim = ft_remove_dollar(lim);
-    }
-    i = 42;
-    i = is_quote(lim);
-    if (i == 1)
-    {
-        lim = ft_remove_here(lim);
-    }
-    while (ft_strncmp(lim, line, ft_strlen(lim))
-        || ft_strlen(line) != ft_strlen(lim))
-    {
-        // write(1, "here_doc> ", 11);
-        if (if_dollar(line) && !i && !ft_strnstr(line, "$?", ft_strlen(line)))
+	if (if_dollar(line) && !i && !ft_strnstr(line, "$?", ft_strlen(line)))
         	line = handle_expand_here(line, env);
 		else if (ft_strnstr(line, "$?", ft_strlen(line)))
 			line = put_status_in_str(line, 1337);
         write(pipe_fd[1], line, ft_strlen(line));
         write(pipe_fd[1], "\n", 1);
         free(line);
-        line = readline("here_doc> ");
+}
+
+void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in)
+{
+    char    *line;
+    char    *str;
+    int        i;
+
+	i = 42;
+    line = readline("here_doc> ");
+	if (!line)
+		exit(1);
+    i = if_dollar(lim);
+    if (i == 1)
+        lim = ft_remove_dollar(lim);
+    i = 42;
+    i = is_quote(lim);
+    if (i == 1)
+        lim = ft_remove_here(lim);
+    while (ft_strncmp(lim, line, ft_strlen(lim))
+        || ft_strlen(line) != ft_strlen(lim))
+    {
+		here_doc_line(line, pipe_fd, env, i);
+		line = readline("here_doc> ");
         if (!line)
             (exit(1));
     }
@@ -591,7 +605,6 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
     free(lim);
     exit(1);
 }
-// 
 
 int here_doc_exec(t_execution *vars ,t_env *env)
 {
@@ -774,7 +787,7 @@ int    execution_cmd(t_execution *vars, t_env *env, t_last *status)
     }
     if (!vars->pid)
     {
-        exec_cmd(vars->tmp, env, vars->pipe_fd,vars->i-1,vars->j-1,vars->k-1, status);
+        exec_cmd(vars->tmp, env, vars->pipe_fd,vars);
     }
 	// while(vars->tmp->in[vars->i-1] != -42)
 	// {
