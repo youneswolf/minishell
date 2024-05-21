@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/18 16:22:03 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/20 20:30:14 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,13 +411,13 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], int i, int j, int k
     {
         redirect_input(holder->in[i]);
     }
-    if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
+    else if (j >= 0 && j < 1024 && holder->out[j] != -42 && holder->out[j] != -1)
     {
         while (holder->out[j] != -42)
             j++;
         redirect_output(holder->out[j-1]);
     }
-    if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
+    else if (k >= 0 && k < 1024 && holder->ap[k] != -42 && holder->ap[k] != -1)
     {
         while (holder->ap[k] != -42)
             k++;
@@ -549,7 +549,7 @@ char *ft_remove_dollar(char *str)
 
 }
 
-void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in, int status)
+void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in)
 {
     char    *line;
     char    *str;
@@ -579,7 +579,7 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
         if (if_dollar(line) && !i && !ft_strnstr(line, "$?", ft_strlen(line)))
         	line = handle_expand_here(line, env);
 		else if (ft_strnstr(line, "$?", ft_strlen(line)))
-			line = put_status_in_str(line, 0);
+			line = put_status_in_str(line, 1337);
         write(pipe_fd[1], line, ft_strlen(line));
         write(pipe_fd[1], "\n", 1);
         free(line);
@@ -593,7 +593,7 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
 }
 // 
 
-int here_doc_exec(t_execution *vars ,t_env *env, int status)
+int here_doc_exec(t_execution *vars ,t_env *env)
 {
 	// status = ft_status(0, 1337);
 	// printf("%d\n",status);
@@ -607,7 +607,7 @@ int here_doc_exec(t_execution *vars ,t_env *env, int status)
 		{
 			signal(SIGINT, heredoc);
 			signal(SIGQUIT, &ft_f);
-			ft_here_doc(vars->tmp->her_doc[vars->n],vars-> pipe_fd, vars->tmp, &env, vars->origin_in, status);
+			ft_here_doc(vars->tmp->her_doc[vars->n],vars-> pipe_fd, vars->tmp, &env, vars->origin_in);
 		}
 		else
 		{
@@ -763,9 +763,7 @@ int    execution_cmd(t_execution *vars, t_env *env, t_last *status)
     if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
         vars->i++;
     if (vars->tmp->out[vars->j] != -42 && vars->tmp->out[vars->j] != -1)
-    {
         vars->j++;
-    }
     if (vars->tmp->ap[vars->k] != -42 && vars->tmp->ap[vars->k] != -1)
         vars->k++;
     vars->pid = fork();
@@ -795,54 +793,43 @@ int    execution_cmd(t_execution *vars, t_env *env, t_last *status)
 	// }
     return (1);
 }
+void initial_vars(t_execution *vars, t_holder **holder)
+{
+	(vars->i = 0, vars->j = 0, vars->k = 0, vars->n = 0, vars->wait_i = 0);
+	vars->tmp = *holder;
+	vars->origin_in = dup(STDIN_FILENO);
+	vars->origin_out = dup(STDOUT_FILENO);
+}
+void piping(t_execution *vars)
+{
+	close (vars->pipe_fd[1]);
+	dup2 (vars->pipe_fd[0], STDIN_FILENO);
+	close(vars->pipe_fd[0]); 
+}
+void cleaning_execution(t_execution *vars, t_holder **holder)
+{
+	dup2(vars->origin_in, STDIN_FILENO);
+	close(vars->origin_in);
+    close(vars->origin_out);
+	if (vars->pipe_fd[0])
+		close(vars->pipe_fd[0]);
+	ft_free_holder(holder);	
+}
 
-void execution(t_holder **holder ,t_env *env, t_last *status)
+int command_first_exec(t_execution *vars, t_env *env, t_last *status)
+{
+	if (!execution_cmd(vars, env,status))
+		{
+			printf("minishell: fork: Resource temporarily unavailable\n");
+			return (0);
+		}
+	return (1);
+}
+
+void after_exec(t_holder **holder , t_execution *vars, t_last *status)
 {
 	status->status = ft_status(0, 1);
-	t_execution vars;
-	vars.ppp = 0;
-	(vars.i = 0, vars.j = 0, vars.k = 0, vars.n = 0, vars.wait_i = 0);
-	int pid;
-	vars.tmp = *holder;
-	static int status_int;
-	vars.origin_in = dup(STDIN_FILENO);
-	vars.origin_out = dup(STDOUT_FILENO);
-	vars.tmp = *holder;
-	int s = 0;
-	while (vars.tmp)
-	{
-		vars.wait_i = 0;
-		status->status = ft_status(0, 1);
-		// (vars.i = 0, vars.j = 0, vars.k = 0, vars.n = 0, vars.wait_i = 0);
-		pipe(vars.pipe_fd);
-		if (vars.tmp->her_doc[vars.n])
-		{
-			s = here_doc_exec(&vars, env, status_int);
-			if (s == 500)
-			{
-				ft_status(1, 1);
-				break ;
-			}
-		}
-		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || vars.tmp->cmd_built_in)
-		{
-			built_in_exec(&vars, env, status);
-		}
-		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] ||vars.tmp->args[0] && vars.tmp->args[0][0])
-		{
-			if (!execution_cmd(&vars, env,status))
-			{
-				printf("minishell: fork: Resource temporarily unavailable\n");
-				break;
-			}
-		}
-		close (vars.pipe_fd[1]);
-		dup2 (vars.pipe_fd[0], STDIN_FILENO);
-		close(vars.pipe_fd[0]); 
-		vars.tmp = vars.tmp->next;
-	}
-	status->status = ft_status(0, 1);
-	waitpid(vars.pid, &status->status, 0);
+	waitpid(vars->pid, &status->status, 0);
 	if (WIFEXITED(status->status)) {
 		status->status = WEXITSTATUS(status->status);
 		ft_status(1, status->status);
@@ -859,14 +846,33 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 			ft_status(1, 130);
 		}
 	}
-	status_int = ft_status(0, 1);
 	while (waitpid(-1, 0, 0) != -1);
-	dup2(vars.origin_in, STDIN_FILENO);
-	close(vars.origin_in);
-    close(vars.origin_out);
-	if (vars.pipe_fd[0])
-		close(vars.pipe_fd[0]);
-	ft_free_holder(holder);
+	cleaning_execution(vars, holder);
+}
+
+void execution(t_holder **holder ,t_env *env, t_last *status)
+{
+	t_execution vars;
+	initial_vars(&vars, holder);
+	int pid;
+	while (vars.tmp)
+	{
+		vars.wait_i = 0;
+		// (vars.i = 0, vars.j = 0, vars.k = 0, vars.n = 0, vars.wait_i = 0);
+		pipe(vars.pipe_fd);
+		if (vars.tmp->her_doc[vars.n])
+			here_doc_exec(&vars, env);
+		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || vars.tmp->cmd_built_in)
+			built_in_exec(&vars, env, status);
+		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] ||vars.tmp->args[0] && vars.tmp->args[0][0])
+		{
+			if(!command_first_exec(&vars, env, status))
+				break;
+		}
+		piping(&vars);
+		vars.tmp = vars.tmp->next;
+	}
+	after_exec(holder, &vars, status);
 }
 
 
