@@ -418,6 +418,8 @@ int check_for_first_elem(char *str)
 	int i;
 
 	i = 0;
+	if (str && str[0] && str[0] == '$')
+		return (0);
 	while(str && str[i] && str[i] != '$')
 	{
 		if (ft_isalpha(str[i]))
@@ -431,7 +433,7 @@ void join_exp(t_exp *vars, t_env **env)
 	vars->i = 0;
 	int check ;
 	vars->dollar_str = ft_split(vars->split->str, '$');
-	check  = check_for_first_elem(vars->dollar_str[0]);
+	check  = check_for_first_elem(vars->split->str);
 	while(vars->dollar_str[vars->i])
 	{
 		vars->j = 0;

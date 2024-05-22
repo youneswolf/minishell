@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 15:28:26 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:42:20 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -578,7 +578,7 @@ void here_doc_line(char *line, int pipe_fd[2], t_env **env, int i)
         free(line);
 }
 
-void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int origin_in)
+void ft_here_doc(char *lim, int pipe_fd[2], t_holder *atmp, t_env **env, int origin_in)
 {
     char    *line;
     char    *str;
