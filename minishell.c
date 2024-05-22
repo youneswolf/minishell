@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/21 14:18:43 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/22 13:35:51 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1285,10 +1285,8 @@ int	main_utils_1(t_line *str, t_env *mini_env)
 	return (0);
 }
 
-int main(int ac, char **av, char **env) // QUITE , exit status CTLC 
+int main(int ac, char **av, char **env)
 {
-	// gfp = fopen("leaks.t", "w");
-	// atexit(leaks);
 	
 	t_line 		*str;
 	t_last		t;

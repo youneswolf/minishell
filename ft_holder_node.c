@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_holder_node.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/22 11:46:14 by ybellakr          #+#    #+#             */
+/*   Updated: 2024/05/22 12:22:28 by ybellakr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_lstnew_holder_utils(t_holder *new)
@@ -7,7 +19,7 @@ void	ft_lstnew_holder_utils(t_holder *new)
 	i = 0;
 	while (i < 1000)
 	{
-        new->args_built_in[i] = NULL;
+		new->args_built_in[i] = NULL;
 		new->args[i] = NULL;
 		new->append_index[i] = -42;
 		new->file_in[i] = NULL;
@@ -15,7 +27,7 @@ void	ft_lstnew_holder_utils(t_holder *new)
 		new->infile_index[i] = -42;
 		new->append[i] = NULL;
 		new->ap[i] = -42;
-		new->outfile_index[i] = -42; 
+		new->outfile_index[i] = -42;
 		new->in[i] = -42;
 		new->out[i] = -42;
 		new->her_doc[i] = NULL;
@@ -23,14 +35,14 @@ void	ft_lstnew_holder_utils(t_holder *new)
 	}
 }
 
-int		ft_lstnew_holder_check(t_holder *new)
+int	ft_lstnew_holder_check(t_holder *new)
 {
 	if (!new || !new->args || !new->args_built_in || !new->file_in
 		|| !new->file_out || !new->append || !new->ap || !new->out
 		|| !new->outfile_index || !new->infile_index || !new->append_index
 		|| !new->in || !new->her_doc)
-			return (1);
-	return(0);
+		return (1);
+	return (0);
 }
 
 t_holder	*ft_lstnew_holder(char *line)
@@ -40,20 +52,20 @@ t_holder	*ft_lstnew_holder(char *line)
 	new = (t_holder *)malloc(sizeof(t_holder));
 	new->cmd = NULL;
 	new->here = -42;
-    new->cmd_built_in = NULL;
+	new->cmd_built_in = NULL;
 	new->nbr_file = 0;
 	new->args = malloc(sizeof(char *) * 1000);
-    new->args_built_in = malloc(sizeof(char *)* 1000);
-	new->file_in = malloc(sizeof(char *)* 1000);
-	new->file_out = malloc(sizeof(char *)* 1000);
-	new->append = malloc(sizeof(char *)* 1000);
-	new->ap = malloc(sizeof(int )* 1000);
-	new->out = malloc(sizeof(int )* 1000);
-	new->outfile_index = malloc(sizeof(int )* 1000);
-	new->infile_index = malloc(sizeof(int )* 1000);
-	new->append_index = malloc(sizeof(int )* 1000);
-	new->in = malloc(sizeof(int )* 1000);
-	new->her_doc = malloc(sizeof(char *)* 1000);
+	new->args_built_in = malloc(sizeof(char *) * 1000);
+	new->file_in = malloc(sizeof(char *) * 1000);
+	new->file_out = malloc(sizeof(char *) * 1000);
+	new->append = malloc(sizeof(char *) * 1000);
+	new->ap = malloc(sizeof(int ) * 1000);
+	new->out = malloc(sizeof(int ) * 1000);
+	new->outfile_index = malloc(sizeof(int ) * 1000);
+	new->infile_index = malloc(sizeof(int ) * 1000);
+	new->append_index = malloc(sizeof(int ) * 1000);
+	new->in = malloc(sizeof(int ) * 1000);
+	new->her_doc = malloc(sizeof(char *) * 1000);
 	if (ft_lstnew_holder_check(new))
 		return (NULL);
 	ft_lstnew_holder_utils(new);
@@ -61,7 +73,7 @@ t_holder	*ft_lstnew_holder(char *line)
 	return (new);
 }
 
-t_holder *last_node(t_holder *head)
+t_holder	*last_node(t_holder *head)
 {
 	while (head && head->next)
 	{
@@ -93,10 +105,10 @@ t_holder	*add_list_holder(t_holder **lst, char *line)
 	return (last_node(*lst));
 }
 
-int     ft_count_pipe(t_line *head)
+int	ft_count_pipe(t_line *head)
 {
-	int 	i;
-	t_line  *tmp;
+	int		i;
+	t_line	*tmp;
 
 	i = 0;
 	tmp = head;
@@ -109,7 +121,7 @@ int     ft_count_pipe(t_line *head)
 	return (i);
 }
 
-int		ft_count_word(char *str)
+int	ft_count_word(char *str)
 {
 	int	i;
 	int	count;
@@ -118,7 +130,8 @@ int		ft_count_word(char *str)
 	count = 0;
 	while (str && str[i])
 	{
-		if (str[i] >= 33 && str[i] <= 126 && (str[i + 1] == ' ' || str[i + 1] == '\0'))
+		if (str[i] >= 33 && str[i] <= 126 && (str[i + 1] == ' '
+				|| str[i + 1] == '\0'))
 			count++;
 		i++;
 	}
@@ -135,7 +148,7 @@ int	ft_count_2d(char **a)
 	return (i);
 }
 
-int		ft_create_holder_utils(t_holder *new, t_line *tmp, int *flag, int *j)
+int	ft_create_holder_utils(t_holder *new, t_line *tmp, int *flag, int *j)
 {
 	int		zz;
 	int		mm;
@@ -143,7 +156,7 @@ int		ft_create_holder_utils(t_holder *new, t_line *tmp, int *flag, int *j)
 
 	zz = 0;
 	mm = 0;
-	if (tmp->flag == 1 && tmp->is_between_quote != 1) //&& tmp->quote == 0
+	if (tmp->flag == 1 && tmp->is_between_quote != 1)
 	{
 		zz = ft_count_word(tmp->str);
 		if (zz >= 1)
@@ -198,7 +211,7 @@ int	ft_create_hoder_utils2(t_holder *new, t_line *tmp, int *flag, int *z)
 	char	**array;
 
 	zz = 0;
-	if (tmp->flag == 1 && tmp->is_between_quote != 1) //&& tmp->quote == 0
+	if (tmp->flag == 1 && tmp->is_between_quote != 1)
 	{
 		zz = ft_count_word(tmp->str);
 		if (zz >= 1)
@@ -208,7 +221,6 @@ int	ft_create_hoder_utils2(t_holder *new, t_line *tmp, int *flag, int *z)
 			new->cmd_built_in = ft_strdup(array[0]);
 			while (array[mm])
 			{
-				// printf("--%s--\n", array[mm]);
 				new->args_built_in[(*z)++] = ft_strdup(array[mm]);
 				mm++;
 			}
@@ -236,7 +248,6 @@ void	ft_create_holder_utils3(t_line *tmp, t_holder *new, int *z)
 			new->cmd = ft_strdup(a[0]);
 			while (a[ee])
 			{
-				printf("{%s}\n", a[ee]);
 				new->args[(*z)++] = ft_strdup(a[ee]);
 				ee++;
 			}
@@ -302,22 +313,22 @@ void	ft_create_holder_args1(t_line *tmp, t_holder *new, int *z)
 
 int	ft_create_holder_outfile(t_line *tmp, t_holder *new, t_long *t)
 {
-	char		**a;
 	t_outfile	q;
 
+	q.ee = 0;
 	if (ft_is_there(tmp->str))
 	{
-		(1) && (q.ee = 0, a = ft_does_it_matche(tmp->str), q.qq = ft_count_2d(a));
+		(1) && (q.a = ft_does_it_matche(tmp->str), q.qq = ft_count_2d(q.a));
 		if (q.qq >= 1)
 		{
-			while (a && a[q.ee])
+			while (q.a && q.a[q.ee])
 			{
-				new->file_out[(t->k)++] = ft_strdup(a[q.ee]);
+				new->file_out[(t->k)++] = ft_strdup(q.a[q.ee]);
 				new->outfile_index[(t->zzz)++] = t->index;
 				(1) && ((t->index)++, q.ee++, new->nbr_file++);
 			}
 			if (q.ee >= 1)
-				return (ft_free_2d(a), printf("bash: ambiguous redirect\n"), 0);
+				return (ft_free_2d(q.a), printf("ambiguous redirect\n"), 0);
 		}
 	}
 	else
@@ -329,54 +340,53 @@ int	ft_create_holder_outfile(t_line *tmp, t_holder *new, t_long *t)
 	return (1);
 }
 
-int	ft_create_holder_infile(t_line *tmp, t_holder *new, int *n, int *sss, int *index)
+int	ft_create_holder_infile(t_line *tmp, t_holder *new, t_long *t)
 {
 	t_outfile	q;
-	char		**a;
 
+	q.ee = 0;
 	if (ft_is_there(tmp->str))
 	{
-		(1) && (a = ft_does_it_matche(tmp->str), q.qq = ft_count_2d(a), q.ee = 0);
+		(1) && (q.a = ft_does_it_matche(tmp->str), q.qq = ft_count_2d(q.a));
 		if (q.qq >= 1)
 		{
-			while (a[q.ee])
+			while (q.a[q.ee])
 			{
-				new->file_in[(*n)++] = ft_strdup(a[q.ee]);
-				(1) && (q.ee++, new->nbr_file++, (*index)++);
-				new->infile_index[(*sss)++] = *index;
+				new->file_in[(t->n)++] = ft_strdup(q.a[q.ee]);
+				(1) && (q.ee++, new->nbr_file++, (t->index)++);
+				new->infile_index[(t->sss)++] = t->index;
 			}
 			if (q.ee >= 1)
-				return (ft_free_2d(a), printf("bash: ambiguous redirect\n"), 0);
+				return (ft_free_2d(q.a), printf("ambiguous redirect\n"), 0);
 		}
 	}
 	else
 	{
-		new->file_in[(*n)++] = ft_strdup(tmp->str);
-		new->infile_index[(*sss)++] = *index;
-		(1) && ((*index)++, new->nbr_file++);
+		new->file_in[(t->n)++] = ft_strdup(tmp->str);
+		new->infile_index[(t->sss)++] = t->index;
+		(1) && ((t->index)++, new->nbr_file++);
 	}
 	return (1);
 }
 
-
 int	ft_create_holder_append(t_line *tmp, t_holder *new, t_long *t)
 {
-	char		**aa;
 	t_outfile	q;
 
 	if (tmp && tmp->next && ft_is_there(tmp->next->str))
 	{
-		(1) && (aa = ft_does_it_matche(tmp->next->str), q.qq = ft_count_2d(aa), q.ee = 0);
+		(1) && (q.ee = 0, tmp = tmp->next);
+		(1) && (q.a = ft_does_it_matche(tmp->str), q.qq = ft_count_2d(q.a));
 		if (q.qq >= 1)
 		{
-			while (aa[q.ee])
+			while (q.a[q.ee])
 			{
-				new->append[(t->a)++] = ft_strdup(aa[q.ee]);
+				new->append[(t->a)++] = ft_strdup(q.a[q.ee]);
 				(1) && (q.ee++, (t->index)++, new->nbr_file++);
 				new->append_index[(t->www)++] = t->index;
 			}
 			if (q.ee >= 1)
-				return (ft_free_2d(aa), printf("bash: ambiguous redirect\n"), 0);
+				return (ft_free_2d(q.a), printf("ambiguous redirect\n"), 0);
 		}
 	}
 	else
@@ -420,15 +430,13 @@ int	ft_utils_norm_utils(t_line *tmp, t_holder *new, t_long *t)
 	}
 	else if (tmp->token == IN_FILE)
 	{
-		if (!ft_create_holder_infile(tmp, new, &t->n, &t->sss, &t->index))
+		if (!ft_create_holder_infile(tmp, new, t))
 			return (0);
 	}
 	else if (tmp->token == APPEND)
-	{
-		ft_create_holder_append(tmp, new, t);
-		t->does = 1;
-	}
+		(1) && (ft_create_holder_append(tmp, new, t), t->does = 1);
 	else if (tmp->token == HERDOC && t->a < 1024)
+	{
 		if (tmp->next)
 		{
 			if (t->does == 0)
@@ -437,6 +445,7 @@ int	ft_utils_norm_utils(t_line *tmp, t_holder *new, t_long *t)
 				new->here = 0;
 			new->her_doc[t->l++] = ft_strdup(tmp->next->str);
 		}
+	}
 	return (1);
 }
 
@@ -455,7 +464,7 @@ int	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
 		ft_create_holder_args(tmp, new, &t->j);
 		t->does = 1;
 	}
-	else if(tmp->token == ARGS && t->flag == 1)
+	else if (tmp->token == ARGS && t->flag == 1)
 	{
 		ft_create_holder_args1(tmp, new, &t->z);
 		t->does = 1;
@@ -465,7 +474,8 @@ int	ft_utils_norm(t_line *tmp, t_holder *new, t_long *t)
 	return (1);
 }
 
-int	ft_create_holder_node_utils(t_line *tmp, t_holder *new, t_long *t, t_holder *holder)
+int	ft_create_holder_node_utils(t_line *tmp, t_holder *new,
+	t_long *t, t_holder *holder)
 {
 	if (tmp->token == CMD && tmp->is_it_built_in == 0)
 	{
@@ -480,12 +490,12 @@ int	ft_create_holder_node_utils(t_line *tmp, t_holder *new, t_long *t, t_holder 
 	return (1);
 }
 
-t_holder    *ft_create_holder_node(t_line *node, char *line)
+t_holder	*ft_create_holder_node(t_line *node, char *line)
 {
-	t_holder    *holder;
-	t_holder    *new;
+	t_holder	*holder;
+	t_holder	*new;
 	t_long		t;
-	t_line      *tmp;
+	t_line		*tmp;
 
 	(1) && (t.i = 0, ft_ini(&t), tmp = node,
 		t.c = ft_count_pipe(node), holder = NULL);
@@ -499,7 +509,7 @@ t_holder    *ft_create_holder_node(t_line *node, char *line)
 			if (tmp->next && tmp->token == PIPE)
 			{
 				tmp = tmp->next;
-				break;
+				break ;
 			}
 			if (!ft_create_holder_node_utils(tmp, new, &t, holder))
 				return (NULL);

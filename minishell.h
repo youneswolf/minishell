@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/18 16:03:54 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/22 13:50:26 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,6 @@
 #include <readline/history.h>
 #include <sys/stat.h>
 #include <libc.h>
-
-// FILE	*gfp;
-
-// static void	*__malloc(size_t size, int line, const char *file)
-// {
-// 	void	*ptr;
-
-// 	ptr = malloc(size);
-// 	fprintf(gfp, "dct[%p] = ['malloc', '%p', %i, '%s']\n",
-// 		ptr, ptr, line, file);
-// 	fflush(gfp);
-// 	return (ptr);
-// }
-
-// static void	__free(void *ptr, int line, const char *file)
-// {
-// 	fprintf(gfp, "dct[%p] = ['free', '%p', %i, '%s']\n",
-// 		ptr, ptr, line, file);
-// 	fflush(gfp);
-// 	free(ptr);
-// }
-// /**/
-// # define malloc(x) __malloc(x, __LINE__, __FILE__)
-// # define free(x) __free(x, __LINE__, __FILE__)
 
 #define NONE -1
 #define CMD 0
@@ -71,7 +47,6 @@
 # define CYAN        "\x1b[36m"
 # define WHT        "\e[0;37m"
 # define RESET        "\x1b[0m"
-
 
 typedef struct s_long
 {
@@ -95,23 +70,32 @@ typedef struct s_long
 	int	c;
 }	t_long;
 
+typedef struct  s_does_match
+{
+	int	i;
+	int	j;
+	int	l;
+	int	ll;
+}	t_does_match;
+
 typedef struct s_status1
 {
-    int     status;
-    int     quote;
+	int     status;
+	int     quote;
 	int		index;
 }           t_status1;
 
 typedef struct s_remove
 {
    	int		count;
-    int		flag;
-    int		i;
+	int		flag;
+	int		i;
 }           t_remove;
 
 typedef struct s_outfile
 {
    	int		qq;
+	char	**a;
 	int		ee;
 }           t_outfile;
 
@@ -125,30 +109,30 @@ typedef struct s_put
 typedef struct s_file
 {
    	int         i;
-    int         z;
-    int         q;
-    int         b;
+	int         z;
+	int         q;
+	int         b;
 }           t_file;
 
 typedef struct s_line
 {
-    char            *str;
-    int             token;
+	char            *str;
+	int             token;
 	int				deja;
-    int             quote;
-    int             type_quote;
-    int             flag;
+	int             quote;
+	int             type_quote;
+	int             flag;
 	int 			is_between_quote;
 	t_status1		*status1;
-    int             is_it_built_in;
-    struct s_line   *next;
+	int             is_it_built_in;
+	struct s_line   *next;
 }                   t_line;
 
 typedef struct s_status
 {
-    int     status;
-    int     quote;
-    // char    *lastdir;
+	int     status;
+	int     quote;
+	// char    *lastdir;
 	int		index;
 	t_line	*node;
 }           t_status;
@@ -184,12 +168,6 @@ typedef struct s_cmd
 	struct s_cmd *next;
 }t_cmd;
 
-// typedef struct s_herdoc
-// {
-
-// } t_herdoc;
-
-
 typedef struct s_holder
 {
 	int here;
@@ -212,40 +190,40 @@ typedef struct s_holder
 }	t_holder;
 typedef struct s_last
 {
-    int     status;
+	int     status;
 	char	*line;
 }           t_last;
 
 typedef struct s_exp
 {
-    t_line *split;
-    t_line *node;
-    char *dollar_str_space;
-    char *spaces;
-    char *join;
-    char **str;
-    char **dollar_str;
-    char *expand_var;
-    int j;
-    int i;
+	t_line *split;
+	t_line *node;
+	char *dollar_str_space;
+	char *spaces;
+	char *join;
+	char **str;
+	char **dollar_str;
+	char *expand_var;
+	int j;
+	int i;
 }t_exp;
+
 typedef struct s_expan
 {
-    t_env *tmp;
-    t_line *line_tmp;
-    char *special;
-    char *pre_special;
-    int i;
-    int j;
-    char *var;
-    char *sub ;
-    char *pre_var;
+	t_env *tmp;
+	t_line *line_tmp;
+	char *special;
+	char *pre_special;
+	int i;
+	int j;
+	char *var;
+	char *sub ;
+	char *pre_var;
 }    t_expan;
 
 typedef struct s_execution
 {
 	t_holder *tmp;
-	// t_env* env;
 	int ppp;
 	int child_stat;
 	int pipe_fd[2];
@@ -258,112 +236,101 @@ typedef struct s_execution
 
 typedef struct s_export
 {
-    int i;
-    char *node_env;
-    char *var_name;
-    char *value;
-    t_env *tmp;
-    t_env *node;
-    int is_invalid;
-    int j;
-    t_holder *line_tmp;
-    char *join;
+	int i;
+	char *node_env;
+	char *var_name;
+	char *value;
+	t_env *tmp;
+	t_env *node;
+	int is_invalid;
+	int j;
+	t_holder *line_tmp;
+	char *join;
 }    t_export;
 
-extern	struct termios    attr;
-
-// echo $USER << 1 cat
-// echo "''''""$USER.$"'"$$USER"'"'"
-// echo "$"
 char			*expand_env(t_expan *vars);
-void    		ft_putchar_fd(char c, int fd);
-void    		ft_putstr_fd(char *s, int fd);
-int     		ft_cmp(char *s, char *s1);
-int     		ft_is_numeric(char *str);
-unsigned long  	ft_atoi(char *str);
+void			ft_putchar_fd(char c, int fd);
+void			ft_putstr_fd(char *s, int fd);
+int				ft_cmp(char *s, char *s1);
+int				ft_is_numeric(char *str);
+unsigned long	ft_atoi(char *str);
 void			ft_exit(t_holder *str);
 void			ft_free_holder(t_holder **str);
 int				ft_oppen_files(t_holder *node, t_last *status);
-void    		ft_f(int signum);
+void			ft_f(int signum);
 char			*ft_substr1(char *str, int start, int len, int not_);
 void			ft_free_holder(t_holder **str);
 int				ft_isalnum_str(char *str);
-char    		*ft_remove3(char *line);
+char			*ft_remove3(char *line);
 char			*ft_remove_utils4(char *line, char *str, int j, int i);
 int				ft_remove_utils3(char *str);
 void 			exec_env(t_env **mini_env );
-void 			exec_unset(t_env **mini_env, t_holder *holder);
-void 			exec_echo(t_holder *holder, t_last *status);
+void			exec_unset(t_env **mini_env, t_holder *holder);
+void			exec_echo(t_holder *holder, t_last *status);
 int				f_strcmp(char *str1, char *str2);
-void 			exec_export(t_holder **holder, t_env **env);
-void    		ft_handler_ctrt_herdoc(int signum);
-int 			f_strcmp(char *str1, char *str2);
+void			exec_export(t_holder **holder, t_env **env);
+void			ft_handler_ctrt_herdoc(int signum);
+int				f_strcmp(char *str1, char *str2);
 int				ft_strcmp_asd(char *s1,  char *s2);
-char    		*ft_itoa(int n);
-char    		*ft_remove_here(char *str);
-t_holder    	*ft_create_holder_node(t_line *node, char *line);
-int         	ft_count_pipe(t_line *head);
+char			*ft_itoa(int n);
+char			*ft_remove_here(char *str);
+t_holder		*ft_create_holder_node(t_line *node, char *line);
+int				ft_count_pipe(t_line *head);
 char			*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char			*put_status_in_str(char *str, int status_int);
-// t_holder        *add_list_holder(t_holder **lst, char *line);
-// t_holder	    *ft_lstnew_holder(char *line);
-void       		ft_pwd(t_env *env);
-void        	ft_execute_cmd(t_line *head);
+void			ft_pwd(t_env *env);
+void			ft_execute_cmd(t_line *head);
 int				ft_isalpha(int c);
 char			*ft_sub_str(char *s, unsigned int start, size_t len, int is_free);
-// void        	ft_give_token(t_line *head);
-char	    	*ft_strdup(char *s1);
+char			*ft_strdup(char *s1);
 char			*ft_strjoin(char *static_str, char *buff, int is_free);
-// char	        *ft_strjoin(char *s1, char *s2);
-size_t	    	ft_strlen(const char *s);
-// char	        *ft_strjoin(char *s1, char *s2);
-int	        	count(char *s, char c);
-char	        *word(char *str, char c);
+size_t			ft_strlen(const char *s);
+int				count(char *s, char c);
+char			*word(char *str, char c);
 int				ft_syntax(t_line *head, t_last	*status);
-char	        **alloc(int l);
-char	        **ft_split(char *str, char c);
-int             ft_cd(char *str, t_env **mini_env);//, t_line *head
+char			**alloc(int l);
+char			**ft_split(char *str, char c);
+int				ft_cd(char *str, t_env **mini_env);
 int				count_dollar(char *str);
-void            ft_put(char *str, t_line **head);
-void            ft_red_args(t_line *head);
-void	        ft_expand_argument(t_env *env, t_line **linked_list);
-char	        *ft_handle_expand(char *line_str, char *arg);
-void	        ft_append_char(char **str, int c);
-int             ft_surpass_chars(char *var);
-char	        *ft_arg_is_exist(t_env *env, char *var);
-char	        *ft_allocate_for_var(int flag, char *str, int i);
-t_env           *ft_get_env(char **env);
-static t_env    *ft_create_new_env(void);
-int	            ft_t_env_len(t_env *head);
+void			ft_put(char *str, t_line **head);
+void			ft_red_args(t_line *head);
+void			ft_expand_argument(t_env *env, t_line **linked_list);
+char			*ft_handle_expand(char *line_str, char *arg);
+void			ft_append_char(char **str, int c);
+int				ft_surpass_chars(char *var);
+char			*ft_arg_is_exist(t_env *env, char *var);
+char			*ft_allocate_for_var(int flag, char *str, int i);
+t_env			*ft_get_env(char **env);
+static t_env	*ft_create_new_env(void);
+int				ft_t_env_len(t_env *head);
 static t_env	*ft_last_node(t_env *top);
 static t_env	*ft_new_node(char *value);
-int	            ft_push_value(char *value, t_env **head);
-void            ft_free_env(t_env **head);
-void            ft_remove_quote(t_line **str, char *line);
-char            *ft_remove(t_line *tmp, char *line);
+int				ft_push_value(char *value, t_env **head);
+void			ft_free_env(t_env **head);
+void			ft_remove_quote(t_line **str, char *line);
+char			*ft_remove(t_line *tmp, char *line);
 int				ft_strchr1(char *s, char c);
-void            ft_checking_files(t_holder *node);
+void			ft_checking_files(t_holder *node);
 int				ft_count_2d(char **array);
 int				ft_strcmp(char *s1,  char *s2);
-int		        ft_cmp_built_in(char *str);
-void            ft_handler_ctrl_c(int signum);
-void	        ft_free_2d(char **array);
-void            ft_free_list(t_line **str, t_status *status);
-void    		redirect_append(int fd);
-void    		redirect_output(int fd);
-void    		redirect_input(int fd);
-t_line 			*ft_lst_new(char *str);
+int				ft_cmp_built_in(char *str);
+void			ft_handler_ctrl_c(int signum);
+void			ft_free_2d(char **array);
+void			ft_free_list(t_line **str, t_status *status);
+void			redirect_append(int fd);
+void			redirect_output(int fd);
+void			redirect_input(int fd);
+t_line			*ft_lst_new(char *str);
 int				if_dollar(char *str);
 char			*handle_expand(char *line_str, t_env **env);
 void			env_list(t_env **mini_env, char *line);
 void			fiLL_env(t_env **mini_env, char **env);
 t_env			*get_last(t_env **a);
 void			ft_free_nodes(t_env **a);
-// char *expand(t_line **line, t_env **env);
-void 			fill_second_null_env(t_env **mini_env);
+void			fill_second_null_env(t_env **mini_env);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
-void 			fill_null_env(t_env **mini_env);
-int   			ft_isalnum(int c);
+void			fill_null_env(t_env **mini_env);
+int				ft_isalnum(int c);
 char 			*expand(char *str, t_env **env);
 char 			*ft_substr(char *str, int start, int len);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
@@ -371,67 +338,57 @@ static			int	end_finder(char *s1, char *set);
 char			*ft_strdup(char *s1);
 static			int	start_finder(char *s1, char *set);
 char			*ft_strtrim(char *s1, char *set, int arg);
-// t_holder    *ft_create_holder_node(t_line *node);
-int     		ft_count_pipe(t_line *head);
-// t_holder	*add_list_holder(t_holder **lst);
-// t_holder	*ft_lstnew_holder(void);
-void    		ft_pwd();
-int 			is_sgl_quote(char *str);
-void    		ft_execute_cmd(t_line *head);
+int				ft_count_pipe(t_line *head);
+void			ft_pwd();
+int				is_sgl_quote(char *str);
+void			ft_execute_cmd(t_line *head);
 void			ft_give_token(t_line *head, t_status *status);
 char			*ft_strdup(char *s1);
-// char	*ft_strjoin(char *s1, char *s2);
 size_t			ft_strlen(const char *s);
 char			*ft_strjoin(char *s1, char *s2, int is_free);
 int				count(char *s, char c);
 char			*word(char *str, char c);
-// void    ft_syntax(t_line *head);
 char			**alloc(int l);
 char			**ft_split(char *str, char c);
-// int    ft_cd(char *str, t_env *mini_env);
-// t_line    *ft_put(char *line);
-void    		ft_red_args(t_line *head);
+void			ft_red_args(t_line *head);
 void			ft_expand_argument(t_env *env, t_line **linked_list);
-// char	*ft_handle_expand(char *line_str, char *arg);
 void			ft_append_char(char **str, int c);
 int				ft_surpass_chars(char *var);
 char			*ft_arg_is_exist(t_env *env, char *var);
 char			*ft_allocate_for_var(int flag, char *str, int i);
-t_env   		*ft_get_env(char **env);
-static t_env    *ft_create_new_env(void);
+t_env			*ft_get_env(char **env);
+static t_env	*ft_create_new_env(void);
 int				ft_t_env_len(t_env *head);
 static t_env	*ft_last_node(t_env *top);
 static t_env	*ft_new_node(char *value);
 int				ft_push_value(char *value, t_env **head);
 void			ft_free_env(t_env **head);
-// void    ft_remove_quote(t_line **str);
-// char    *ft_remove(t_line *tmp);
-void    		ft_checking_files(t_holder *node);
-char 			*handle_expand_here(char *line_str, t_env **env);
+void			ft_checking_files(t_holder *node);
+char			*handle_expand_here(char *line_str, t_env **env);
 t_line			*get_last_l(t_line **a);
-char 			*expand_here(char *str, t_env **env);
-int 			count_sgl_quote(char *str);
+char			*expand_here(char *str, t_env **env);
+int				count_sgl_quote(char *str);
 char			**ft_split1(const char *str, char c);
 static char		**alloc1(int l);
-void    		ft_free_list2(t_line **str);
+void			ft_free_list2(t_line **str);
 static int		ft_free(char **array, const char *str, char c, int a);
 static char		*word1(const char *str, char c);
 static int		count1(const char *s, char c);
-char 			**ft_does_it_matche(char *str);
-int 			ft_is_there(char *str);
-int 			ft_is_there_in_the_dir(char *pattern, char *text);
-int    			ft_search_back(char *pattern, char *text, int l, int ll);
-int 			ft_str(char *str);
+char			**ft_does_it_matche(char *str);
+int				ft_is_there(char *str);
+int				ft_is_there_in_the_dir(char *pattern, char *text);
+int				ft_search_back(char *pattern, char *text, int l, int ll);
+int				ft_str(char *str);
 int				ft_status(int a, int status);
-char 			*handle_expand(char *line_str, t_env **env);
-void 			join_exp(t_exp *vars, t_env **env);
-void 			join_exp_1dollar(t_exp *vars, t_env **env);
-void 			initialize_vars(t_expan *vars, t_env **env);
-t_line 			*get_exp_node(char *line_str);
-void 			join_exp_here(t_exp *vars, t_env **env);
-void 			join_exp_1dollar_here(t_exp *vars, t_env **env);
-int 			check_for_first_elem(char *str);
-void    		ft_free_list3(t_line **str);
-// to add later
-void 			heredoc ();
+char			*handle_expand(char *line_str, t_env **env);
+void			join_exp(t_exp *vars, t_env **env);
+void			join_exp_1dollar(t_exp *vars, t_env **env);
+void			initialize_vars(t_expan *vars, t_env **env);
+t_line			*get_exp_node(char *line_str);
+void			join_exp_here(t_exp *vars, t_env **env);
+void			join_exp_1dollar_here(t_exp *vars, t_env **env);
+int				check_for_first_elem(char *str);
+void			ft_free_list3(t_line **str);
+void			heredoc ();
+
 #endif
