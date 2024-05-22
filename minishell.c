@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 13:35:51 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:28:26 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int f_strcmp(char *str1, char *str2)
 
 int is_there_exit(char *str)
 {
-	int i, j;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -476,6 +476,7 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], t_execution *vars)
     char *path;
     char **array;
 
+	array = NULL;
     redirection_cmd(holder, vars, pipe_fd);
     if (is_slash(holder->args[0]))
 		cmd_file_stat(holder, &path);
@@ -549,7 +550,8 @@ char *ft_remove_dollar(char *str)
     int i = 1;
     char *new_str;
 
-    if ((str && str[0] == '$') && (str[1] && str[1] == 39 || str[1] && str[1] == 34))
+	new_str = NULL;
+    if ((str && str[0] == '$') && ((str[1] && str[1] == 39) || (str[1] && str[1] == 34)))
     {
         new_str = malloc(ft_strlen(str));
         while (str && str[i])
@@ -583,6 +585,7 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *tmp, t_env **env, int orig
     int        i;
 
 	i = 42;
+	str = NULL;
     line = readline("here_doc> ");
 	if (!line)
 		exit(1);
@@ -877,7 +880,7 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 			here_doc_exec(&vars, env);
 		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || vars.tmp->cmd_built_in)
 			built_in_exec(&vars, env, status);
-		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] ||vars.tmp->args[0] && vars.tmp->args[0][0])
+		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] || vars.tmp->args[0] && vars.tmp->args[0][0])
 		{
 			if(!command_first_exec(&vars, env, status))
 				break;
@@ -924,38 +927,6 @@ void	ft_is_buil(t_line *str)
 		if ((tmp->token == CMD) && ft_cmp_built_in(tmp->str) == 1)
 			tmp->is_it_built_in = 1;
 		tmp = tmp->next;
-	}
-}
-
-void	ft_print_tokens(t_line *node, t_status *status)
-{
-	t_line *head = node;
-	while (head)
-	{
-		if (head->token == CMD && head->str)
-			printf(BLUE"[%s]"RESET, "CMD");
-		else if (head->token == ARGS && head->str)
-			printf(YELLOW"[%s]"RESET, "ARGS");
-		else if (head->token == PIPE && head->str)
-			printf(MAGENTA"[%s]"RESET, "PIPE");
-		else if (head->token == IN_REDIR && head->str)
-			printf(CYAN"[%s]"RESET, "IN_REDIR");
-		else if (head->token == OUT_REDIR && head->str)
-			printf(WHT"[%s]"RESET, "OUT_REDIR");
-		else if (head->token == HERDOC && head->str)
-			printf(GREEN"[%s]"RESET, "HERDOC");
-		else if (head->token == OUT_FILE && head->str)
-			printf(MAGENTA"[%s]"RESET, "OUT_FILE");
-		else if (head->token == IN_FILE && head->str)
-			printf(YELLOW"[%s]"RESET, "IN_FILE");
-		else if (head->token == FILE && head->str)
-			printf(YELLOW"[%s]"RESET, "FILE");
-		else if (head->token == APPEND && head->str)
-			printf(YELLOW"[%s]"RESET, "APPEND");
-		else if (head->token == DELIMITER && head->str)
-			printf(YELLOW"[%s]"RESET, "DELIMITER");
-		printf("{%s} index\n", head->str);
-		head = head->next;
 	}
 }
 
@@ -1047,6 +1018,7 @@ void	ft_skip_empty_expand(t_line **node)
 	t_line	*tmp;
 	t_line	*previous;
 
+	tmp = NULL;
 	if ((*node) && (*node)->token != OUT_FILE && (*node)->token != IN_FILE && (*node)->token != APPEND
 		&& (*node)->token != DELIMITER && (*node)->flag == 1 && !(*node)->str[0])
 	{
@@ -1082,43 +1054,6 @@ int is_between_quotes(char *str)
 		return (1);
 	}
 	return (0);
-}
-// void	leaks()
-// {
-// 	fclose(gfp);
-// 	system("leaks minishell");
-// 	usleep(1000 * 100 *10000);
-// }
-
-void	ft_print_holder(t_holder *tmp)
-{
-	t_holder *tmp1 = tmp;
-	while (tmp1)
-	{
-		int kk = 0;
-		int zz = 0;
-		if (tmp1->cmd)
-			printf("holder cmd %s\n", tmp1->cmd);
-		if (tmp1->cmd_built_in)
-			printf("holder cmd %s\n", tmp1->cmd_built_in);
-		while (tmp1->args_built_in[kk])
-		{
-			printf("holder args_buit_in %s\n", tmp1->args_built_in[kk]);
-			kk++;
-		}
-		kk = 0;
-		while (tmp1->args[kk])
-		{
-			printf("holder args %s\n", tmp1->args[kk]);
-			kk++;
-		}
-		while (tmp1->file_out[zz])
-		{
-			printf("holder outfile %s\n", tmp1->file_out[zz]);
-			zz++;
-		}
-		tmp1 = tmp1->next;
-	}
 }
 
 int	ft_status(int a, int status)
@@ -1287,7 +1222,6 @@ int	main_utils_1(t_line *str, t_env *mini_env)
 
 int main(int ac, char **av, char **env)
 {
-	
 	t_line 		*str;
 	t_last		t;
 	t_holder	*tmp;
