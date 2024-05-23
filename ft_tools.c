@@ -699,9 +699,6 @@ int check_sgl_parity(char *str, int i, int sgl)
 {
 	int parity;
 	sgl += count_sgl(str, i);
-	printf("%d\n",count_sgl(str, i));
-	printf("%d\n",i);
-	printf("%s\n",str);
 	parity = sgl / 2;
 	// printf("aaa%d\n",sgl);
 	// while (str && str[i] && str[i] == 39)
@@ -740,7 +737,6 @@ int is_sgl_quote_ex(char *str, int last)
 	static int sgl;
 	if (last == 1)
 	{
-		printf("entaaaaaer\n");
 		sgl = 0;
 	}
 	// if (last)
@@ -749,18 +745,15 @@ int is_sgl_quote_ex(char *str, int last)
 	int past_sgl = sgl;
 	int j = 0;
 	int z = 0;
-	printf("||%d||\n",sgl);
 	while (str && str[i])
 	{
 		if (str[i] == 39)
 		{
-			printf("enter\n");
 			sgl++;
 			j = 1;
 		}
 		if (str[i] == 34 && str[i + 1] && str[i + 1] == 39)
 		{
-			printf("enter\n");
 			sgl += count_sgl(str, i);
 			return (0);
 		}
@@ -768,7 +761,6 @@ int is_sgl_quote_ex(char *str, int last)
 		if (j && check_sgl_parity(str,i,sgl))
 		{
 			sgl += count_sgl(str, i);
-			printf("second\n");
 			return (1);
 		}
 		// if (sgl != 0 &&sgl %2 == 0)
@@ -777,8 +769,6 @@ int is_sgl_quote_ex(char *str, int last)
 		if (str[i] == '$' && j)
 		{
 			sgl += count_sgl(str, i);
-			printf("third\n");
-
 			return (1);
 		}
 		i++;

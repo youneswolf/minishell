@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 16:42:20 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/23 06:01:53 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -611,12 +611,9 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *atmp, t_env **env, int ori
 
 int here_doc_exec(t_execution *vars ,t_env *env)
 {
-	// status = ft_status(0, 1337);
-	// printf("%d\n",status);
 	while (vars->tmp->her_doc[vars->n])
 	{
 		dup2(vars->origin_in, STDIN_FILENO);
-		// if (vars->n > 0)
 			pipe(vars->pipe_fd);
 		vars->pid = fork();
 		if (!vars->pid)
@@ -650,13 +647,15 @@ int here_doc_exec(t_execution *vars ,t_env *env)
 				if (dup2(vars->pipe_fd[0], STDIN_FILENO) == -1)
 					(perror("dup2 doc"));
 				close(vars->pipe_fd[0]);
+				// close(vars->pipe_fd[1]);
 				// pipe(vars->pipe_fd);
 			}
 			else
 			{
 				close(vars->pipe_fd[1]);
 				dup2(vars->origin_in, STDIN_FILENO);
-				pipe(vars->pipe_fd);
+				close(vars->pipe_fd[0]);
+				// pipe(vars->pipe_fd);
 			}
 			}
 			vars->n++;
@@ -666,57 +665,9 @@ int here_doc_exec(t_execution *vars ,t_env *env)
 		return (0);
 }
 
-// void here_doc_exec_1(t_execution *vars ,t_env *env)
-// {
-// 	while (vars->tmp->her_doc[vars->n])
-// 	{
-// 		dup2(vars->origin_in, STDIN_FILENO);
-// 		// if (vars->n > 0)
-// 			pipe(vars->pipe_fd);
-// 		vars->pid = fork();
-// 		if (!vars->pid)
-// 		{
-// 			signal(SIGINT, SIG_DFL);
-// 			signal(SIGQUIT, &ft_f);
-// 			ft_here_doc(vars->tmp->her_doc[vars->n],vars-> pipe_fd, vars->tmp, &env, vars->origin_in);
-// 		}
-// 		else
-// 		{
-// 			waitpid(vars->pid, &vars->child_stat, 0);
-// 			if (WIFSIGNALED(vars->child_stat) && WTERMSIG(vars->child_stat) == SIGINT)
-// 				break ;
-// 			if (WIFEXITED(vars->child_stat))
-// 			{
-// 				int exit_status = WEXITSTATUS(vars->child_stat);
-// 				if (exit_status == 255)
-// 				{
-// 					vars->tmp = vars->tmp->next;
-// 					break;
-// 				}
-// 			}
-// 			close(vars->pipe_fd[1]);
-// 			if (vars->tmp->cmd)
-// 			{
-// 				if (dup2(vars->pipe_fd[0], STDIN_FILENO) == -1)
-// 					(perror("dup2 doc"));
-// 				close(vars->pipe_fd[0]);
-// 				// pipe(vars->pipe_fd);
-// 			}
-// 			else
-// 			{
-// 				close(vars->pipe_fd[1]);
-// 				dup2(vars->origin_in, STDIN_FILENO);
-// 				// pipe(vars->pipe_fd);
-// 			}
-// 			}
-// 			vars->n++;
-// 		}
-// }
-
 void built_in_exec(t_execution *vars, t_env *env, t_last *status)
 {
-	// status->status = ft_status(0, 11);
-	// printf("=={%d}==\n", status->status);
+
 	int fd;
 	(vars->i = 0, vars->j = 0, vars->k = 0);
 	if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
@@ -725,10 +676,6 @@ void built_in_exec(t_execution *vars, t_env *env, t_last *status)
 		vars->j++;
 	if (vars->tmp->ap[vars->k] != -42 && vars->tmp->ap[vars->k] != -1)
 		vars->k++;
-	// if (vars->tmp->in[vars->i-1] >= 0 && vars->tmp->in[vars->i-1] < 1024 && vars->tmp->in[vars->i-1] != -42 && vars->tmp->in[vars->i-1] != -1)
-	// {
-	// 	redirect_input(vars->tmp->in[vars->i-2]);
-	// }
 	else if (vars->j != 0 && vars->tmp->out[vars->j-1] >= 0 && vars->tmp->in[vars->j-1] < 1024 && vars->tmp->out[vars->j-1] != -42 && vars->tmp->out[vars->j-1] != -1)
 	{
 		while (vars->tmp->out[vars->j-1] != -42)
@@ -742,29 +689,19 @@ void built_in_exec(t_execution *vars, t_env *env, t_last *status)
 		redirect_append(vars->tmp->ap[vars->k-2]);
 	}
 	if (vars->tmp->next)
-	{
 		dup2(vars->pipe_fd[1], STDOUT_FILENO);
-		// close(vars->pipe_fd[0]);
-		// close(vars->pipe_fd[1]);
-	}
 	if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "export"))
 		exec_export(&vars->tmp, &env);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "echo"))
-	{
 		exec_echo(vars->tmp, status);
-	}
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "unset"))
 		exec_unset(&env, vars->tmp);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "env"))
 		exec_env(&env);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "exit"))
-	{
 		ft_exit(vars->tmp);
-	}
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "pwd"))
-	{
 		ft_pwd(env);
-	}
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "cd"))
 	{
 		if (vars->tmp->args_built_in[1])
@@ -785,28 +722,30 @@ int    execution_cmd(t_execution *vars, t_env *env, t_last *status)
     vars->pid = fork();
     if (vars->pid == -1)
     {
-        //  printf("minishell: fork: Resource temporarily unavailable\n");
         return(0) ;
     }
     if (!vars->pid)
     {
         exec_cmd(vars->tmp, env, vars->pipe_fd,vars);
     }
-	// while(vars->tmp->in[vars->i-1] != -42)
-	// {
-    // 	close(vars->tmp->in[vars->i-1]);
-	// 	vars->i++;
-	// }
-	// while(vars->tmp->out[vars->j-1] != -42)
-	// {
-    // 	 close(vars->tmp->out[vars->j-1]);
-	// 	vars->j++;
-	// }
-	// while(close(vars->tmp->ap[vars->k-1]) != -42)
-	// {
-   	//  close(vars->tmp->ap[vars->k-1]);
-	// 	vars->k++;
-	// }
+	vars->j = 0;
+	vars->i = 0;
+	vars->k = 0;
+	while(vars->tmp->out[vars->j] && vars->tmp->out[vars->j] != -42 && vars->tmp->out[vars->j] != -1)
+	{
+		close(vars->tmp->out[vars->j]);
+		vars->j++;
+	}
+	while(vars->tmp->in[vars->i] && vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
+	{
+		close(vars->tmp->in[vars->i]);
+		vars->i++;
+	}
+	while(vars->tmp->ap[vars->k] && vars->tmp->ap[vars->k] != -42 && vars->tmp->ap[vars->k] != -1)
+	{
+		close(vars->tmp->ap[vars->k]);
+		vars->k++;
+	}
     return (1);
 }
 void initial_vars(t_execution *vars, t_holder **holder)
@@ -829,6 +768,7 @@ void cleaning_execution(t_execution *vars, t_holder **holder)
     close(vars->origin_out);
 	if (vars->pipe_fd[0])
 		close(vars->pipe_fd[0]);
+	close(vars->pipe_fd[1]);
 	ft_free_holder(holder);	
 }
 
@@ -874,13 +814,16 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 	while (vars.tmp)
 	{
 		vars.wait_i = 0;
-		// (vars.i = 0, vars.j = 0, vars.k = 0, vars.n = 0, vars.wait_i = 0);
 		pipe(vars.pipe_fd);
 		if (vars.tmp->her_doc[vars.n])
-			here_doc_exec(&vars, env);
+		{
+			(close(vars.pipe_fd[0]), close(vars.pipe_fd[1]));
+			if (here_doc_exec(&vars, env)== 500)
+				break;
+		}
 		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || vars.tmp->cmd_built_in)
 			built_in_exec(&vars, env, status);
-		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] || vars.tmp->args[0] && vars.tmp->args[0][0])
+		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] || vars.tmp->file_in[vars.i] || vars.tmp->append[vars.k] || vars.tmp->args[0] && vars.tmp->args[0][0])
 		{
 			if(!command_first_exec(&vars, env, status))
 				break;
