@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 13:50:26 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/23 02:37:51 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,7 @@ void 			exec_env(t_env **mini_env );
 void			exec_unset(t_env **mini_env, t_holder *holder);
 void			exec_echo(t_holder *holder, t_last *status);
 int				f_strcmp(char *str1, char *str2);
+int count_sgl(char *str, int i);
 void			exec_export(t_holder **holder, t_env **env);
 void			ft_handler_ctrt_herdoc(int signum);
 int				f_strcmp(char *str1, char *str2);
@@ -331,7 +332,7 @@ void			fill_second_null_env(t_env **mini_env);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 void			fill_null_env(t_env **mini_env);
 int				ft_isalnum(int c);
-char 			*expand(char *str, t_env **env);
+char 			*expand(char *str, t_env **env, int last);
 char 			*ft_substr(char *str, int start, int len);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
 static			int	end_finder(char *s1, char *set);
@@ -341,6 +342,7 @@ char			*ft_strtrim(char *s1, char *set, int arg);
 int				ft_count_pipe(t_line *head);
 void			ft_pwd();
 int				is_sgl_quote(char *str);
+int is_sgl_quote_ex(char *str, int last);
 void			ft_execute_cmd(t_line *head);
 void			ft_give_token(t_line *head, t_status *status);
 char			*ft_strdup(char *s1);

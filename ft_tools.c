@@ -422,7 +422,7 @@ int check_for_first_elem(char *str)
 		return (0);
 	while(str && str[i] && str[i] != '$')
 	{
-		if (ft_isalpha(str[i]))
+		if (str[i] != '.' || str[i] != ',' || str[i] != '/' || str[i] != '-' || str[i] != ':')
 			return (1);		
 		i++;
 	}
@@ -445,7 +445,12 @@ void join_exp(t_exp *vars, t_env **env)
 		}
 		else
 			vars->dollar_str_space = ft_strjoin("$",vars->dollar_str_space,3);
-		vars->join = ft_strjoin(vars->join, expand(vars->dollar_str_space, env),2);
+		if (vars->i == 0)
+			vars->join = ft_strjoin(vars->join, expand(vars->dollar_str_space, env,1),2);
+		else
+		{
+			vars->join = ft_strjoin(vars->join, expand(vars->dollar_str_space, env,0),2);
+		}
 		while (vars->dollar_str[vars->i] &&vars->dollar_str[vars->i][vars->j]&&  vars->dollar_str[vars->i][vars->j] == ' ')
 		{
 			vars->join = ft_strjoin(vars->join, " ",1);
@@ -458,7 +463,7 @@ void join_exp(t_exp *vars, t_env **env)
 }
 void join_exp_1dollar(t_exp *vars, t_env **env)
 {
-	vars->join = ft_strjoin(vars->join, expand(vars->split->str, env),2);
+	vars->join = ft_strjoin(vars->join, expand(vars->split->str, env,1),2);
 	if (vars->split->next)
 	{
 		vars->join = ft_strjoin(vars->join," ",1);
@@ -552,11 +557,11 @@ void initialize_vars(t_expan *vars, t_env **env)
 	vars->i = 0;
 	vars->j = 0;
 }
-char *expand(char *str, t_env **env)
+char *expand(char *str, t_env **env, int last)
 {
 	t_expan vars;
 	initialize_vars(&vars, env);
-	if (is_sgl_quote(str) && is_char(str))
+	if (is_sgl_quote_ex(str,last) && is_char(str))
 		return (ft_strdup(str));
 	if (!if_dollar(str))
 		return (ft_strdup(str));
@@ -577,7 +582,9 @@ char *expand(char *str, t_env **env)
 	else
 		vars.var = ft_strjoin(vars.sub, "=",1);
 	if (expand_env(&vars))
+	{
 		return(vars.var);
+	}
 	vars.i = 0;
 	vars.j = 42;
 	free(vars.var);
@@ -662,19 +669,118 @@ void fiLL_env(t_env **mini_env, char **env)
 
 	}
 }
-int is_sgl_quote(char *str)
+int check_is_closed(char *str,int  sgl)
 {
-	int i = 0;
-	int j = 0;
-	int z = 0;
+	int i;
+	int j;
+	int k;
+	int count;
+
+	count = 0;
+	k = 0;
+	j = 0;
+	i = 0;
 	while (str && str[i])
 	{
-		if (str[i] == 34 && str[i + 1] == 39)
-			return (0);
 		if (str[i] == 39)
+		{
 			j = 1;
-		if (str[i] == '$' && j)
+			count++;
+		}
+		if (j && str[i] == '$' || sgl && str[i] == '$')
+			k = 1;
+		i++;
+	}
+	if (k && count %2 == 1)
+		return (1);
+	return (0);
+}
+int check_sgl_parity(char *str, int i, int sgl)
+{
+	int parity;
+	sgl += count_sgl(str, i);
+	printf("%d\n",count_sgl(str, i));
+	printf("%d\n",i);
+	printf("%s\n",str);
+	parity = sgl / 2;
+	// printf("aaa%d\n",sgl);
+	// while (str && str[i] && str[i] == 39)
+	// {
+	// 	parity++;
+	// 	i++;
+	// }
+	if (sgl %2 == 0 && sgl != 0 && parity % 2 == 1 && check_is_closed(str,sgl))
+		return (1);
+	// if (sgl %2 == 1)
+		return (0);
+	// printf("%d\n",parity);
+	// printf("|%s|\n",str);
+	// if (parity != 0 && parity % 2 == 0)
+	// 	return (1);
+	// return (0);
+}
+int count_sgl(char *str, int i)
+{
+	int count;
+	if (str[i] && str[i] == 39)
+		i = i+1;
+	count = 0;
+	while (str && str[i])
+	{
+		if (str[i] == 39)
+			count++;
+		i++;
+	}
+	// printf("%d\n",count);
+	return (count);
+}
+int is_sgl_quote_ex(char *str, int last)
+{
+	int i = 0;
+	static int sgl;
+	if (last == 1)
+	{
+		printf("entaaaaaer\n");
+		sgl = 0;
+	}
+	// if (last)
+	// 	return(sgl=0, 1);
+	// printf("%d\n",sgl);
+	int past_sgl = sgl;
+	int j = 0;
+	int z = 0;
+	printf("||%d||\n",sgl);
+	while (str && str[i])
+	{
+		if (str[i] == 39)
+		{
+			printf("enter\n");
+			sgl++;
+			j = 1;
+		}
+		if (str[i] == 34 && str[i + 1] && str[i + 1] == 39)
+		{
+			printf("enter\n");
+			sgl += count_sgl(str, i);
+			return (0);
+		}
+		// printf("%d|,%s\n",sgl,str);
+		if (j && check_sgl_parity(str,i,sgl))
+		{
+			sgl += count_sgl(str, i);
+			printf("second\n");
 			return (1);
+		}
+		// if (sgl != 0 &&sgl %2 == 0)
+
+		// 	return(sgl= 0 ,1);
+		if (str[i] == '$' && j)
+		{
+			sgl += count_sgl(str, i);
+			printf("third\n");
+
+			return (1);
+		}
 		i++;
 	}
 	return (0);
