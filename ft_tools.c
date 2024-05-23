@@ -752,6 +752,11 @@ int is_sgl_quote_ex(char *str, int last)
 			sgl++;
 			j = 1;
 		}
+		if (str[i] == 39 && str[i + 1] && str[i + 1] == 34)
+		{
+			sgl += count_sgl(str, i);
+			return (1);
+		}
 		if (str[i] == 34 && str[i + 1] && str[i + 1] == 39)
 		{
 			sgl += count_sgl(str, i);
