@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 21:08:37 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 15:17:44 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/24 10:13:25 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	ft_handler_ctrl_c(int signum)
 			ft_status(1, 0);
 			return ;
 		}
-		// rl_replace_line("", 1);
 		rl_redisplay();
 	}
 }

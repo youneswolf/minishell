@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 12:43:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/24 09:50:32 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_syntax_quote(char *str, int i, int count)
 			i++;
 	}
 	if (count % 2 != 0)
-		return (printf("syntax error: double or single quote\n"),
+		return (ft_putstr_fd("syntax error: double or single quote\n", 2),
 			ft_status(1, 258), 0);
 	return (1);
 }
@@ -58,27 +58,27 @@ int	ft_her_doc(t_line *head)
 int	ft_syntax_utils(t_line *tmp, int flag)
 {
 	if (tmp->next && flag == tmp->next->token && flag != ARGS)
-		return (ft_status(1, 258), printf("error near `%s'\n", tmp->str), 0);
+		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	else if (tmp && tmp->next && tmp->token == DELIMITER
 		&& (tmp->next->token == IN_REDIR || tmp->next->token == OUT_REDIR)
 		&& !tmp->next->next)
-		return (ft_status(1, 258), printf("error near `%s'\n", tmp->str), 1);
+		return (ft_status(1, 258),ft_putstr_fd("error\n", 2), 1);
 	else if ((tmp->token == PIPE || tmp->token == HERDOC
 			|| tmp->token == IN_REDIR || tmp->token == OUT_REDIR
 			|| tmp->token == APPEND) && !tmp->next)
-		return (ft_status(1, 258), printf("error near `%s'\n", tmp->str), 0);
+		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	else if (tmp->next && (tmp->token == IN_REDIR || tmp->token == OUT_REDIR)
 		&& tmp->next->token == PIPE)
-		return (ft_status(1, 258), printf("error near `%s'\n", tmp->str), 0);
+		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	else if (tmp->next && tmp->token == HERDOC && tmp->next->token == PIPE)
-		return (ft_status(1, 258), printf("error near `%s'\n", tmp->str), 0);
+		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	else if ((tmp->token == IN_REDIR || tmp->token == OUT_REDIR) && !tmp->next)
-		return (ft_status(1, 258), printf("error near `%s'\n", tmp->str), 0);
+		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	else if (tmp && tmp->next && (tmp->token == HERDOC
 			&& tmp->next->token == OUT_REDIR) || (tmp->token == HERDOC
 			&& tmp->next->token == IN_REDIR)
 		|| (tmp->token == IN_REDIR && tmp->next->token == OUT_REDIR))
-		return (ft_status(1, 258), printf("error near `%s'\n", tmp->str), 0);
+		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	return (1);
 }
 
@@ -95,7 +95,7 @@ int	ft_syntax(t_line *head, t_last *status)
 	if (tmp && tmp->token == PIPE || ft_her_doc(head)
 		|| (tmp->token == IN_REDIR && !tmp->next)
 		|| (tmp->token == HERDOC && !tmp->next))
-		return (ft_status(1, 258), printf("error near `%s'\n", tmp->str), 0);
+		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	while (tmp)
 	{
 		if (!ft_syntax_quote(tmp->str, i, count))

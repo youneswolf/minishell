@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:39:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 12:28:23 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/24 09:48:33 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_pwd(t_env *mini_env)
 	i = 0;
 	tmp = mini_env;
 	if (getcwd(buf, sizeof(buf)) != NULL)
-		printf("Current working directory:%s\n", buf);
+		printf("%s\n", buf);
 	else
 	{
 		while (tmp)

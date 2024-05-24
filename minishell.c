@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/23 06:01:53 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/24 10:13:16 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ char    *ft_add_space_to_command(char *str)
 void    ft_ctr(int sig)
 {
 	(void)sig;
-	printf(RED"\nminishell$ "RESET);
+	printf("\nminishell$ ");
 	return ;
 }
 
@@ -420,7 +420,7 @@ void cmd_file_stat(t_holder *holder, char **path)
         }
 	}
 	 else
-        (printf("bash: %s: No such file or directory\n",holder->args[0]), exit(127));
+        (ft_putstr_fd("bash: : No such file or directory\n", 2), exit(127));
 }
 
 void cmd_null_path(char *path, t_holder *holder)
@@ -776,7 +776,7 @@ int command_first_exec(t_execution *vars, t_env *env, t_last *status)
 {
 	if (!execution_cmd(vars, env,status))
 		{
-			printf("minishell: fork: Resource temporarily unavailable\n");
+			ft_putstr_fd("minishell: fork: Resource temporarily unavailable\n", 2);
 			return (0);
 		}
 	return (1);
@@ -1128,7 +1128,7 @@ void	main_utils(t_line *str, t_last *t, t_status *status, t_env *mini_env)
 	ft_remove_quote(&str, t->line);
 	ft_is_buil(str);
 	tmp = ft_create_holder_node(str,t->line);
-	ft_free_list(&str, status);
+	// ft_free_list(&str, status);
 	if (tmp)
 	{
 		if (ft_oppen_files(tmp, t))
@@ -1142,7 +1142,7 @@ int	main_utils_1(t_line *str, t_env *mini_env)
 	t_last t;
 
 	if (signal(SIGQUIT, ft_handler_ctrl_c) == SIG_ERR || (signal(SIGINT, ft_handler_ctrl_c) == SIG_ERR))
-		return (perror("signal"), 1);
+		return (1);
 	t.status = ft_status(0, 1337);
 	line = readline("minishell$ ");
 	if (line == NULL)
@@ -1152,14 +1152,14 @@ int	main_utils_1(t_line *str, t_env *mini_env)
 	line = ft_add_space_to_command(line);
 	ft_put(line, &str);
 	t_status *status = malloc(sizeof(t_status)); 
-	// status->node = str;
 	status->status = 1337;
 	t.line = line;
 	ft_give_token(str, status);
 	ft_is_buil(str);
 	main_utils(str, &t, status, mini_env);
-	str = NULL;
 	free(line);
+	ft_free_list(&str, status);
+	str = NULL;
 	return (0);
 }
 

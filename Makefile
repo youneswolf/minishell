@@ -1,7 +1,16 @@
-# SRC = ft_tools.c minishell.c ft_utlils.c ft_give_token.c ft_put_node.c ft_syntax.c ft_red_args.c ft_remove_quote.c ft_holder_node.c ft_checking_files.c redirect_append.c redirect_input.c redirect_output.c ft_free.c
-# all:
-# 	cc -lreadline -fsanitize=address -g $(SRC) -o minishell
-CC = cc -fsanitize=address -g
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/05/24 09:42:56 by ybellakr          #+#    #+#              #
+#    Updated: 2024/05/24 09:42:57 by ybellakr         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+CC = cc
 # CC += -Wall -Wextra -Werror
 RM = rm -f
 NAME = minishell
@@ -22,11 +31,6 @@ SRC_HEADER = minishell.h
 OBJS = $(SRC_FILE:.c=.o)
 
 all: $(NAME) 
-
-# $(NAME): $(OBJS)
-# 	@echo "$(YELLOW)Compilation of the files...$(RESET)"
-# 	@$(CC) $^ -o $@
-# 	@echo "$(GREEN)[====Executable file Compiled Successfully!====]$(RESET)"
 
 READLINEDIR = $(shell brew --prefix readline)
 
