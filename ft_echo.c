@@ -41,7 +41,7 @@ void    ft_put_str(char *str)
     }
 }
 
-void echo_no_new_line(t_holder *holder, int *i, t_last *status)
+void echo_no_new_line(t_holder *holder, int *i)
 {
     (*i)++;
     while (holder->args_built_in[*i + 1])
@@ -56,7 +56,7 @@ void echo_no_new_line(t_holder *holder, int *i, t_last *status)
         }
 }
 
-void    echo_new_line(t_holder *holder, int j, t_last *status)
+void    echo_new_line(t_holder *holder, int j)
 {
     while (holder->args_built_in[j + 2])
         {
@@ -70,15 +70,15 @@ void    echo_new_line(t_holder *holder, int j, t_last *status)
         }
 }
 
-void exec_echo(t_holder *holder, t_last *status)
+void exec_echo(t_holder *holder)
 {
     int    i = 1;
     int    j = 0;
     if (!ft_strncmp(holder->args_built_in[i], "-n",2))
-        echo_no_new_line(holder, &i, status);
+        echo_no_new_line(holder, &i);
     else
     {
-        echo_new_line(holder, j, status);
+        echo_new_line(holder, j);
         write(1, "\n", 1);
     }
 }

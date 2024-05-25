@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/25 00:40:04 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/25 03:27:46 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,13 @@ typedef struct s_line
 	int             is_it_built_in;
 	struct s_line   *next;
 }                   t_line;
-
+typedef struct s_join
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
+	size_t	len;
+}	t_join;
 typedef struct s_status
 {
 	int     status;
@@ -266,7 +272,7 @@ char			*ft_remove_utils4(char *line, char *str, int j, int i);
 int				ft_remove_utils3(char *str);
 void 			exec_env(t_env **mini_env );
 void			exec_unset(t_env **mini_env, t_holder *holder);
-void			exec_echo(t_holder *holder, t_last *status);
+void			exec_echo(t_holder *holder);
 int				f_strcmp(char *str1, char *str2);
 int count_sgl(char *str, int i);
 void			exec_export(t_holder **holder, t_env **env);

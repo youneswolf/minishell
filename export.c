@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:32:00 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/16 12:33:46 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/25 03:36:28 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,9 +285,7 @@ void	put_env_value(t_export *vars, t_env **env)
 		(*env) = (*env)->next;
 	}
 	if (i)
-	{
 		if_not_in_env1(vars, env);
-	}
 	else
 		vars->j++;
 }

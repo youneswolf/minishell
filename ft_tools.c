@@ -63,36 +63,31 @@ t_line	*get_last_l(t_line **a)
 
 char	*ft_strjoin(char *static_str, char *buff, int is_free)
 {
-	size_t	i;
-	size_t	j;
-	char	*str;
-	size_t	len;
+	t_join vars;
 
 	if (!static_str && !buff)
 		return (ft_strdup(""));
-	len = ft_strlen(static_str);
-	str = malloc(sizeof(char) * (len + ft_strlen(buff)) + 1);
-	if (!str)
+	vars.len = ft_strlen(static_str);
+	vars.str = malloc(sizeof(char) * (vars.len + ft_strlen(buff)) + 1);
+	if (!vars.str)
 		return (ft_free1(&static_str));
-	i = 0;
-	j = 0;
-	while (static_str && static_str[i] != '\0')
+	vars.i = 0;
+	vars.j = 0;
+	while (static_str && static_str[vars.i] != '\0')
 	{
-		str[i] = static_str[i];
-		i++;
+		vars.str[vars.i] = static_str[vars.i];
+		vars.i++;
 	}
-	while (buff && buff[j] != '\0')
-		str[i++] = buff[j++];
-	str[i] = '\0';
+	while (buff && buff[vars.j] != '\0')
+		vars.str[vars.i++] = buff[vars.j++];
+	vars.str[vars.i] = '\0';
 	if (is_free == 1)
 		free(static_str);
 	else if (is_free == 2)
-	{
 		(free(static_str), free(buff));
-	}
 	else if(is_free == 3)
 		free(buff);
-	return (str);
+	return (vars.str);
 }
 
 // int	ft_strncmp(const char *s1, const char *s2, size_t n)
@@ -187,9 +182,7 @@ char	*ft_sub_str(char *s, unsigned int start, size_t len, int is_free)
 		len = i - start;
 	dst = (char *)malloc(sizeof(char) * (len) + 1);
 	if (!dst)
-	{
 		return (NULL);
-	}
 	i = 0;
 	while (i < len)
 	{
@@ -433,16 +426,15 @@ int check_quotes(char *str)
 {
 	int i;
 	char quote;
-	int parity = 0;
+	int parity;
 
+	parity = 0;
 	i = 0;
 	if (str && str[0] && (str[0] == 39 || str[0] == 34))
 	{
 		quote = str[0];
 		while (str[parity] == quote)
-		{
 			parity++;
-		}
 		i = parity;
 		while (str[i])
 			i++;
@@ -526,13 +518,9 @@ char *handle_expand(char *line_str, t_env **env)
 	while (vars.split)
 	{
 		if (count_dollar(vars.split->str) > 1)
-		{
 			join_exp(&vars, env);
-		}
 		else 
-		{
 			join_exp_1dollar(&vars, env);
-		}
 		vars.split = vars.split->next;
 	}
 	ft_free_list2(&vars.node);
@@ -600,7 +588,11 @@ void initialize_vars(t_expan *vars, t_env **env)
 	vars->i = 0;
 	vars->j = 0;
 }
-
+void get_var(t_expan *vars)
+{
+	vars->var = ft_strjoin(vars->pre_var, "=",1);
+		free(vars->sub);
+}
 char *expand(char *str, t_env **env, int last, int quotes)
 {
 	t_expan vars;
@@ -621,10 +613,7 @@ char *expand(char *str, t_env **env, int last, int quotes)
 	vars.i = 0;
 	expand_vars(&vars);
 	if (vars.pre_var)
-	{
-		vars.var = ft_strjoin(vars.pre_var, "=",1);
-		free(vars.sub);
-	}
+		get_var(&vars);
 	else
 		vars.var = ft_strjoin(vars.sub, "=",1);
 	if (expand_env(&vars))
@@ -742,21 +731,10 @@ int check_sgl_parity(char *str, int i, int sgl)
 	int parity;
 	sgl += count_sgl(str, i);
 	parity = sgl / 2;
-	// printf("aaa%d\n",sgl);
-	// while (str && str[i] && str[i] == 39)
-	// {
-	// 	parity++;
-	// 	i++;
-	// }
+
 	if (sgl %2 == 0 && sgl != 0 && parity % 2 == 1 && check_is_closed(str,sgl))
 		return (1);
-	// if (sgl %2 == 1)
 		return (0);
-	// printf("%d\n",parity);
-	// printf("|%s|\n",str);
-	// if (parity != 0 && parity % 2 == 0)
-	// 	return (1);
-	// return (0);
 }
 int count_sgl(char *str, int i)
 {
@@ -775,49 +753,27 @@ int count_sgl(char *str, int i)
 }
 int is_sgl_quote_ex(char *str, int last)
 {
-	int i = 0;
+	int i;
 	static int sgl;
+	int j;
+
 	if (last == 1)
-	{
 		sgl = 0;
-	}
-	// if (last)
-	// 	return(sgl=0, 1);
-	// printf("%d\n",sgl);
-	int past_sgl = sgl;
-	int j = 0;
-	int z = 0;
+	i = 0;
+	j = 0;
 	while (str && str[i])
 	{
 		if (str[i] == 39)
-		{
-			sgl++;
-			j = 1;
-		}
+			(1) && sgl++, j = 1;
 		if (str[i] == 39 && str[i + 1] && str[i + 1] == 34)
-		{
-			sgl += count_sgl(str, i);
-			return (1);
-		}
+			return (sgl+=count_sgl(str, i), 1);
 		if (str[i] == 34 && str[i + 1] && str[i + 1] == 39)
-		{
-			sgl += count_sgl(str, i);
-			return (0);
-		}
-		// printf("%d|,%s\n",sgl,str);
+			return (sgl+=count_sgl(str, i), 0);
 		if (j && check_sgl_parity(str,i,sgl))
-		{
-			sgl += count_sgl(str, i);
-			return (1);
-		}
-		// if (sgl != 0 &&sgl %2 == 0)
-
-		// 	return(sgl= 0 ,1);
+		
+			return (sgl+=count_sgl(str, i), 1);
 		if (str[i] == '$' && j)
-		{
-			sgl += count_sgl(str, i);
-			return (1);
-		}
+			return (sgl+=count_sgl(str, i), 1);
 		i++;
 	}
 	return (0);
