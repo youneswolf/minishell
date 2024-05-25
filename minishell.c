@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/25 03:35:21 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/25 06:52:50 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -612,7 +612,10 @@ int check_if_ctrl_c(t_execution *vars)
 {
 	int exit_status = WEXITSTATUS(vars->child_stat);
 		if (exit_status == 100)
-				return (write(1, "\n", 1), 100);
+		{
+			ft_status(1, 1);
+			return (write(1, "\n", 1), 100);
+		}
 		if (exit_status == 255)
 		{
 			vars->tmp = vars->tmp->next;
