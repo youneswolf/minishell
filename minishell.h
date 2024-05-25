@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/23 02:37:51 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/25 00:40:04 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,7 +332,7 @@ void			fill_second_null_env(t_env **mini_env);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 void			fill_null_env(t_env **mini_env);
 int				ft_isalnum(int c);
-char 			*expand(char *str, t_env **env, int last);
+char 			*expand(char *str, t_env **env, int last, int quotes);
 char 			*ft_substr(char *str, int start, int len);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
 static			int	end_finder(char *s1, char *set);

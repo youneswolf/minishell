@@ -428,12 +428,38 @@ int check_for_first_elem(char *str)
 	}
 	return (0);
 }
-void join_exp(t_exp *vars, t_env **env)
+
+int check_quotes(char *str)
 {
-	vars->i = 0;
-	int check ;
-	vars->dollar_str = ft_split(vars->split->str, '$');
-	check  = check_for_first_elem(vars->split->str);
+	int i;
+	char quote;
+	int parity = 0;
+
+	i = 0;
+	if (str && str[0] && (str[0] == 39 || str[0] == 34))
+	{
+		quote = str[0];
+		while (str[parity] == quote)
+		{
+			parity++;
+		}
+		i = parity;
+		while (str[i])
+			i++;
+		i--;
+		while (str[i] == quote)
+		{
+			i--;
+			parity--;
+		}
+		if (parity == 0)
+			return (quote);
+	}
+	return (0);
+}
+
+void expanding(t_exp *vars, int check , int quotes, t_env **env)
+{
 	while(vars->dollar_str[vars->i])
 	{
 		vars->j = 0;
@@ -446,12 +472,10 @@ void join_exp(t_exp *vars, t_env **env)
 		else
 			vars->dollar_str_space = ft_strjoin("$",vars->dollar_str_space,3);
 		if (vars->i == 0)
-			vars->join = ft_strjoin(vars->join, expand(vars->dollar_str_space, env,1),2);
+			vars->join = ft_strjoin(vars->join, expand(vars->dollar_str_space, env,1, quotes),2);
 		else
-		{
-			vars->join = ft_strjoin(vars->join, expand(vars->dollar_str_space, env,0),2);
-		}
-		while (vars->dollar_str[vars->i] &&vars->dollar_str[vars->i][vars->j]&&  vars->dollar_str[vars->i][vars->j] == ' ')
+			vars->join = ft_strjoin(vars->join, expand(vars->dollar_str_space, env,0, quotes),2);
+		while (vars->dollar_str[vars->i] && vars->dollar_str[vars->i][vars->j]&&  vars->dollar_str[vars->i][vars->j] == ' ')
 		{
 			vars->join = ft_strjoin(vars->join, " ",1);
 			vars->j++;
@@ -459,16 +483,35 @@ void join_exp(t_exp *vars, t_env **env)
 		vars->i++;
 		free(vars->dollar_str_space);
 	}
-		ft_free_2d(vars->dollar_str);
 }
+
+void join_exp(t_exp *vars, t_env **env)
+{
+	vars->i = 0;
+	int check ;
+	int quotes = 42;
+	int dollar;
+	vars->dollar_str = ft_split(vars->split->str, '$');
+	check  = check_for_first_elem(vars->split->str);
+	quotes = check_quotes(vars->split->str);
+	if (quotes == 39)
+		quotes = 1;
+	else if (quotes == 34)
+		quotes = 2;
+	expanding(vars, check, quotes, env);
+	ft_free_2d(vars->dollar_str);
+
+}
+
 void join_exp_1dollar(t_exp *vars, t_env **env)
 {
-	vars->join = ft_strjoin(vars->join, expand(vars->split->str, env,1),2);
+	vars->join = ft_strjoin(vars->join, expand(vars->split->str, env,1, 0),2);
 	if (vars->split->next)
 	{
 		vars->join = ft_strjoin(vars->join," ",1);
 	}
 }
+
 char *handle_expand(char *line_str, t_env **env)
 {
 	t_exp vars;
@@ -557,11 +600,14 @@ void initialize_vars(t_expan *vars, t_env **env)
 	vars->i = 0;
 	vars->j = 0;
 }
-char *expand(char *str, t_env **env, int last)
+
+char *expand(char *str, t_env **env, int last, int quotes)
 {
 	t_expan vars;
 	initialize_vars(&vars, env);
-	if (is_sgl_quote_ex(str,last) && is_char(str))
+	if (is_sgl_quote_ex(str,last) && is_char(str) && quotes != 2)
+		return (ft_strdup(str));
+	if (quotes == 1)
 		return (ft_strdup(str));
 	if (!if_dollar(str))
 		return (ft_strdup(str));
@@ -582,11 +628,7 @@ char *expand(char *str, t_env **env, int last)
 	else
 		vars.var = ft_strjoin(vars.sub, "=",1);
 	if (expand_env(&vars))
-	{
 		return(vars.var);
-	}
-	vars.i = 0;
-	vars.j = 42;
 	free(vars.var);
 	return (ft_strjoin(vars.pre_special, vars.special,2));
 }
