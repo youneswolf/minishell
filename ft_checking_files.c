@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/24 09:45:26 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/25 16:53:42 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	ft_oppen_files_utiles333(t_file *t, t_holder *tmp)
 		{
 			tmp->out[t->b] = open(tmp->file_out[t->b], O_CREAT | O_RDWR, 0644);
 			if (tmp->out[t->b] == -1)
-				return (1);
+				return (0);
 			t->b++;
 		}
 		else
@@ -100,22 +100,20 @@ int	ft_oppen_files_utiles333(t_file *t, t_holder *tmp)
 			ft_null_tmp(&tmp);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 int	ft_oppen_files_utiles(t_file *t, t_holder *tmp)
 {
-	if (ft_oppen_files_utiles333(t, tmp))
-		return (write(2, "no such file or directory\n", 26),
-			ft_status(1, 1), 0);
-	if (tmp->file_in[t->z] && tmp->infile_index[t->z] == t->i)
+	if (!ft_oppen_files_utiles333(t, tmp))
+		return (ft_status(1, 1), 0);
+	else if (tmp->file_in[t->z] && tmp->infile_index[t->z] == t->i)
 	{
 		tmp->in[t->z] = open(tmp->file_in[t->z], O_RDONLY);
 		if (!is_ambiguous(tmp->file_in[t->i]))
 		{
 			if (tmp->in[t->z] == -1)
-				return (write(2, "no such file or directory\n", 27),
-					ft_status(1, 1), 0);
+				return (ft_status(1, 1), 0);
 			t->z++;
 		}
 		else
@@ -142,13 +140,13 @@ int	ft_oppen_files_nrm(t_holder *tmp, t_file *t)
 			tmp->ap[t->q] = open(tmp->append[t->q], O_CREAT
 					| O_RDWR | O_APPEND, 0644);
 			if (tmp->ap[t->q] == -1)
-				return (1);
+				return (0);
 			t->q++;
 		}
 		else
 			ft_oppen_utils(tmp, t);
 	}
-	return (0);
+	return (1);
 }
 
 int	ft_oppen_files(t_holder *node, t_last *status)
@@ -164,12 +162,14 @@ int	ft_oppen_files(t_holder *node, t_last *status)
 		t.i = 0;
 		while (t.i < tmp->nbr_file)
 		{
-			if (ft_oppen_files_nrm(tmp, &t))
+			if (!ft_oppen_files_nrm(tmp, &t))
 				return (write(2, "no such file or directory\n", 26),
 					ft_status(1, 1), 0);
+			else if (ft_oppen_files_nrm(tmp, &t))
+				;
 			t.i++;
 		}
 		tmp = tmp->next;
 	}
-	return (ft_status(1, 0), 1);
+	return (1);
 }

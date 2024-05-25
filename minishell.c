@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/25 06:52:50 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/25 16:08:05 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -805,7 +805,8 @@ void after_exec(t_holder **holder , t_execution *vars, t_last *status)
 {
 	status->status = ft_status(0, 1);
 	waitpid(vars->pid, &status->status, 0);
-	if (WIFEXITED(status->status)) {
+	if (WIFEXITED(status->status))
+	{
 		status->status = WEXITSTATUS(status->status);
 		ft_status(1, status->status);
 	}
@@ -832,6 +833,7 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 
 	while (vars.tmp)
 	{
+		status->status = ft_status(0, 1);
 		pipe(vars.pipe_fd);
 		if (vars.tmp->her_doc[vars.n])
 		{
@@ -1148,7 +1150,6 @@ void	main_utils(t_line *str, t_last *t, t_status *status, t_env *mini_env)
 	ft_remove_quote(&str, t->line);
 	ft_is_buil(str);
 	tmp = ft_create_holder_node(str,t->line);
-	// ft_free_list(&str, status);
 	if (tmp)
 	{
 		if (ft_oppen_files(tmp, t))
@@ -1172,7 +1173,7 @@ int	main_utils_1(t_line *str, t_env *mini_env)
 	line = ft_add_space_to_command(line);
 	ft_put(line, &str);
 	t_status *status = malloc(sizeof(t_status)); 
-	status->status = 1337;
+	status->status = ft_status(0, 1);
 	t.line = line;
 	ft_give_token(str, status);
 	ft_is_buil(str);
