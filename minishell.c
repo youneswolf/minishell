@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 10:24:56 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 11:43:35 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1180,8 +1180,6 @@ int	main_utils_1(t_line *str, t_env *mini_env)
 	ft_give_token(str, status);
 	ft_is_buil(str);
 	main_utils(str, &t, status, mini_env);
-	// ft_free_list(&str, status);
-	// str = NULL;
 	free(line);
 	return (0);
 }

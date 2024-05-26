@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 10:32:36 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 11:10:54 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 11:49:59 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,15 @@ int	ft_is_there_in_the_dir(char *pattern, char *text)
 					t.i++;
 				if (pattern[t.i] == '\0')
 					return (1);
-				while (text[t.j] && text[t.j] != pattern[t.i])
+				while (text[t.j] && pattern[t.i] && text[t.j] != pattern[t.i])
 					t.j++;
 			}
-			if (pattern[t.i] && pattern[t.i] == text[t.j])
+			if (pattern[t.i] && text[t.j] && pattern[t.i] == text[t.j])
 				(1) && (t.i++, t.j++);
 			else
 				return (0);
 		}
-		return ((pattern[t.i] == text[t.j] == '\0') || pattern[t.i] == '*');
+		return ((pattern[t.i] == '\0' && text[t.j] == '\0') || pattern[t.i] == '*');
 	}
 }
 
@@ -237,7 +237,7 @@ char	**ft_does_it_matche(char *str)
 	{
 		str1 = ft_remove3(str);
 		array = malloc(sizeof(char *) * 2);
-		array[0] = str1;
+		array[0] = ft_strdup(str1);
 		array[1] = NULL;
 		return (array);
 	}
@@ -247,7 +247,7 @@ char	**ft_does_it_matche(char *str)
 	array = ft_does_matche_utils(dir, name, str);
 	if (ft_count_2d(array) == 0)
 	{
-		array[0] = str;
+		array[0] = ft_strdup(str);
 		array[1] = NULL;
 	}
 	return (array);

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:46:14 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 10:21:24 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 11:48:52 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,7 @@ void	ft_create_holder_args(t_line *tmp, t_holder *new, int *j)
 	int		qq;
 	int		ee;
 
+	a = NULL;
 	if (ft_is_there(tmp->str))
 	{
 		a = ft_does_it_matche(tmp->str);
@@ -274,7 +275,7 @@ void	ft_create_holder_args(t_line *tmp, t_holder *new, int *j)
 		ee = 0;
 		if (qq >= 1)
 		{
-			while (a[ee] != NULL)
+			while (a && a[ee] != NULL)
 			{
 				new->args[(*j)++] = ft_strdup(a[ee]);
 				ee++;
