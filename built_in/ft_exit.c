@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 02:20:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:40:00 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 15:21:47 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,13 @@ void	ft_exit(t_holder *str)
 	if (i == 1)
 		(ft_putstr_fd("exit\n", 2), exit(ft_status(0, 1)));
 	else if (i > 2 && ft_is_numeric(tmp1->args_built_in[1]))
-		(write(2, "exit\n", 6), write(2, "bash: exit: too many arguments\n", \
-			32), ft_status(1, 1));
+		(write(2, "exit\n", 6), write(2, "bash: exit: too many arguments\n",
+				32), ft_status(1, 1));
 	else if (i == 2 && ft_is_numeric(tmp1->args_built_in[1])
 		&& ((size_t)ft_atoi(tmp1->args_built_in[1]) <= 9223372036854775807
 			|| (size_t)ft_atoi(tmp1->args_built_in[1]) >= -922337203685477588))
-		(ft_putstr_fd("exit\n", 2), ft_status(1, ft_atoi(tmp1->args_built_in[1])),
-			exit(ft_atoi(tmp1->args_built_in[1])));
+		(ft_putstr_fd("exit\n", 2), ft_status(1, ft_atoi(tmp1->args_built_in[1]))
+			, exit(ft_atoi(tmp1->args_built_in[1])));
 	else if (tmp1->args_built_in[1] && !ft_is_numeric(tmp1->args_built_in[1]))
 		ft_exit_utils();
 	else if (tmp1->args_built_in[1] && ft_is_numeric(tmp1->args_built_in[1])

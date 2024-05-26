@@ -6,47 +6,11 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:40:46 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 15:03:53 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	*ft_substr1(char *str, int start, int len, int not_)
-{
-	char	*sub;
-	int		i;
-	int		str_len;
-
-	i = 0;
-	str_len = ft_strlen(str);
-	if (start + len > str_len)
-		len = str_len - start;
-	sub = (char *)malloc((len + 1) * sizeof(char));
-	while (i < len)
-		sub[i++] = str[start++];
-	sub[len] = '\0';
-	if (not_ == 1)
-		free(str);
-	return (sub);
-}
-
-char	*ft_substr(char *str, int start, int len)
-{
-	char	*sub;
-	int		i;
-	int		str_len;
-
-	i = 0;
-	str_len = ft_strlen(str);
-	if (start + len > str_len)
-		len = str_len - start;
-	sub = (char *)malloc((len + 1) * sizeof(char));
-	while (i < len)
-		sub[i++] = str[start++];
-	sub[len] = '\0';
-	return (sub);
-}
 
 t_line	*ft_lstnew(char *str, int start, int end)
 {

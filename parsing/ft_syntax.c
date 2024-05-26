@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:40:25 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 15:06:58 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	ft_syntax_utils(t_line *tmp, int flag)
 	else if (tmp && tmp->next && tmp->token == DELIMITER
 		&& (tmp->next->token == IN_REDIR || tmp->next->token == OUT_REDIR)
 		&& !tmp->next->next)
-		return (ft_status(1, 258),ft_putstr_fd("error\n", 2), 1);
+		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 1);
 	else if ((tmp->token == PIPE || tmp->token == HERDOC
 			|| tmp->token == IN_REDIR || tmp->token == OUT_REDIR
 			|| tmp->token == APPEND) && !tmp->next)

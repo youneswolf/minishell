@@ -26,10 +26,11 @@ RESET=		\033[0m        # No Color
 
 SRC_FILE =	parsing/minishell.c execution/ft_utlils.c parsing/ft_give_token.c parsing/ft_put_node.c parsing/ft_syntax.c parsing/ft_red_args.c parsing/ft_free.c\
 			 parsing/ft_remove_quote.c parsing/ft_holder_node.c parsing/ft_checking_files.c parsing/ft_ctrl_c.c execution/ft_tools.c\
-			 execution/redirect_append.c execution/redirect_input.c execution/redirect_output.c parsing/ft_her_expand.c parsing/ft_remove_here_quote.c\
-			 built_in//export.c parsing/ft_does_matche.c execution/ft_split.c parsing/ft_remove_here_quote.c built_in/ft_echo.c built_in/ft_unset.c built_in/ft_env.c built_in/ft_cd.c built_in/ft_exit.c\
-			 built_in/ft_pwd.c parsing/ft_add_space.c parsing/ft_checking_files.c parsing/ft_ctrl_c.c parsing/ft_expand.c parsing/ft_her_expand.c parsing/ft_is_built_in.c\
-			 parsing/ft_signals.c parsing/ft_utils.c parsing/skip_expand.c execution/ft_execution.c
+			 execution/redirect_append.c execution/redirect_input.c execution/redirect_output.c execution/ft_her_expand.c execution/ft_remove_here_quote.c\
+			 built_in//export.c parsing/ft_does_matche.c execution/ft_split.c built_in/ft_echo.c built_in/ft_unset.c built_in/ft_env.c built_in/ft_cd.c built_in/ft_exit.c\
+			 built_in/ft_pwd.c parsing/ft_add_space.c parsing/ft_checking_files.c parsing/ft_ctrl_c.c execution/ft_expand.c parsing/ft_is_built_in.c\
+			 parsing/ft_signals.c parsing/ft_utils.c parsing/skip_expand.c execution/ft_execution.c parsing/ft_files_utiles.c\
+			 parsing/ft_matche_utils.c parsing/ft_holder1.c parsing/ft_holder2.c parsing/ft_holder3.c parsing/ft_holder4.c parsing/ft_put_utils.c
 
 SRC_HEADER = minishell.h
 
