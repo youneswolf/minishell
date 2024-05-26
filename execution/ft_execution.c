@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execution.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:50:26 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:51:24 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:52:21 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ char	*find_path(t_env *env)
 	dest = NULL;
 	while (!dest)
 	{
-		dest = strnstr(tmp->env, "PATH=", 5); 
+		if (tmp->deleted != 1)
+			dest = strnstr(tmp->env, "PATH=", 5); 
 		tmp = tmp->next;
 	}
 	return (dest);
@@ -577,7 +578,7 @@ int    execution_cmd(t_execution *vars, t_env *env, t_last *status)
         vars->k++;
     vars->pid = fork();
     if (vars->pid == -1)
-        return(0) ;
+        return (0) ;
     if (!vars->pid)
         exec_cmd(vars->tmp, env, vars->pipe_fd,vars);
 	exec_cmd_vars_init(vars);

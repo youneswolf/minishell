@@ -21,7 +21,7 @@ void exec_env(t_env **mini_env)
     tmp = *mini_env;
     while (tmp)
     {
-        if (is_equal(tmp->env))
+        if (is_equal(tmp->env) && tmp->deleted != 1)
             printf("%s\n",tmp->env);
         tmp = tmp->next;
     }

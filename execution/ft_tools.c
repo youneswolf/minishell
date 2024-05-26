@@ -587,6 +587,7 @@ void fill_null_env(t_env **mini_env)
 		(ft_free_nodes(mini_env), exit(1));
 	node->env = first;
 	node->printed = 0;
+	node->deleted = 0;
 	node->next = NULL;
 	*mini_env = node;
 	fill_second_null_env(mini_env);
@@ -608,6 +609,7 @@ void fill_second_null_env(t_env **mini_env)
 		(ft_free_nodes(mini_env), exit(1));
 	final = ft_strjoin(var, buf, 1);
 	node->env = final;
+	node->deleted = 0;
 	node->next = NULL;
 	(*mini_env)->next = node;
 }
@@ -738,6 +740,7 @@ void	env_list(t_env **mini_env, char *line)
 		(ft_free_nodes(mini_env), exit(1));
 	node->env = line;
 	node->printed = 0;
+	node->deleted = 0;
 	node->next = NULL;
 	if (!(*mini_env))
 	{

@@ -5,17 +5,24 @@ void remove_node(t_env **mini_env, int i)
 	t_env *join;
 	t_env *head;
 	int j;
-
+	t_env *new_list;
 	head = *mini_env;
 	j = 0;
 	while (*mini_env)
 	{
+		if (i == 0)
+		{
+			(*mini_env)->deleted =1;
+			break;
+		}
 		if (j == i - 1)
 		{
 			join = (*mini_env)->next;
-			(*mini_env)->next = (*mini_env)->next->next;
-			free(join->env);
-			free(join);
+			(*mini_env)->next->deleted = 1;
+			// (*mini_env)->next = (*mini_env)->next->next;
+			break;
+			// free(join->env);
+			// free(join);
 
 		}
 		*mini_env = (*mini_env)->next;
@@ -23,7 +30,27 @@ void remove_node(t_env **mini_env, int i)
 	}
 	*mini_env = head;
 }
+// void remove_node(t_env **mini_env, int i) {
+//     t_env *head = *mini_env;
+//     int j = 0;
 
+//     while (*mini_env) {
+//         if (i == 0) {
+//             (*mini_env)->deleted = 1;
+// 			break;
+//         }
+
+//         if (j == i - 1 && (*mini_env)->next != NULL) {
+//             (*mini_env)->next->deleted = 1;
+//             break;
+//         }
+
+//         *mini_env = (*mini_env)->next;
+//         j++;
+//     }
+
+//     *mini_env = head;
+// }
 void exec_unset(t_env **mini_env, t_holder *holder)
 {
 	t_env *tmp;

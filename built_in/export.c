@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:32:00 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/26 13:40:18 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 21:14:51 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,13 +123,17 @@ void	declare_export(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
+		if (tmp->deleted == 1)
+		{
+			tmp = tmp->next;
+			continue;
+		}
 		node = malloc(sizeof(t_env));
 		node->env = ft_strdup(tmp->env);
+		node->deleted = tmp->deleted;
 		node->next = NULL;
 		if (!head)
-		{
 			head = node;
-		}
 		else
 		{
 			last_node = get_last(&head);
@@ -303,6 +307,8 @@ void	export_vars(t_export *vars, t_holder **holder, t_env **env)
 int	check_first_is_nbr(char *str)
 {
 	if (str[0] && str[0] >= '0' && str[0] <= '9')
+		return (0);
+	if (str[0] && (str[0] == '=' || str[0] == '+'))
 		return (0);
 	return (1);
 }
