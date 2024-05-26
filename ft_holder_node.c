@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:46:14 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/24 09:47:24 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:21:24 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,7 +328,8 @@ int	ft_create_holder_outfile(t_line *tmp, t_holder *new, t_long *t)
 				(1) && ((t->index)++, q.ee++, new->nbr_file++);
 			}
 			if (q.ee >= 1)
-				return (ft_free_2d(q.a), ft_putstr_fd("ambiguous redirect\n", 2), 0);
+				return (ft_free_2d(q.a), ft_free_2d(new->file_out),
+				new->file_out = NULL, ft_putstr_fd("ambiguous redirect\n", 2), 1);
 		}
 	}
 	else
@@ -357,7 +358,8 @@ int	ft_create_holder_infile(t_line *tmp, t_holder *new, t_long *t)
 				new->infile_index[(t->sss)++] = t->index;
 			}
 			if (q.ee >= 1)
-				return (ft_free_2d(q.a), ft_putstr_fd("ambiguous redirect\n", 2), 0);
+				return (ft_free_2d(q.a), ft_free_2d(new->file_in),
+				new->file_in = NULL, ft_putstr_fd("ambiguous redirect\n", 2), 1);
 		}
 	}
 	else
@@ -386,7 +388,8 @@ int	ft_create_holder_append(t_line *tmp, t_holder *new, t_long *t)
 				new->append_index[(t->www)++] = t->index;
 			}
 			if (q.ee >= 1)
-				return (ft_free_2d(q.a), ft_putstr_fd("ambiguous redirect\n", 2), 0);
+				return (ft_free_2d(q.a), ft_free_2d(new->append),
+				new->append = NULL, ft_putstr_fd("ambiguous redirect\n", 2), 0);
 		}
 	}
 	else

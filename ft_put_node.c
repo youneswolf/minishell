@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 17:00:05 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/22 12:27:29 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:19:22 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void	add_list(t_line **lst, char *str, int start, int end)
 	if (*lst == NULL)
 	{
 		*lst = new;
-		new->next = NULL;
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/25 16:53:42 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:11:35 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	ft_oppen_files_utiles1(t_holder *tmp, t_file *t)
 
 int	ft_oppen_files_utiles333(t_file *t, t_holder *tmp)
 {
-	if (tmp->file_out[t->b] && tmp->outfile_index[t->b] == t->i)
+	if (tmp->file_out && tmp->file_out[t->b] && tmp->outfile_index[t->b] == t->i)
 	{
 		if (!is_ambiguous(tmp->file_out[t->b]))
 		{
@@ -107,7 +107,7 @@ int	ft_oppen_files_utiles(t_file *t, t_holder *tmp)
 {
 	if (!ft_oppen_files_utiles333(t, tmp))
 		return (ft_status(1, 1), 0);
-	else if (tmp->file_in[t->z] && tmp->infile_index[t->z] == t->i)
+	else if (tmp->file_in && tmp->file_in[t->z] && tmp->infile_index[t->z] == t->i)
 	{
 		tmp->in[t->z] = open(tmp->file_in[t->z], O_RDONLY);
 		if (!is_ambiguous(tmp->file_in[t->i]))
@@ -133,9 +133,9 @@ int	ft_oppen_files_nrm(t_holder *tmp, t_file *t)
 {
 	if (!ft_oppen_files_utiles(t, tmp))
 		return (0);
-	else if (tmp->append_index[t->q] == t->i)
+	else if (tmp->append_index && tmp->append_index[t->q] == t->i)
 	{
-		if (!is_ambiguous(tmp->append[t->q]))
+		if (tmp->append && !is_ambiguous(tmp->append[t->q]))
 		{
 			tmp->ap[t->q] = open(tmp->append[t->q], O_CREAT
 					| O_RDWR | O_APPEND, 0644);

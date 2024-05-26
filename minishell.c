@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/25 16:08:05 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 10:24:56 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -843,9 +843,9 @@ void execution(t_holder **holder ,t_env *env, t_last *status)
 		}
 		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) || vars.tmp->cmd_built_in)
 			built_in_exec(&vars, env);
-		if (vars.tmp && vars.tmp->cmd || vars.tmp->file_out[vars.j] 
-		|| vars.tmp->file_in[vars.i] || vars.tmp->append[vars.k] 
-		|| vars.tmp->args[0] && vars.tmp->args[0][0])
+		if ((vars.tmp && vars.tmp->cmd) || (vars.tmp->file_out && vars.tmp->file_out[vars.j]) 
+		|| (vars.tmp->file_in && vars.tmp->file_in[vars.i]) || (vars.tmp->append && vars.tmp->append[vars.k])
+		|| (vars.tmp->args && vars.tmp->args[0] && vars.tmp->args[0][0]))
 		{
 			if(!command_first_exec(&vars, env, status))
 				break;
@@ -988,6 +988,7 @@ void	ft_skip_empty_expand(t_line **node)
 		&& (*node)->token != DELIMITER && (*node)->flag == 1 && !(*node)->str[0])
 	{
 		previous = (*node);
+		// if ((*node)->next)
 		(*node) = (*node)->next;
 		free(previous->str);
 		free(previous->status1);
@@ -1150,6 +1151,7 @@ void	main_utils(t_line *str, t_last *t, t_status *status, t_env *mini_env)
 	ft_remove_quote(&str, t->line);
 	ft_is_buil(str);
 	tmp = ft_create_holder_node(str,t->line);
+	ft_free_list(&str, status);
 	if (tmp)
 	{
 		if (ft_oppen_files(tmp, t))
@@ -1178,9 +1180,9 @@ int	main_utils_1(t_line *str, t_env *mini_env)
 	ft_give_token(str, status);
 	ft_is_buil(str);
 	main_utils(str, &t, status, mini_env);
+	// ft_free_list(&str, status);
+	// str = NULL;
 	free(line);
-	ft_free_list(&str, status);
-	str = NULL;
 	return (0);
 }
 
