@@ -700,12 +700,12 @@ void fiLL_env(t_env **mini_env, char **env)
 
 	}
 }
-int check_is_closed(char *str,int  sgl)
+int	check_is_closed(char *str,int  sgl)
 {
-	int i;
-	int j;
-	int k;
-	int count;
+	int	i;
+	int	j;
+	int	k;
+	int	count;
 
 	count = 0;
 	k = 0;
