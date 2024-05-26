@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/25 03:27:46 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/26 14:07:57 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ typedef struct s_status
 {
 	int     status;
 	int     quote;
-	// char    *lastdir;
 	int		index;
 	t_line	*node;
 }           t_status;
@@ -274,7 +273,7 @@ void 			exec_env(t_env **mini_env );
 void			exec_unset(t_env **mini_env, t_holder *holder);
 void			exec_echo(t_holder *holder);
 int				f_strcmp(char *str1, char *str2);
-int count_sgl(char *str, int i);
+int				count_sgl(char *str, int i);
 void			exec_export(t_holder **holder, t_env **env);
 void			ft_handler_ctrt_herdoc(int signum);
 int				f_strcmp(char *str1, char *str2);
@@ -348,7 +347,7 @@ char			*ft_strtrim(char *s1, char *set, int arg);
 int				ft_count_pipe(t_line *head);
 void			ft_pwd();
 int				is_sgl_quote(char *str);
-int is_sgl_quote_ex(char *str, int last);
+int				is_sgl_quote_ex(char *str, int last);
 void			ft_execute_cmd(t_line *head);
 void			ft_give_token(t_line *head, t_status *status);
 char			*ft_strdup(char *s1);
@@ -398,5 +397,20 @@ void			join_exp_1dollar_here(t_exp *vars, t_env **env);
 int				check_for_first_elem(char *str);
 void			ft_free_list3(t_line **str);
 void			heredoc ();
-
+void			ft_skip_empty_expand_utils(t_line *head, t_line *previous, t_line *tmp);
+void			ft_skip_empty_expand(t_line **node);
+int				is_between_quotes(char *str);
+int				ft_status(int a, int status);
+int				int_len(int n);
+int				ft_cmp_built_in(char *str);
+void			ft_is_buil(t_line *str);
+void			ft_set_token_to_none(t_line *str);
+int				is_there_exit(char *str);
+void			ft_add_space_utils(char *new_line, char *str, int quote, int i, int j);
+char			*ft_add_space_to_command(char *str);
+char			*ft_strnstr(const char *haystack, const char *needle, size_t len);
+void			execution(t_holder **holder ,t_env *env, t_last *status);
+int				ft_isdigit(int c);
+int				ft_isalnum(int c);
+char			*ft_strchr(char *s, int c);
 #endif
