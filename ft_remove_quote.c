@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:36:17 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/24 10:07:20 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/26 11:57:00 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*ft_remove(t_line *tmp, char *line)
 	if (!str)
 		return (free(str), ft_free_list(&tmp, NULL), NULL);
 	str = ft_remove_utils2(tmp, str, j, i);
-	if (str[0] == '\0')
+	if (str[0] == '\0' && tmp->flag != 1)
 		ft_putstr_fd("bash: :command not found\n", 2);
 	return (str);
 }
