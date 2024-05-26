@@ -1,7 +1,7 @@
 # SRC = ft_tools.c minishell.c ft_utlils.c ft_give_token.c ft_put_node.c ft_syntax.c ft_red_args.c ft_remove_quote.c ft_holder_node.c ft_checking_files.c redirect_append.c redirect_input.c redirect_output.c ft_free.c
 # all:
 # 	cc -lreadline -fsanitize=address -g $(SRC) -o minishell
-CC = cc #-fsanitize=address -g
+# CC = cc 
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
@@ -24,11 +24,13 @@ GREEN=		\033[32m
 YELLOW=		\033[0;33m
 RESET=		\033[0m        # No Color
 
-SRC_FILE = minishell.c ft_utlils.c ft_give_token.c ft_put_node.c ft_syntax.c ft_red_args.c ft_free.c\
-			 ft_remove_quote.c ft_holder_node.c ft_checking_files.c ft_ctrl_c.c ft_tools.c\
-			 redirect_append.c redirect_input.c redirect_output.c ft_her_expand.c ft_remove_here_quote.c\
-			 export.c ft_does_matche.c ft_split.c ft_remove_here_quote.c ft_echo.c ft_unset.c ft_env.c ft_cd.c ft_exit.c\
-			 ft_pwd.c
+SRC_FILE =	parsing/minishell.c execution/ft_utlils.c parsing/ft_give_token.c parsing/ft_put_node.c parsing/ft_syntax.c parsing/ft_red_args.c parsing/ft_free.c\
+			 parsing/ft_remove_quote.c parsing/ft_holder_node.c parsing/ft_checking_files.c parsing/ft_ctrl_c.c execution/ft_tools.c\
+			 execution/redirect_append.c execution/redirect_input.c execution/redirect_output.c execution/ft_her_expand.c execution/ft_remove_here_quote.c\
+			 built_in//export.c parsing/ft_does_matche.c execution/ft_split.c built_in/ft_echo.c built_in/ft_unset.c built_in/ft_env.c built_in/ft_cd.c built_in/ft_exit.c\
+			 built_in/ft_pwd.c parsing/ft_add_space.c parsing/ft_checking_files.c parsing/ft_ctrl_c.c execution/ft_expand.c parsing/ft_is_built_in.c\
+			 parsing/ft_signals.c parsing/ft_utils.c parsing/skip_expand.c execution/ft_execution.c parsing/ft_files_utiles.c\
+			 parsing/ft_matche_utils.c parsing/ft_holder1.c parsing/ft_holder2.c parsing/ft_holder3.c parsing/ft_holder4.c parsing/ft_put_utils.c
 
 SRC_HEADER = minishell.h
 

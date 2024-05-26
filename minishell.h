@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/25 03:27:46 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/26 15:03:01 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define MINISHELL_H
 #include <stdio.h>
 #include <string.h>
+#include <sys/_types/_size_t.h>
 #include <termios.h>
 #include <Kernel/sys/syslimits.h>
 #include <signal.h>
@@ -138,7 +139,6 @@ typedef struct s_status
 {
 	int     status;
 	int     quote;
-	// char    *lastdir;
 	int		index;
 	t_line	*node;
 }           t_status;
@@ -254,6 +254,13 @@ typedef struct s_export
 	char *join;
 }    t_export;
 
+typedef struct s_add_space
+{
+	int	i;
+	int	count;
+	int	flag;
+}    t_add_space;
+
 char			*expand_env(t_expan *vars);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char *s, int fd);
@@ -274,7 +281,7 @@ void 			exec_env(t_env **mini_env );
 void			exec_unset(t_env **mini_env, t_holder *holder);
 void			exec_echo(t_holder *holder);
 int				f_strcmp(char *str1, char *str2);
-int count_sgl(char *str, int i);
+int				count_sgl(char *str, int i);
 void			exec_export(t_holder **holder, t_env **env);
 void			ft_handler_ctrt_herdoc(int signum);
 int				f_strcmp(char *str1, char *str2);
@@ -348,7 +355,7 @@ char			*ft_strtrim(char *s1, char *set, int arg);
 int				ft_count_pipe(t_line *head);
 void			ft_pwd();
 int				is_sgl_quote(char *str);
-int is_sgl_quote_ex(char *str, int last);
+int				is_sgl_quote_ex(char *str, int last);
 void			ft_execute_cmd(t_line *head);
 void			ft_give_token(t_line *head, t_status *status);
 char			*ft_strdup(char *s1);
@@ -384,7 +391,7 @@ static char		*word1(const char *str, char c);
 static int		count1(const char *s, char c);
 char			**ft_does_it_matche(char *str);
 int				ft_is_there(char *str);
-int				ft_is_there_in_the_dir(char *pattern, char *text);
+int				ft_is_there_in_the_dir(char *pat, char *text);
 int				ft_search_back(char *pattern, char *text, int l, int ll);
 int				ft_str(char *str);
 int				ft_status(int a, int status);
@@ -398,5 +405,49 @@ void			join_exp_1dollar_here(t_exp *vars, t_env **env);
 int				check_for_first_elem(char *str);
 void			ft_free_list3(t_line **str);
 void			heredoc ();
-
+void			ft_skip_empty_expand_utils(t_line *head, t_line *previous, t_line *tmp);
+void			ft_skip_empty_expand(t_line **node);
+int				is_between_quotes(char *str);
+int				ft_status(int a, int status);
+int				int_len(int n);
+int				ft_cmp_built_in(char *str);
+void			ft_is_buil(t_line *str);
+void			ft_set_token_to_none(t_line *str);
+int				is_there_exit(char *str);
+void			ft_add_space_utils(char *new_line, char *str, int quote, t_add_space t);
+char			*ft_add_space_to_command(char *str);
+char			*ft_strnstr(const char *haystack, const char *needle, size_t len);
+void			execution(t_holder **holder ,t_env *env, t_last *status);
+int				ft_isdigit(int c);
+int				ft_isalnum(int c);
+char			*ft_strchr(char *s, int c);
+int				is_ambiguous(char *str);
+void			ft_free_2d_am(char **array);
+void			ft_null_tmp(t_holder **tmp);
+void			ft_oppen_files_utiles1(t_holder *tmp, t_file *t);
+int				ft_str(char *str);
+int				ft_search_back(char *pattern, char *text, int l, int ll);
+int				ft_is_there_in_the_dir(char *pattern, char *text);
+int				ft_is_there(char *str);
+int				ft_remove_utils3(char *str);
+void			ft_lstnew_holder_utils(t_holder *new_);
+int				ft_lstnew_holder_check(t_holder *new_);
+t_holder		*ft_lstnew_holder(char *line);
+t_holder		*last_node(t_holder *head);
+t_holder		*add_list_holder(t_holder **lst, char *line);
+int				ft_count_pipe(t_line *head);
+int				ft_count_word(char *str);
+int				ft_count_2d(char **a);
+int				ft_create_holder_utils(t_holder *new_, t_line *tmp, int *flag, int *j);
+void			ft_create_holder_utils1(t_holder *new_, t_line *tmp, int *j, int *flag);
+int				ft_create_hoder_utils2(t_holder *new_, t_line *tmp, int *flag, int *z);
+void			ft_create_holder_utils3(t_line *tmp, t_holder *new_, int *z);
+void			ft_create_holder_args(t_line *tmp, t_holder *new_, int *j);
+void			ft_create_holder_args1(t_line *tmp, t_holder *new_, int *z);
+int				ft_create_holder_outfile(t_line *tmp, t_holder *new_, t_long *t);
+int				ft_create_holder_infile(t_line *tmp, t_holder *new_, t_long *t);
+int				ft_create_holder_append(t_line *tmp, t_holder *new_, t_long *t);
+void			ft_ini(t_long *t);
+int				ft_utils_norm_utils(t_line *tmp, t_holder *new_, t_long *t);
+int				ft_utils_norm(t_line *tmp, t_holder *new_, t_long *t);
 #endif
