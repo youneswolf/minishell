@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/27 10:11:11 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:24:53 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	ft_oppen_files(t_holder *node, t_last *status)
 	(1) && (t.i = 0, t.z = 0, t.q = 0, t.b = 0, e = 0);
 	while (tmp)
 	{
-		t.i = 0;
+		(1) && (t.i = 0, t.z = 0, t.q = 0, t.b = 0, e = 0);
 		while (t.i <= tmp->nbr_file)
 		{
 			if (!ft_oppen_files_nrm(tmp, &t))
@@ -102,6 +102,7 @@ int	ft_oppen_files(t_holder *node, t_last *status)
 			t.i++;
 		}
 		tmp = tmp->next;
+		printf("here\n");
 	}
 	return (1);
 }
