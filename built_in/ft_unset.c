@@ -1,13 +1,13 @@
 #include "../minishell.h"
 
-int	ft_isdigit(int c)
-{
-	if ((char )c >= 48 && (char )c <= 57)
-	{
-		return (1);
-	}
-	return (0);
-}
+// int	ft_isdigit(int c)
+// {
+// 	if ((char )c >= 48 && (char )c <= 57)
+// 	{
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 void remove_node(t_env **mini_env, int i)
 {
 	t_env *tmp;
@@ -44,7 +44,7 @@ int check_unset_syntax(char *str)
 	int i;
 
 	i = 0;
-	if (str && str[0] && is_digit(str[0]))
+	if (str && str[0] && ft_isdigit(str[0]))
 	{
 		ft_status(1,1);
 		return (0);
@@ -59,7 +59,7 @@ int check_unset_syntax(char *str)
 		}
 		i++;
 	}
-	
+	return (1);
 }
 void exec_unset(t_env **mini_env, t_holder *holder)
 {
