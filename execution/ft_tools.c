@@ -513,8 +513,10 @@ char *expand_env(t_expan *vars)
 {
 	while (vars->tmp && vars->var)
 	{
-		if (!ft_strncmp(vars->var, vars->tmp->env, ft_strlen(vars->var) && vars->tmp->deleted != 1))
+		if (!ft_strncmp(vars->var, vars->tmp->env, ft_strlen(vars->var)))
 		{
+			if (vars->tmp->deleted == 1)
+				return (NULL);
 			vars->i = 0;
 			free(vars->var);
 			vars->var = ft_strjoin(vars->tmp->env,vars->special,3);

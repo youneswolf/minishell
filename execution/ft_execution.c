@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:50:26 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/27 10:29:14 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/27 23:00:03 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,14 @@ char	*find_path(t_env *env)
 
 	tmp = env;
 	dest = NULL;
-	while (!dest)
+	while (tmp)
 	{
 		if (tmp->deleted != 1)
-			dest = strnstr(tmp->env, "PATH=", 5); 
+		{
+			dest = strnstr(tmp->env, "PATH=", 5);
+			if (dest)
+				break;
+		}
 		tmp = tmp->next;
 	}
 	return (dest);
@@ -209,7 +213,13 @@ int is_dir(char *path)
 	}
     return (0);
 }
-
+void no_such_file_or_dir_error(char *str)
+{
+ 		ft_putstr_fd("bash ",2);
+        ft_putstr_fd(str,2);
+        ft_putstr_fd("  No such file or directory\n",2);
+		exit(127);
+}
 void cmd_file_stat(t_holder *holder, char **path)
 {
 	if (is_dir(holder->args[0]))
@@ -234,7 +244,7 @@ void cmd_file_stat(t_holder *holder, char **path)
         }
 	}
 	 else
-        (ft_putstr_fd("bash: : No such file or directory\n", 2), exit(127));
+		no_such_file_or_dir_error(holder->args[0]);
 }
 
 void cmd_null_path(char *path, t_holder *holder)
@@ -265,7 +275,6 @@ void redirection_cmd(t_holder *holder , t_execution *vars, int pipe_fd[2])
 	static int i;
 	i++;
 	init_vars_cmd(vars);
-	printf("%d\n",holder->in[vars->i]);
 	if (vars->i >= 0 && vars->i < 1024 && holder->in[vars->i] != -42 && holder->in[vars->i] != -1)
     {
 		while (holder->in[vars->i] != -42)
@@ -290,7 +299,7 @@ void redirection_cmd(t_holder *holder , t_execution *vars, int pipe_fd[2])
 
 void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], t_execution *vars)
 {
-    char *path;
+    char *path = NULL;
     char **array;
 
 	array = NULL;
@@ -301,7 +310,6 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], t_execution *vars)
         path = get_path(env, holder->args[0]);
 	cmd_null_path(path, holder);
     array = ft_put_env_string(array, env);
-	printf("%p\n",path);
     execve(path, holder->args, array);
     ft_free_2d(array);
     exit(1);
@@ -361,7 +369,7 @@ int is_quote(char *str)
 			return (1);
 		i++;
 	}
-	return (42);
+	return (0);
 }
 char *ft_remove_dollar(char *str)
 {
@@ -385,15 +393,15 @@ char *ft_remove_dollar(char *str)
 
 }
 
-void here_doc_line(char *line, int pipe_fd[2], t_env **env, int i)
+void here_doc_line(char **line, int pipe_fd[2], t_env **env, int i)
 {
-	if (if_dollar(line) && !i && !ft_strnstr(line, "$?", ft_strlen(line)))
-        	line = handle_expand_here(line, env);
-		else if (ft_strnstr(line, "$?", ft_strlen(line)))
-			line = put_status_in_str(line, 1337);
-        write(pipe_fd[1], line, ft_strlen(line));
+	if (if_dollar(*line) && !i && !ft_strnstr(*line, "$?", ft_strlen(*line)))
+        	*line = handle_expand_here(*line, env);
+		else if (ft_strnstr(*line, "$?", ft_strlen(*line)))
+			*line = put_status_in_str(*line, 1337);
+        write(pipe_fd[1], *line, ft_strlen(*line));
         write(pipe_fd[1], "\n", 1);
-        free(line);
+        free(*line);
 }
 
 void ft_here_doc(char *lim, int pipe_fd[2], t_holder *atmp, t_env **env, int origin_in)
@@ -415,7 +423,7 @@ void ft_here_doc(char *lim, int pipe_fd[2], t_holder *atmp, t_env **env, int ori
     while (ft_strncmp(lim, line, ft_strlen(lim))
         || ft_strlen(line) != ft_strlen(lim))
     {
-		here_doc_line(line, pipe_fd, env, i);
+		here_doc_line(&line, pipe_fd, env, i);
 		line = readline("here_doc> ");
         if (!line)
             (exit(1));

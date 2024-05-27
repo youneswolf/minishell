@@ -1,0 +1,14 @@
+0x7fab94904340
+Makefile
+a
+b
+built_in
+c
+execution
+homebrew
+minishell
+minishell.h
+parsing
+salah
+salah2
+script.sh

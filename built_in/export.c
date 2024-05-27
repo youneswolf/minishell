@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:32:00 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/26 21:14:51 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/27 23:05:11 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ void	if_not_in_env(t_export *vars, t_env **env)
 	}
 	vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j], vars->i,
 		ft_strlen(vars->line_tmp->args_built_in[vars->j]) - vars->i);
-			printf("%s\n",vars->value);
 	vars->join = ft_strjoin(vars->var_name, vars->value, 2);
 	vars->node = malloc(sizeof(t_env));
 	vars->node->env = vars->join;
@@ -219,7 +218,6 @@ void	add_vars(t_export *vars, t_env **env)
 			vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j],
 				vars->i, ft_strlen(vars->line_tmp->args_built_in[vars->j])
 				- vars->i);
-			printf("%s\n",vars->value);
 			vars->join = ft_strjoin(vars->var_name, vars->value, 2);
 			free((*env)->env);
 			(*env)->env = vars->join;
@@ -240,6 +238,7 @@ void print_error(t_export *vars)
 	vars->j++;
 	vars->i = 0;
 	vars->is_invalid = 1;
+	ft_status(1, 1);
 }
 void	check_validity(t_export *vars, t_env **env)
 {
@@ -318,6 +317,7 @@ void	check_first_is_nbr2(t_export *vars)
 	printf("bash: export: `%s': not a valid identifier\n",
 		vars->line_tmp->args_built_in[vars->j]);
 	vars->j++;
+	ft_status(1,1);
 }
 
 int	check_if_addition(char **str, t_export *vars)
@@ -356,6 +356,7 @@ void	exec_export(t_holder **holder, t_env **env)
 				continue ;
 			}
 			check_env_vars(&vars, env);
+			ft_status(1, 0);
 		}
 	}
 }
