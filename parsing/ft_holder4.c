@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 14:54:50 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/27 10:08:39 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:26:42 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,9 @@ int	ft_create_holder_infile(t_line *tmp, t_holder *new_, t_long *t)
 	else
 	{
 		new_->file_in[(t->n)++] = ft_strdup(tmp->str);
-		new_->nbr_file++;
 		(1) && ((t->index)++, new_->infile_index[(t->sss)++] = t->index);
-		printf("got here the index is %d, the filename %s\n", t->index, new_->file_in[t->n - 1]);
 	}
-	return (1);
+	return (new_->nbr_file++, 1);
 }
 
 int	ft_create_holder_append(t_line *tmp, t_holder *new_, t_long *t)
@@ -67,10 +65,9 @@ int	ft_create_holder_append(t_line *tmp, t_holder *new_, t_long *t)
 	else
 	{
 		new_->append[(t->a)++] = ft_strdup(tmp->next->str);
-		new_->nbr_file++;
 		(1) && ((t->index)++, new_->append_index[(t->www)++] = t->index);
 	}
-	return (1);
+	return (new_->nbr_file++, 1);
 }
 
 void	ft_ini(t_long *t)
