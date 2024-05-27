@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:40:13 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:03:11 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	ft_cd(char *str, t_env **mini_env)
 			ft_cd_utils_1(mini_env, str1, str);
 		else
 			ft_cd_utils(mini_env, str1, str);
+		ft_status(1, 0);
 	}
 	else
 		perror("directory not found");
