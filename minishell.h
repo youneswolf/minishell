@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 20:17:14 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 00:02:08 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,15 @@ typedef struct s_add_space
 	int	flag;
 }    t_add_space;
 
+typedef struct s_unset
+{
+	t_env *tmp;
+	char *value;
+	t_line *tmp1;
+	int i;
+    int ind;
+}	t_unset;
+
 char			*expand_env(t_expan *vars);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char *s, int fd);
@@ -331,8 +340,18 @@ int				ft_strcmp(char *s1,  char *s2);
 int				ft_cmp_built_in(char *str);
 void			ft_handler_ctrl_c(int signum);
 void			ft_free_2d(char **array);
+void			put_env_value(t_export *vars, t_env **env);
+void			check_validity(t_export *vars, t_env **env);
+void			ft_print_export(t_env *head);
+void			ft_putstr_export(char *s);
+void			export_vars(t_export *vars, t_holder **holder, t_env **env);
+void			ft_sort_list(t_env **env);
+void			add_vars(t_export *vars, t_env **env);
+void			declare_export(t_env *env);
+void			if_not_in_env(t_export *vars, t_env **env);
 void			ft_free_list(t_line **str, t_status *status);
 void			redirect_append(int fd);
+void			if_not_in_env1(t_export *vars, t_env **env);
 void			redirect_output(int fd);
 void			redirect_input(int fd);
 t_line			*ft_lst_new(char *str);
