@@ -59,7 +59,18 @@ int check_unset_syntax(char *str)
 		}
 		i++;
 	}
+	if (i != 0  && str[i - 1] == '!')
+	{
+		ft_status(1,1);
+		return (0);
+	}
 	return (1);
+}
+void print_error_unset(char *str)
+{
+	ft_putstr_fd("bash: unset: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(" not a valid identifier\n", 2);
 }
 void exec_unset(t_env **mini_env, t_holder *holder)
 {
@@ -75,6 +86,7 @@ void exec_unset(t_env **mini_env, t_holder *holder)
 	{
 		if (!check_unset_syntax(holder->args_built_in[ind]))
 		{
+			print_error_unset(holder->args_built_in[ind]);
 			ind++;
 			continue;
 		}
