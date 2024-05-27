@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 14:44:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 14:52:54 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/27 09:46:15 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,8 @@ int	ft_create_holder_outfile(t_line *tmp, t_holder *new_, t_long *t)
 	else
 	{
 		new_->file_out[(t->k)++] = ft_strdup(tmp->str);
+		new_->nbr_file++;
 		(1) && (new_->outfile_index[(t->zzz)++] = t->index, (t->index)++);
 	}
-	return (new_->nbr_file++, 1);
+	return (1);
 }

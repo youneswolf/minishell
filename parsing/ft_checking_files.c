@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 14:29:38 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:11:11 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	ft_oppen_files_utiles(t_file *t, t_holder *tmp)
 		&& tmp->infile_index[t->z] == t->i)
 	{
 		tmp->in[t->z] = open(tmp->file_in[t->z], O_RDONLY);
+		printf("got here the fd is %d\n", tmp->in[t->z]);
 		if (!is_ambiguous(tmp->file_in[t->i]))
 		{
 			if (tmp->in[t->z] == -1)
@@ -91,7 +92,7 @@ int	ft_oppen_files(t_holder *node, t_last *status)
 	while (tmp)
 	{
 		t.i = 0;
-		while (t.i < tmp->nbr_file)
+		while (t.i <= tmp->nbr_file)
 		{
 			if (!ft_oppen_files_nrm(tmp, &t))
 				return (write(2, "no such file or directory\n", 26),
