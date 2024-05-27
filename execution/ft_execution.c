@@ -6,9 +6,10 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:50:26 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/27 10:04:05 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/27 10:29:14 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../minishell.h"
 
@@ -261,6 +262,8 @@ void cmd_piping(int pipe_fd[2])
 }
 void redirection_cmd(t_holder *holder , t_execution *vars, int pipe_fd[2])
 {
+	static int i;
+	i++;
 	init_vars_cmd(vars);
 	printf("%d\n",holder->in[vars->i]);
 	if (vars->i >= 0 && vars->i < 1024 && holder->in[vars->i] != -42 && holder->in[vars->i] != -1)

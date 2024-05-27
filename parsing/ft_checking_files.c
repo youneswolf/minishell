@@ -6,8 +6,10 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/27 10:02:55 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/27 10:29:21 by asedoun          ###   ########.fr       */
 /*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */
 
 #include "../minishell.h"
@@ -41,6 +43,7 @@ int	ft_oppen_files_utiles(t_file *t, t_holder *tmp)
 		&& tmp->infile_index[t->z] == t->i)
 	{
 		tmp->in[t->z] = open(tmp->file_in[t->z], O_RDONLY);
+		printf("got here the fd is %d\n", tmp->in[t->z]);
 		if (!is_ambiguous(tmp->file_in[t->i]))
 		{
 			if (tmp->in[t->z] == -1)
@@ -91,6 +94,7 @@ int	ft_oppen_files(t_holder *node, t_last *status)
 	while (tmp)
 	{
 		t.i = 0;
+		(1) && (t.i = 0, t.z = 0, t.q = 0, t.b = 0, e = 0);
 		while (t.i <= tmp->nbr_file)
 		{
 			if (!ft_oppen_files_nrm(tmp, &t))
@@ -101,6 +105,7 @@ int	ft_oppen_files(t_holder *node, t_last *status)
 			t.i++;
 		}
 		tmp = tmp->next;
+		printf("here\n");
 	}
 	return (1);
 }

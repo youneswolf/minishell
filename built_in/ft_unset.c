@@ -1,4 +1,13 @@
 #include "../minishell.h"
+
+int	ft_isdigit(int c)
+{
+	if ((char )c >= 48 && (char )c <= 57)
+	{
+		return (1);
+	}
+	return (0);
+}
 void remove_node(t_env **mini_env, int i)
 {
 	t_env *tmp;
@@ -30,27 +39,28 @@ void remove_node(t_env **mini_env, int i)
 	}
 	*mini_env = head;
 }
-// void remove_node(t_env **mini_env, int i) {
-//     t_env *head = *mini_env;
-//     int j = 0;
+int check_unset_syntax(char *str)
+{
+	int i;
 
-//     while (*mini_env) {
-//         if (i == 0) {
-//             (*mini_env)->deleted = 1;
-// 			break;
-//         }
-
-//         if (j == i - 1 && (*mini_env)->next != NULL) {
-//             (*mini_env)->next->deleted = 1;
-//             break;
-//         }
-
-//         *mini_env = (*mini_env)->next;
-//         j++;
-//     }
-
-//     *mini_env = head;
-// }
+	i = 0;
+	if (str && str[0] && is_digit(str[0]))
+	{
+		ft_status(1,1);
+		return (0);
+	}
+	while (str && str[i])
+	{
+		if (str[i] == '.'|| str[i] == ',' || str[i] == '/'|| str[i] == '-'
+			|| str[i] == ':' || str[i] == '=' || str[i] == '+')
+		{
+			ft_status(1,1);
+			return (0);
+		}
+		i++;
+	}
+	
+}
 void exec_unset(t_env **mini_env, t_holder *holder)
 {
 	t_env *tmp;
@@ -63,6 +73,11 @@ void exec_unset(t_env **mini_env, t_holder *holder)
 	tmp = *mini_env;
 	while (holder->args_built_in[ind])
 	{
+		if (!check_unset_syntax(holder->args_built_in[ind]))
+		{
+			ind++;
+			continue;
+		}
 		value = ft_strjoin(holder->args_built_in[ind], "=",0);
 		i = 0;
 		while (tmp)
