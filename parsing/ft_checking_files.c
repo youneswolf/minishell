@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_checking_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 14:29:38 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:02:55 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	ft_oppen_files(t_holder *node, t_last *status)
 	while (tmp)
 	{
 		t.i = 0;
-		while (t.i < tmp->nbr_file)
+		while (t.i <= tmp->nbr_file)
 		{
 			if (!ft_oppen_files_nrm(tmp, &t))
 				return (write(2, "no such file or directory\n", 26),

@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:50:26 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 20:52:21 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/27 10:04:05 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,7 @@ void cmd_piping(int pipe_fd[2])
 void redirection_cmd(t_holder *holder , t_execution *vars, int pipe_fd[2])
 {
 	init_vars_cmd(vars);
+	printf("%d\n",holder->in[vars->i]);
 	if (vars->i >= 0 && vars->i < 1024 && holder->in[vars->i] != -42 && holder->in[vars->i] != -1)
     {
 		while (holder->in[vars->i] != -42)
@@ -297,6 +298,7 @@ void  exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], t_execution *vars)
         path = get_path(env, holder->args[0]);
 	cmd_null_path(path, holder);
     array = ft_put_env_string(array, env);
+	printf("%p\n",path);
     execve(path, holder->args, array);
     ft_free_2d(array);
     exit(1);
