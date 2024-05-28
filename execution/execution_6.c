@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_6.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:50:32 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 06:01:20 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 15:41:55 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	dup2cmd_here(t_execution *vars)
 
 void	here_doc_child(t_execution *vars, t_env *env)
 {
-	signal(SIGINT, heredoc);
+	signal(SIGINT, ft_heredoc);
 	signal(SIGQUIT, &ft_f);
 	ft_here_doc(vars->tmp->her_doc[vars->n], vars->pipe_fd, vars->tmp, &env);
 }

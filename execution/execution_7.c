@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   execution_7.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:50:51 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 06:29:59 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 16:02:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	exec_built_fcts(t_execution *vars, t_env *env)
+void	exec_built_fcts(t_execution *vars, t_env *env,t_holder *holder)
 {
 	(1) && (vars->i = 0, vars->j = 0, vars->k = 0);
 	closing_files(vars);
-	check_which_built_in(vars, env);
+	check_which_built_in(vars, env, holder);
 	dup2(vars->origin_out, STDOUT_FILENO);
 }
 
@@ -49,8 +49,22 @@ int	here_doc_exec(t_execution *vars, t_env *env)
 	return (0);
 }
 
-void	check_which_built_in(t_execution *vars, t_env *env)
+int count_nodes(t_holder *holder)
 {
+	int i;
+	
+	i = 0;
+	while (holder)
+	{
+		i++;
+		holder = holder->next;
+	}
+	return (i);
+}
+
+void	check_which_built_in(t_execution *vars, t_env *env, t_holder *holder)
+{
+	vars->exit = count_nodes(holder);
 	if (vars->tmp->next)
 		dup2(vars->pipe_fd[1], STDOUT_FILENO);
 	if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "export"))
@@ -61,18 +75,20 @@ void	check_which_built_in(t_execution *vars, t_env *env)
 		exec_unset(&env, vars->tmp);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "env"))
 		exec_env(&env);
-	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "exit"))
-		ft_exit(vars->tmp);
+	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "exit")
+		&& vars->exit == 1)
+		ft_exit(vars->tmp, vars->exit);
+	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "exit")
+		&& vars->exit > 1)
+		ft_exit2(vars->tmp, vars->exit);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "pwd"))
 		ft_pwd(env);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "cd"))
-	{
 		if (vars->tmp->args_built_in[1])
 			ft_cd(vars->tmp->args_built_in[1], &env);
-	}
 }
 
-void	built_in_exec(t_execution *vars, t_env *env)
+void	built_in_exec(t_execution *vars, t_env *env, t_holder *holder)
 {
 	(1) && (vars->i = 0, vars->j = 0, vars->k = 0);
 	if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
@@ -98,7 +114,7 @@ void	built_in_exec(t_execution *vars, t_env *env)
 			vars->k++;
 		redirect_append(vars->tmp->ap[vars->k -2]);
 	}
-	exec_built_fcts(vars, env);
+	exec_built_fcts(vars, env, holder);
 }
 
 void	exec_cmd_vars_init(t_execution *vars)

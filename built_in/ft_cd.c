@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/27 11:03:11 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/28 14:27:34 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_cd_utils(t_env **mini_env, char *str1, char *str)
 
 	while (mini_env)
 	{
-		if (f_strcmp((*mini_env)->env, "PWD"))
+		if (f_strcmp((*mini_env)->env, "PWD") && (*mini_env)->deleted != 1)
 		{
 			perror("error retrieving current directory: getcwd: cannot access \
 			parent directories: ");
@@ -36,7 +36,7 @@ void	ft_cd_utils_1(t_env **mini_env, char *str1, char *str)
 {
 	while (mini_env)
 	{
-		if (f_strcmp((*mini_env)->env, "PWD"))
+		if (f_strcmp((*mini_env)->env, "PWD") && (*mini_env)->deleted != 1)
 		{
 			str1 = ft_strjoin((*mini_env)->env, "/", 1);
 			str1 = ft_strjoin(str1, str, 1);

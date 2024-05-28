@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 02:20:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 15:21:47 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:27:07 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,23 @@ unsigned long	ft_atoi(char *str)
 	return (j);
 }
 
-void	ft_exit_utils(void)
+void	ft_exit_utils(int k)
 {
-	ft_putstr_fd("exit\n", 2);
-	ft_putstr_fd("exit: : numeric argument required\n", 2);
-	ft_status(1, 255);
-	exit(255);
+	if (k == 1)
+	{
+		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("exit: : numeric argument required\n", 2);
+		ft_status(1, 255);
+		exit(255);
+	}
+	else
+	{
+		ft_putstr_fd("exit: : numeric argument required\n", 2);
+		ft_status(1, 255);
+	}
 }
 
-void	ft_exit(t_holder *str)
+void	ft_exit(t_holder *str, int count)
 {
 	t_holder		*tmp1;
 	unsigned long	t;
@@ -93,9 +101,9 @@ void	ft_exit(t_holder *str)
 		(ft_putstr_fd("exit\n", 2), ft_status(1, ft_atoi(tmp1->args_built_in[1]))
 			, exit(ft_atoi(tmp1->args_built_in[1])));
 	else if (tmp1->args_built_in[1] && !ft_is_numeric(tmp1->args_built_in[1]))
-		ft_exit_utils();
+		ft_exit_utils(1);
 	else if (tmp1->args_built_in[1] && ft_is_numeric(tmp1->args_built_in[1])
 		&& ((size_t)ft_atoi(tmp1->args_built_in[1]) > 9223372036854775807
 			|| (size_t)ft_atoi(tmp1->args_built_in[1]) < -922337203685477588))
-		ft_exit_utils();
+		ft_exit_utils(1);
 }

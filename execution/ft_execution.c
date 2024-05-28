@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execution.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:50:26 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 06:00:52 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 15:59:02 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	execution(t_holder **holder, t_env *env, t_last *status)
 		}
 		if ((vars.tmp->cmd_built_in && vars.tmp->file_out[vars.j]) 
 			|| vars.tmp->cmd_built_in)
-			built_in_exec(&vars, env);
+			built_in_exec(&vars, env, *holder);
 		if ((vars.tmp && vars.tmp->cmd))
 		{
 			if (!command_first_exec(&vars, env, status))

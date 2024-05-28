@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_8.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:51:14 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 05:25:36 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 15:49:21 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,5 @@ void	cleaning_execution(t_execution *vars, t_holder **holder)
 		close(vars->pipe_fd[0]);
 	close(vars->pipe_fd[1]);
 	ft_free_holder(holder);
+	vars->exit = 0;
 }

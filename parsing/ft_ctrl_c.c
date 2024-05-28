@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 21:08:37 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:41:20 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:41:51 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ void	ft_f(int signum)
 	return ;
 }
 
-void	heredoc(void)
+void	ft_heredoc(int signum)
 {
+	(void)signum;
 	ft_status(1, 1);
 	close (STDIN_FILENO);
 	exit (100);
