@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 02:53:34 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 04:18:20 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,14 +277,30 @@ void			ft_putstr_fd(char *s, int fd);
 int				ft_cmp(char *s, char *s1);
 int				ft_is_numeric(char *str);
 unsigned long	ft_atoi(char *str);
+char			**ft_put_env_string(char **array, t_env *env);
+void			ft_here_doc(char *lim, int pipe_fd[2], t_holder *atmp, t_env **env, int origin_in);
+char			*get_path(t_env *env, char *cmd);
+void			here_doc_child(t_execution *vars, t_env *env);
+void			exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], t_execution *vars);
+void			exec_cmd_vars_init(t_execution *vars);
+int				check_if_ctrl_c(t_execution *vars);
+void			 exec_dups_here(t_execution *vars);
+void			here_piping(t_execution *vars);
 void			ft_exit(t_holder *str);
+int				is_slash(char *str);
+void			cmd_null_path(char *path, t_holder *holder);
 void			ft_free_holder(t_holder **str);
+void			cmd_file_stat(t_holder *holder, char **path);
 int				ft_oppen_files(t_holder *node, t_last *status);
 void			ft_f(int signum);
+void			init_vars_cmd(t_execution *vars);
+char			*skip_path(char *str);
+char			*ft_strjoin_path(char *static_str, char *buff);
 char			*ft_substr1(char *str, int start, int len, int not_);
 void			ft_free_holder(t_holder **str);
 int				ft_isalnum_str(char *str);
 char			*ft_remove3(char *line);
+char			*find_path(t_env *env);
 char			*ft_remove_utils4(char *line, char *str, int j, int i);
 int				ft_remove_utils3(char *str);
 void 			exec_env(t_env **mini_env );
@@ -298,6 +314,12 @@ int				f_strcmp(char *str1, char *str2);
 int				ft_strcmp_asd(char *s1,  char *s2);
 char			*ft_itoa(int n);
 char			*ft_remove_here(char *str);
+int				execution_cmd(t_execution *vars, t_env *env, t_last *status);
+void			cleaning_execution(t_execution *vars, t_holder **holder);
+void 			initial_vars(t_execution *vars, t_holder **holder);
+int				here_doc_exec(t_execution *vars ,t_env *env);
+void			built_in_exec(t_execution *vars, t_env *env);
+void			piping(t_execution *vars);
 t_holder		*ft_create_holder_node(t_line *node, char *line);
 int				ft_count_pipe(t_line *head);
 char			*ft_strnstr(const char *haystack, const char *needle, size_t len);
