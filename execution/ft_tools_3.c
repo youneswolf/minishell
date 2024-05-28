@@ -6,16 +6,16 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:51:11 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 01:55:50 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 02:19:23 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_line *ft_lst_new(char *str)
+t_line	*ft_lst_new(char *str)
 {
-	t_line *line;
-	
+	t_line	*line;
+
 	line = malloc(sizeof(t_line));
 	if (!line)
 		return (NULL);
@@ -26,7 +26,7 @@ t_line *ft_lst_new(char *str)
 
 int	if_dollar(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str && str[i])
@@ -38,9 +38,11 @@ int	if_dollar(char *str)
 	return (0);
 }
 
-int is_char(char *str)
+int	is_char(char *str)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (str && str[i])
 	{
 		if (ft_isalpha(str[i]))
@@ -50,10 +52,11 @@ int is_char(char *str)
 	return (0);
 }
 
-void    ft_free_list3(t_line **str)
+void	ft_free_list3(t_line **str)
 {
-	t_line *to_be_free;
+	t_line	*to_be_free;
 	t_line	*prev;
+
 	to_be_free = *str;
 	while (to_be_free)
 	{
@@ -64,10 +67,11 @@ void    ft_free_list3(t_line **str)
 	}
 }
 
-void    ft_free_list2(t_line **str)
+void	ft_free_list2(t_line **str)
 {
-	t_line *to_be_free;
+	t_line	*to_be_free;
 	t_line	*prev;
+
 	to_be_free = *str;
 	while (to_be_free)
 	{

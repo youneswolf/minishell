@@ -31,7 +31,8 @@ SRC_FILE =	parsing/minishell.c execution/ft_utlils.c parsing/ft_give_token.c par
 			 built_in/ft_pwd.c parsing/ft_add_space.c parsing/ft_checking_files.c parsing/ft_ctrl_c.c execution/ft_expand.c parsing/ft_is_built_in.c\
 			 parsing/ft_signals.c parsing/ft_utils.c parsing/skip_expand.c execution/ft_execution.c parsing/ft_files_utiles.c\
 			 parsing/ft_matche_utils.c parsing/ft_holder1.c parsing/ft_holder2.c parsing/ft_holder3.c parsing/ft_holder4.c parsing/ft_put_utils.c \
-			 built_in/export_1.c built_in/export_2.c built_in/export_3.c built_in/export_4.c
+			 built_in/export_1.c built_in/export_2.c built_in/export_3.c built_in/export_4.c execution/ft_her_expand_1.c execution/ft_her_expand_2.c \
+			 execution/ft_tools_1.c execution/ft_tools_2.c execution/ft_tools_3.c execution/ft_tools_4.c execution/ft_tools_5.c execution/ft_tools_6.c execution/ft_tools_7.c
 
 SRC_HEADER = minishell.h
 

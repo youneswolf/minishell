@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 15:12:51 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/28 02:57:23 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	main(int ac, char **av, char **env)
 	tcsetattr(STDIN_FILENO, TCSANOW, &attr);
 	t.status = ft_status(0, 1337);
 	if (env[0])
-		fiLL_env(&mini_env, env);
+		fill_env(&mini_env, env);
 	else
 		fill_null_env(&mini_env);
 	while (1)

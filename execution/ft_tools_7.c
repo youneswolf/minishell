@@ -6,23 +6,24 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:53:45 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 01:56:16 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 02:57:11 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void fill_second_null_env(t_env **mini_env)
+void	fill_second_null_env(t_env **mini_env)
 {
 	char	buf[1024];
-	char	*var = ft_strdup("PWD=");
-	char *final;
-	t_env *node;
-	char *line;
-	int i;
+	char	*var;
+	char	*final;
+	t_env	*node;
+	int		i;
+
+	var = ft_strdup("PWD=");
 	i = 0;
 	if (getcwd(buf, sizeof(buf)) == NULL)
-        (perror("getcwd"), exit(EXIT_FAILURE));
+		perror("getcwd");
 	node = malloc(sizeof(t_env));
 	if (!node)
 		(ft_free_nodes(mini_env), exit(1));
@@ -37,6 +38,7 @@ void	ft_free_nodes(t_env **a)
 {
 	t_env	*head;
 	t_env	*tobefreed;
+
 	head = *a;
 	while (head != NULL)
 	{
@@ -47,11 +49,11 @@ void	ft_free_nodes(t_env **a)
 	*a = NULL;
 }
 
-void fiLL_env(t_env **mini_env, char **env)
+void	fill_env(t_env **mini_env, char **env)
 {
-	char *line;
-	int	i;
-	int j;
+	char	*line;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (env[i])
@@ -68,11 +70,10 @@ void fiLL_env(t_env **mini_env, char **env)
 		line[j] = '\0';
 		env_list(mini_env, line);
 		i++;
-
 	}
 }
 
-int	check_is_closed(char *str,int  sgl)
+int	check_is_closed(char *str, int sgl)
 {
 	int	i;
 	int	j;
@@ -94,18 +95,19 @@ int	check_is_closed(char *str,int  sgl)
 			k = 1;
 		i++;
 	}
-	if (k && count %2 == 1)
+	if (k && count % 2 == 1)
 		return (1);
 	return (0);
 }
 
-int check_sgl_parity(char *str, int i, int sgl)
+int	check_sgl_parity(char *str, int i, int sgl)
 {
-	int parity;
+	int	parity;
+
 	sgl += count_sgl(str, i);
 	parity = sgl / 2;
-
-	if (sgl %2 == 0 && sgl != 0 && parity % 2 == 1 && check_is_closed(str,sgl))
+	if (sgl % 2 == 0 && sgl != 0 && parity % 2 == 1 
+		&& check_is_closed(str, sgl))
 		return (1);
-		return (0);
+	return (0);
 }

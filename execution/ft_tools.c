@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:48:55 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 02:10:35 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 02:38:00 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,11 @@ void	env_list(t_env **mini_env, char *line)
 		last_node = get_last(mini_env);
 		last_node->next = node;
 	}
+}
+
+void	append_dollar_if_check(t_exp *vars, int check)
+{
+	if (check == 0)
+			vars->dollar_str_space = ft_strjoin("$", 
+					vars->dollar_str_space, 3);
 }

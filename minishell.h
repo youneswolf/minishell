@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 00:02:08 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 02:53:34 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,6 +310,7 @@ char			*ft_strdup(char *s1);
 char			*ft_strjoin(char *static_str, char *buff, int is_free);
 size_t			ft_strlen(const char *s);
 int				count(char *s, char c);
+void			append_dollar_if_check(t_exp *vars, int check);
 char			*word(char *str, char c);
 int				ft_syntax(t_line *head, t_last	*status);
 char			**alloc(int l);
@@ -358,7 +359,7 @@ t_line			*ft_lst_new(char *str);
 int				if_dollar(char *str);
 char			*handle_expand(char *line_str, t_env **env);
 void			env_list(t_env **mini_env, char *line);
-void			fiLL_env(t_env **mini_env, char **env);
+void			fill_env(t_env **mini_env, char **env);
 t_env			*get_last(t_env **a);
 void			ft_free_nodes(t_env **a);
 void			fill_second_null_env(t_env **mini_env);
@@ -425,6 +426,11 @@ void			join_exp_1dollar_here(t_exp *vars, t_env **env);
 int				check_for_first_elem(char *str);
 void			ft_free_list3(t_line **str);
 void			heredoc ();
+char			*expand_nbr(char *str);
+void			 expand_vars(t_expan *vars);
+int				is_char(char *str);
+int				is_number(char *str);
+int				check_sgl_parity(char *str, int i, int sgl);
 void			ft_skip_empty_expand_utils(t_line *head, t_line *previous, t_line *tmp);
 void			ft_skip_empty_expand(t_line **node);
 int				is_between_quotes(char *str);
