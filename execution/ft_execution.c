@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:50:26 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/27 23:00:03 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 01:47:26 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char *get_status_str(char *str, int i, int status_int)
     free(str);
     return (status);
 }
+
 char *put_status_in_str(char *str, int status_int)
 {
     int    i;
