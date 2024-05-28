@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:14:25 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 01:20:36 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 05:48:46 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,14 @@ int	ft_isalnum(int c)
 	if (ft_isalpha(c) || ft_isdigit(c))
 		return (1);
 	return (0);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s && s[i])
+		i++;
+	return (i);
 }

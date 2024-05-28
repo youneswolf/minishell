@@ -3,49 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utlils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 12:54:59 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:37:54 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/28 05:48:38 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s && s[i])
-		i++;
-	return (i);
-}
-
-
-// char	*ft_strjoin(char *s1, char *s2)
-// {
-// 	int			size;
-// 	int			i;
-// 	char		*str;
-// 	int			j;
-
-// 	size = ft_strlen(s1) + ft_strlen(s2);
-// 	str = (char *)malloc((size + 1) * sizeof(char));
-// 	if (str == NULL)
-// 		return (s1 = NULL, NULL);
-// 	i = 0;
-// 	while (s1 && s1[i])
-// 	{
-// 		str[i] = s1[i];
-// 		i++;
-// 	}
-// 	j = 0;
-// 	while (s2 && s2[j])
-// 		str[i++] = s2[j++];
-// 	str[i] = '\0';
-// 	return (s1 = NULL, str);
-// }
 
 static	char	*free2darray(char **array, int n);
 

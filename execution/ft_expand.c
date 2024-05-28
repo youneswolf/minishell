@@ -3,37 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_expand.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 14:00:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:41:12 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/28 05:47:09 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_strdup(char *s1)
+int	ft_check_if_chars_digit(char c)
 {
-	size_t	i;
-	char	*dest;
-
-	i = ft_strlen(s1);
-	dest = (char *)malloc(sizeof(char) *(i + 1));
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (s1 && s1[i])
-	{
-		dest[i] = s1[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-int ft_check_if_chars_digit(char c)
-{
-    return ((c >= '0' && c <= '9')||(c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
+	return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') 
+		|| (c >= 'A' && c <= 'Z') || c == '_');
 }
 
 char	*ft_strchr(char *s, int c)
@@ -58,7 +40,6 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-
 char	*ft_allocate_for_var(int flag, char *str, int i)
 {
 	char	*ptr;
@@ -75,7 +56,6 @@ char	*ft_allocate_for_var(int flag, char *str, int i)
 	}
 	return (ptr);
 }
-
 
 int	ft_surpass_chars(char *var)
 {
@@ -107,4 +87,3 @@ void	ft_append_char(char **str, int c)
 	(1) && ((*str)[i++] = c, (*str)[i] = '\0');
 	free(s);
 }
-

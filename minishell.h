@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 04:18:20 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 05:42:52 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,7 +278,8 @@ int				ft_cmp(char *s, char *s1);
 int				ft_is_numeric(char *str);
 unsigned long	ft_atoi(char *str);
 char			**ft_put_env_string(char **array, t_env *env);
-void			ft_here_doc(char *lim, int pipe_fd[2], t_holder *atmp, t_env **env, int origin_in);
+void			ft_here_doc(char *lim, int pipe_fd[2], t_holder *atmp, t_env **env);
+void			check_which_built_in(t_execution *vars, t_env *env);
 char			*get_path(t_env *env, char *cmd);
 void			here_doc_child(t_execution *vars, t_env *env);
 void			exec_cmd(t_holder *holder, t_env *env, int pipe_fd[2], t_execution *vars);
@@ -288,6 +289,7 @@ void			 exec_dups_here(t_execution *vars);
 void			here_piping(t_execution *vars);
 void			ft_exit(t_holder *str);
 int				is_slash(char *str);
+void			closing_files(t_execution *vars);
 void			cmd_null_path(char *path, t_holder *holder);
 void			ft_free_holder(t_holder **str);
 void			cmd_file_stat(t_holder *holder, char **path);

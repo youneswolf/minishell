@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:48:55 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 02:38:00 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 05:47:53 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,25 @@ void	env_list(t_env **mini_env, char *line)
 void	append_dollar_if_check(t_exp *vars, int check)
 {
 	if (check == 0)
-			vars->dollar_str_space = ft_strjoin("$", 
-					vars->dollar_str_space, 3);
+		vars->dollar_str_space = ft_strjoin("$", 
+				vars->dollar_str_space, 3);
+}
+
+char	*ft_strdup(char *s1)
+{
+	size_t	i;
+	char	*dest;
+
+	i = ft_strlen(s1);
+	dest = (char *)malloc(sizeof(char) *(i + 1));
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (s1 && s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }
