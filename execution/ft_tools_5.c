@@ -6,15 +6,23 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:27 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 02:41:43 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 06:27:29 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	join_exp_1dollar(t_exp *vars, t_env **env)
+void	join_exp_1dollar(t_exp *vars, t_env **env, char *str)
 {
-	vars->join = ft_strjoin(vars->join, expand(vars->split->str, env, 1, 0), 2);
+	int	quotes;
+
+	quotes = check_quotes(str);
+	if (quotes == 39)
+		quotes = 1;
+	else if (quotes == 34)
+		quotes = 2;
+	vars->join = ft_strjoin(vars->join,
+			expand(vars->split->str, env, 1, quotes), 2);
 	if (vars->split->next)
 	{
 		vars->join = ft_strjoin(vars->join, " ", 1);
@@ -28,7 +36,6 @@ char	*handle_expand(char *line_str, t_env **env)
 	vars.i = 0;
 	vars.j = 0;
 	vars.split = get_exp_node(line_str);
-	free(line_str);
 	vars.join = NULL;
 	vars.str = NULL;
 	vars.dollar_str = NULL;
@@ -37,11 +44,12 @@ char	*handle_expand(char *line_str, t_env **env)
 	{
 		if (count_dollar(vars.split->str) > 1)
 			join_exp(&vars, env);
-		else 
-			join_exp_1dollar(&vars, env);
+		else
+			join_exp_1dollar(&vars, env, line_str);
 		vars.split = vars.split->next;
 	}
 	ft_free_list2(&vars.node);
+	free(line_str);
 	if (!vars.join)
 		return (ft_strdup(""));
 	return (vars.join);

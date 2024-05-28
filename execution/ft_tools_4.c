@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 02:37:52 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 06:27:13 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,10 @@ int	check_quotes(char *str)
 		i = parity;
 		while (str[i])
 			i++;
-		i--;
-		while (str[i] == quote)
-		{
-			i--;
+		if (parity % 2 == 0)
+			return (34);
+		while (str[--i] == quote)
 			parity--;
-		}
 		if (parity == 0)
 			return (quote);
 	}

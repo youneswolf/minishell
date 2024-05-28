@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:50:32 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 05:40:47 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 06:01:20 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,5 @@ void	exec_dups_here(t_execution *vars)
 		dup2cmd_here(vars);
 	else
 		here_piping(vars);
+	ft_status(1, 0);
 }

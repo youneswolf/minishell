@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:53:11 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 02:49:29 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 06:10:00 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*expand(char *str, t_env **env, int last, int quotes)
 
 	initialize_vars(&vars, env);
 	if ((is_sgl_quote_ex(str, last) && is_char(str) && quotes != 2) 
-		|| quotes == 1)
+		|| (quotes == 1))
 		return (ft_strdup(str));
 	if (!if_dollar(str))
 		return (ft_strdup(str));

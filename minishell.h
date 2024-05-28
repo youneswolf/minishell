@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 05:42:52 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/28 06:23:19 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,7 @@ typedef struct s_unset
 
 char			*expand_env(t_expan *vars);
 void			ft_putchar_fd(char c, int fd);
+int				check_quotes(char *str);
 void			ft_putstr_fd(char *s, int fd);
 int				ft_cmp(char *s, char *s1);
 int				ft_is_numeric(char *str);
@@ -442,7 +443,7 @@ int				ft_str(char *str);
 int				ft_status(int a, int status);
 char			*handle_expand(char *line_str, t_env **env);
 void			join_exp(t_exp *vars, t_env **env);
-void			join_exp_1dollar(t_exp *vars, t_env **env);
+void			join_exp_1dollar(t_exp *vars, t_env **env, char *str);
 void			initialize_vars(t_expan *vars, t_env **env);
 t_line			*get_exp_node(char *line_str);
 void			join_exp_here(t_exp *vars, t_env **env);

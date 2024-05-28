@@ -14,7 +14,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc -fsanitize=address -g
+CC = cc
 # CC += -Wall -Wextra -Werror
 RM = rm -f
 NAME = minishell
