@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:46:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 11:07:23 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 11:53:22 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ void	exec_env(t_env **mini_env, t_holder *holder)
 	t_env	*tmp;
 
 	tmp = *mini_env;
+	if (holder->args_built_in[1])
+	{
+		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd(holder->args_built_in[1], 2);
+		ft_putstr_fd(" No such file or directory\n", 2);
+		ft_status(1, 127);
+		return ;
+	}
 	while (tmp)
 	{
 		if (is_equal(tmp->env) && tmp->deleted != 1)
