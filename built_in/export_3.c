@@ -6,10 +6,9 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:29:15 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 11:00:50 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 11:19:41 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell.h"
 
@@ -38,7 +37,7 @@ void	add_vars(t_export *vars, t_env **env)
 	}
 	if (!(*env))
 		if_not_in_env(vars, env);
-	(1)  && (vars->j++, vars->i = 0);
+	(1) && (vars->j++, vars->i = 0);
 	*env = vars->tmp;
 }
 
@@ -79,6 +78,16 @@ void	check_validity(t_export *vars, t_env **env)
 	}
 }
 
+void	put_var_in_env(t_export *vars, t_env **env)
+{
+	vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j],
+			vars->i + 1,
+			ft_strlen(vars->line_tmp->args_built_in[vars->j])
+			- vars->i - 1);
+	(*env)->env = ft_strjoin((*env)->env, vars->value, 2);
+	free(vars->var_name);
+}
+
 void	put_env_value(t_export *vars, t_env **env)
 {
 	int	i;
@@ -95,12 +104,7 @@ void	put_env_value(t_export *vars, t_env **env)
 				(*env) = (*env)->next;
 				continue ;
 			}
-			vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j],
-					vars->i + 1,
-					ft_strlen(vars->line_tmp->args_built_in[vars->j])
-					- vars->i - 1);
-			(*env)->env = ft_strjoin((*env)->env, vars->value, 2);
-			free(vars->var_name);
+			put_var_in_env(vars);
 			i = 0;
 			break ;
 		}

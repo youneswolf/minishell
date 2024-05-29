@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:49:59 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 10:00:06 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 11:20:58 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,13 @@ void	exec_unset(t_env **mini_env, t_holder *holder)
 		vars.i = 0;
 		while (vars.tmp)
 		{
-			if (!ft_strncmp(vars.value, vars.tmp->env, ft_strlen(vars.value)) &&
-			vars.tmp->deleted != 1)
+			if (!ft_strncmp(vars.value, vars.tmp->env, ft_strlen(vars.value)))
 			{
+				if (vars.tmp->deleted == 1)
+				{
+					vars.tmp = vars.tmp->next;
+					continue ;
+				}
 				free(vars.value);
 				remove_node(mini_env, vars.i);
 				break ;

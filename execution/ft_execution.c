@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execution.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:50:26 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 15:59:02 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 11:26:19 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	command_first_exec(t_execution *vars, t_env *env, t_last *status)
 	{
 		ft_putstr_fd("minishell: fork: Resource \
 		temporarily unavailable\n", 2);
+		ft_status(1, 1);
 		return (0);
 	}
 	return (1);
