@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution_7.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:50:51 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 16:02:10 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:48:09 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	exec_built_fcts(t_execution *vars, t_env *env,t_holder *holder)
+void	exec_built_fcts(t_execution *vars, t_env *env, t_holder *holder)
 {
 	(1) && (vars->i = 0, vars->j = 0, vars->k = 0);
 	closing_files(vars);
@@ -47,19 +47,6 @@ int	here_doc_exec(t_execution *vars, t_env *env)
 		vars->n++;
 	}
 	return (0);
-}
-
-int count_nodes(t_holder *holder)
-{
-	int i;
-	
-	i = 0;
-	while (holder)
-	{
-		i++;
-		holder = holder->next;
-	}
-	return (i);
 }
 
 void	check_which_built_in(t_execution *vars, t_env *env, t_holder *holder)
