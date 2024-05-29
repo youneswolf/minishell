@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/29 09:58:04 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:45:48 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,13 @@ void	ft_cd_utils(t_env **mini_env, char *str1, char *str)
 {
 	while (mini_env)
 	{
-		if (f_strcmp((*mini_env)->env, "PWD") && (*mini_env)->deleted != 1)
+		if (f_strcmp((*mini_env)->env, "PWD"))
 		{
+			if ((*mini_env)->deleted == 1)
+			{
+				*mini_env = (*mini_env)->next;				
+				continue ;
+			}
 			perror("error retrieving current directory: getcwd: cannot access \
 			parent directories: ");
 			str1 = ft_strjoin((*mini_env)->env, "/", 1);
@@ -34,8 +39,13 @@ void	ft_cd_utils_1(t_env **mini_env, char *str1, char *str)
 {
 	while (mini_env)
 	{
-		if (f_strcmp((*mini_env)->env, "PWD") && (*mini_env)->deleted != 1)
+		if (f_strcmp((*mini_env)->env, "PWD"))
 		{
+			if ((*mini_env)->deleted == 1)
+			{
+				*mini_env = (*mini_env)->next;				
+				continue ;
+			}
 			str1 = ft_strjoin((*mini_env)->env, "/", 1);
 			str1 = ft_strjoin(str1, str, 1);
 			(*mini_env)->env = ft_strdup(str1);
