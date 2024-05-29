@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 14:28:03 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 14:29:55 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:01:09 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	ft_null_tmp(t_holder **tmp)
 
 void	ft_oppen_files_utiles1(t_holder *tmp, t_file *t)
 {
+	(void)t;
 	ft_putstr_fd("bash: : ambiguous redirect\n", 2);
 	ft_null_tmp(&tmp);
 	ft_status(1, 1);

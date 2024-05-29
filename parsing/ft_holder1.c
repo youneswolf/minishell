@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 14:37:18 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 14:39:33 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:02:07 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_holder	*ft_lstnew_holder(char *line)
 {
 	t_holder	*new;
 
+	(void)line;
 	new = (t_holder *)malloc(sizeof(t_holder));
 	new->cmd = NULL;
 	new->here = -42;

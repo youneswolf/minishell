@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:51:14 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 15:49:21 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:07:51 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	closing_files(t_execution *vars)
 
 int	execution_cmd(t_execution *vars, t_env *env, t_last *status)
 {
+	(void)status;
 	if (vars->tmp->in[vars->i] != -42 && vars->tmp->in[vars->i] != -1)
 		vars->i++;
 	if (vars->tmp->out[vars->j] != -42 && vars->tmp->out[vars->j] != -1)

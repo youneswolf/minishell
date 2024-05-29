@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:38:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 14:27:34 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:58:04 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	ft_cd_utils(t_env **mini_env, char *str1, char *str)
 {
-	char	*str2;
-
 	while (mini_env)
 	{
 		if (f_strcmp((*mini_env)->env, "PWD") && (*mini_env)->deleted != 1)
@@ -54,8 +52,8 @@ int	ft_cd(char *str, t_env **mini_env)
 	char	*str1;
 	DIR		*dir;
 	char	curdir[PATH_MAX];
-	char	path[PATH_MAX];
 
+	str1 = NULL;
 	dir = opendir(str);
 	if (dir == NULL)
 		return (ft_status(1, 1), perror("path not found"), 0);

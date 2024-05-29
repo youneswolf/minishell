@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tools_7.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:53:45 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 02:57:11 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:05:07 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	check_is_closed(char *str, int sgl)
 			j = 1;
 			count++;
 		}
-		if (j && str[i] == '$' || sgl && str[i] == '$')
+		if (j && (str[i] == '$' || (sgl && str[i] == '$')))
 			k = 1;
 		i++;
 	}

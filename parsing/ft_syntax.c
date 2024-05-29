@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 14:47:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 15:06:58 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:10:35 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ int	ft_syntax_utils(t_line *tmp, int flag)
 		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	else if ((tmp->token == IN_REDIR || tmp->token == OUT_REDIR) && !tmp->next)
 		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
-	else if (tmp && tmp->next && (tmp->token == HERDOC
-			&& tmp->next->token == OUT_REDIR) || (tmp->token == HERDOC
-			&& tmp->next->token == IN_REDIR)
-		|| (tmp->token == IN_REDIR && tmp->next->token == OUT_REDIR))
+	else if (tmp && tmp->next && ((tmp->token == HERDOC
+				&& tmp->next->token == OUT_REDIR) || (tmp->token == HERDOC
+				&& tmp->next->token == IN_REDIR)
+			|| (tmp->token == IN_REDIR && tmp->next->token == OUT_REDIR)))
 		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	return (1);
 }
@@ -89,12 +89,13 @@ int	ft_syntax(t_line *head, t_last *status)
 	t_line	*tmp;
 	int		count;
 
+	(void)status;
 	(1) && (i = 0, count = 0, tmp = head);
 	if (!tmp)
 		return (0);
-	if (tmp && tmp->token == PIPE || ft_her_doc(head)
-		|| (tmp->token == IN_REDIR && !tmp->next)
-		|| (tmp->token == HERDOC && !tmp->next))
+	if (tmp && (tmp->token == PIPE || ft_her_doc(head)
+			|| (tmp->token == IN_REDIR && !tmp->next)
+			|| (tmp->token == HERDOC && !tmp->next)))
 		return (ft_status(1, 258), ft_putstr_fd("error\n", 2), 0);
 	while (tmp)
 	{

@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:28:41 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:40:41 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:51:17 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	ft_red_args(t_line *head)
 {
 	t_line	*tmp;
 	t_line	*tmp1;
-	int		i;
 	int		flag;
 
 	tmp = head;

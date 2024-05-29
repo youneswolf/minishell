@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_5.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:50:10 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 05:07:49 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:06:54 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ void	ft_here_doc(char *lim, int pipe_fd[2], t_holder *atmp,
 	t_env **env)
 {
 	char	*line;
-	char	*str;
 	int		i;
 
-	(1) && (i = 42, str = NULL);
+	(void)atmp;
+	(1) && (i = 42);
 	line = readline("here_doc> ");
 	if (!line)
 		exit(1);
