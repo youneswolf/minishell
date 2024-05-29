@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/29 09:46:32 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:43:55 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,9 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	mini_env = NULL;
-	str = NULL;
-	tmp = NULL;
-	tcgetattr(STDIN_FILENO, &attr);
+	(1) && (tmp = NULL, str = NULL, mini_env = NULL);
+	if (tcgetattr(STDIN_FILENO, &attr) == -1)
+		perror("attributes");
 	attr.c_lflag = ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &attr);
 	t.status = ft_status(0, 1337);
