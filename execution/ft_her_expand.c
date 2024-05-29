@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_her_expand.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:40:59 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 01:17:38 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 09:54:29 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*expand_here(char *str, t_env **env)
 	initialize_vars(&vars, env);
 	while (str && str[vars.i] != '$')
 		vars.i++;
-	if (vars.i && vars.i != ft_strlen(str))
+	if (vars.i && (size_t)vars.i != ft_strlen(str))
 		vars.pre_special = ft_substr(str, 0, vars.i);
 	vars.sub = ft_sub_str (str, vars.i + 1, (ft_strlen(str) - vars.i - 1), 0);
 	vars.i = 0;

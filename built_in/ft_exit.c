@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 02:20:58 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 16:27:07 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:13:23 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,10 @@ void	ft_exit_utils(int k)
 void	ft_exit(t_holder *str, int count)
 {
 	t_holder		*tmp1;
-	unsigned long	t;
 	int				i;
-	char			*s;
 
-	tmp1 = str;
-	i = 0;
+	(void)count;
+	(1) && (i = 0, tmp1 = str);
 	while (tmp1 && tmp1->args_built_in[i])
 		i++;
 	if (i == 1)
@@ -96,14 +94,16 @@ void	ft_exit(t_holder *str, int count)
 		(write(2, "exit\n", 6), write(2, "bash: exit: too many arguments\n",
 				32), ft_status(1, 1));
 	else if (i == 2 && ft_is_numeric(tmp1->args_built_in[1])
-		&& ((size_t)ft_atoi(tmp1->args_built_in[1]) <= 9223372036854775807
-			|| (size_t)ft_atoi(tmp1->args_built_in[1]) >= -922337203685477588))
+		&& ((long)ft_atoi(tmp1->args_built_in[1]) <= (long)9223372036854775807
+			|| (long)ft_atoi(tmp1->args_built_in[1]) >= \
+			(long)-922337203685477588))
 		(ft_putstr_fd("exit\n", 2), ft_status(1, ft_atoi(tmp1->args_built_in[1]))
 			, exit(ft_atoi(tmp1->args_built_in[1])));
 	else if (tmp1->args_built_in[1] && !ft_is_numeric(tmp1->args_built_in[1]))
 		ft_exit_utils(1);
 	else if (tmp1->args_built_in[1] && ft_is_numeric(tmp1->args_built_in[1])
-		&& ((size_t)ft_atoi(tmp1->args_built_in[1]) > 9223372036854775807
-			|| (size_t)ft_atoi(tmp1->args_built_in[1]) < -922337203685477588))
+		&& ((long)ft_atoi(tmp1->args_built_in[1]) > (long)9223372036854775807
+			|| (long)ft_atoi(tmp1->args_built_in[1]) < \
+			(long)-922337203685477588))
 		ft_exit_utils(1);
 }

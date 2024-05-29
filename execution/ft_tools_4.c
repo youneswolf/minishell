@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tools_4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 06:27:13 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:03:42 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ void	join_exp(t_exp *vars, t_env **env)
 {
 	int	check ;
 	int	quotes;
-	int	dollar;
 
 	quotes = 42;
 	vars->i = 0;

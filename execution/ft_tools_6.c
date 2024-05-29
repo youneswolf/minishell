@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tools_6.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:53:11 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/28 06:10:00 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:04:28 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*expand(char *str, t_env **env, int last, int quotes)
 		return (expand_nbr(str));
 	while (str && str[vars.i] && str[vars.i] != '$')
 		vars.i++;
-	if (vars.i && vars.i != ft_strlen(str))
+	if (vars.i && (size_t)vars.i != ft_strlen(str))
 		vars.pre_special = ft_sub_str(str, 0, vars.i, 0);
 	vars.sub = ft_sub_str(str, vars.i + 1, (ft_strlen(str) - vars.i -1), 0);
 	vars.i = 0;
@@ -84,8 +84,6 @@ char	*expand(char *str, t_env **env, int last, int quotes)
 void	fill_null_env(t_env **mini_env)
 {
 	t_env	*node;
-	char	*line;
-	int		len;
 	int		i;
 	char	*first;
 

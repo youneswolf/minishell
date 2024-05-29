@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:46:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/27 23:47:05 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 09:57:23 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	is_equal(char *str)
 
 void	exec_env(t_env **mini_env)
 {
-	int		i;
 	t_env	*tmp;
 
 	tmp = *mini_env;

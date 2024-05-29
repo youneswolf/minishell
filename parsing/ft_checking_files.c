@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_checking_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:06:44 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/27 22:10:37 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 09:52:46 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	ft_oppen_files_utiles(t_file *t, t_holder *tmp)
 
 void	ft_oppen_utils(t_holder *tmp, t_file *t)
 {
+	(void)t;
 	ft_putstr_fd("bash: : ambiguous redirect\n", 2);
 	ft_null_tmp(&tmp);
 	ft_status(1, 1);
@@ -89,6 +90,7 @@ int	ft_oppen_files(t_holder *node, t_last *status)
 	int			e;
 
 	tmp = node;
+	(void)status;
 	(1) && (t.i = 0, t.z = 0, t.q = 0, t.b = 0, e = 0);
 	while (tmp)
 	{

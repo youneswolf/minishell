@@ -6,9 +6,10 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:29:15 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 10:40:31 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:41:38 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../minishell.h"
 
@@ -53,6 +54,7 @@ void	print_error(t_export *vars)
 
 void	check_validity(t_export *vars, t_env **env)
 {
+	(void)env;
 	if (vars->i == 0 
 		&& (vars->line_tmp->args_built_in[vars->j][vars->i] == '='))
 	{

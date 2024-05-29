@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 10:32:36 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 14:31:59 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:57:10 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	**ft_does_matche_utils(DIR *dir, struct dirent *name, char *str)
 	int		i;
 	char	**array;
 
-	i = 0;
+	(1) && (i = 0, array = NULL);
 	if (dir)
 	{
 		array = malloc(sizeof(char *) * 1000);
@@ -121,7 +121,7 @@ char	**ft_does_it_matche(char *str)
 	char			**array;
 	char			*str1;
 
-	i = 0;
+	(1) && (i = 0, name = NULL);
 	if (ft_is_between_quotes(str))
 	{
 		str1 = ft_remove3(str);
