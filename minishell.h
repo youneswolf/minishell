@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/29 09:48:37 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:21:05 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -504,5 +504,7 @@ void			ft_ini(t_long *t);
 int				ft_utils_norm_utils(t_line *tmp, t_holder *new_, t_long *t);
 int				ft_utils_norm(t_line *tmp, t_holder *new_, t_long *t);
 void			ft_exit2(t_holder *str, int count);
+char			*ft_strtrim(char *s1, char *set, int arg);
+int				count_nodes(t_holder *holder);
 
 #endif

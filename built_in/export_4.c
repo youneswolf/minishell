@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:29:31 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/27 23:40:08 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 09:58:45 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	if_not_in_env(t_export *vars, t_env **env)
 	vars->node = malloc(sizeof(t_env));
 	vars->node->env = vars->join;
 	vars->node->next = NULL;
+	vars->node->deleted = 0;
 	(*env)->next = vars->node;
 }
 
@@ -87,6 +88,7 @@ void	if_not_in_env1(t_export *vars, t_env **env)
 	vars->node = malloc(sizeof(t_env));
 	vars->node->env = vars->join;
 	vars->node->next = NULL;
+	vars->node->deleted = 0;
 	(*env)->next = vars->node;
 	vars->j++;
 }

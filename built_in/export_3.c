@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:29:15 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/27 23:40:16 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:40:31 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,13 @@ void	add_vars(t_export *vars, t_env **env)
 			vars->i);
 	while (*env)
 	{
-		if (!ft_strncmp(vars->var_name, (*env)->env, ft_strlen(vars->var_name)))
+		if (!ft_strncmp(vars->var_name, (*env)->env, ft_strlen((*env)->env)))
 		{
+			if ((*env)->deleted == 1)
+			{
+				(*env) = (*env)->next;
+				continue ;
+			}
 			vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j],
 					vars->i, ft_strlen(vars->line_tmp->args_built_in[vars->j])
 					- vars->i);
@@ -32,9 +37,8 @@ void	add_vars(t_export *vars, t_env **env)
 	}
 	if (!(*env))
 		if_not_in_env(vars, env);
-	vars->j++;
+	(1)  && (vars->j++, vars->i = 0);
 	*env = vars->tmp;
-	vars->i = 0;
 }
 
 void	print_error(t_export *vars)
@@ -82,8 +86,13 @@ void	put_env_value(t_export *vars, t_env **env)
 			vars->i - 1);
 	while (*env)
 	{
-		if (!ft_strncmp(vars->var_name, (*env)->env, ft_strlen(vars->var_name)))
+		if (!ft_strncmp(vars->var_name, (*env)->env, ft_strlen((*env)->env)))
 		{
+			if ((*env)->deleted == 1)
+			{
+				(*env) = (*env)->next;
+				continue ;
+			}
 			vars->value = ft_substr(vars->line_tmp->args_built_in[vars->j],
 					vars->i + 1,
 					ft_strlen(vars->line_tmp->args_built_in[vars->j])
