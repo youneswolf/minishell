@@ -15,7 +15,7 @@
 # **************************************************************************** #
 
 CC = cc
-# CC += -Wall -Wextra -Werror
+CC += -Wall -Wextra -Werror
 RM = rm -f
 NAME = minishell
 

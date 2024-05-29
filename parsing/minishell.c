@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 02:57:23 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 09:46:32 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int	main(int ac, char **av, char **env)
 	t_env			*mini_env;
 	struct termios	attr;
 
+	(void)ac;
+	(void)av;
 	mini_env = NULL;
 	str = NULL;
 	tmp = NULL;

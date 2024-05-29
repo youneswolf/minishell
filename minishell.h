@@ -6,7 +6,7 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/28 16:27:44 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:48:37 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,12 +360,8 @@ int				ft_surpass_chars(char *var);
 char			*ft_arg_is_exist(t_env *env, char *var);
 char			*ft_allocate_for_var(int flag, char *str, int i);
 t_env			*ft_get_env(char **env);
-static t_env	*ft_create_new_env(void);
 int				ft_t_env_len(t_env *head);
-static t_env	*ft_last_ft_node(t_env *top);
-static t_env	*ft_new_node(char *value);
 int				ft_push_value(char *value, t_env **head);
-void			ft_free_env(t_env **head);
 void			ft_remove_quote(t_line **str, char *line);
 char			*ft_remove(t_line *tmp, char *line);
 int				ft_strchr1(char *s, char c);
@@ -403,10 +399,7 @@ int				ft_isalnum(int c);
 char			*expand(char *str, t_env **env, int last, int quotes);
 char			*ft_substr(char *str, int start, int len);
 size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
-static int		end_finder(char *s1, char *set);
 char			*ft_strdup(char *s1);
-static int		start_finder(char *s1, char *set);
-char			*ft_strtrim(char *s1, char *set, int arg);
 int				ft_count_pipe(t_line *head);
 void			ft_pwd(t_env *mini_env);
 int				is_sgl_quote(char *str);
@@ -427,10 +420,7 @@ int				ft_surpass_chars(char *var);
 char			*ft_arg_is_exist(t_env *env, char *var);
 char			*ft_allocate_for_var(int flag, char *str, int i);
 t_env			*ft_get_env(char **env);
-static t_env	*ft_create_new_env(void);
 int				ft_t_env_len(t_env *head);
-static t_env	*ft_last_node(t_env *top);
-static t_env	*ft_new_node(char *value);
 int				ft_push_value(char *value, t_env **head);
 void			ft_free_env(t_env **head);
 void			ft_checking_files(t_holder *node);
@@ -439,11 +429,7 @@ t_line			*get_last_l(t_line **a);
 char			*expand_here(char *str, t_env **env);
 int				count_sgl_quote(char *str);
 char			**ft_split1(const char *str, char c);
-static char		**alloc1(int l);
 void			ft_free_list2(t_line **str);
-static int		ft_free(char **array, const char *str, char c, int a);
-static char		*word1(const char *str, char c);
-static int		count1(const char *s, char c);
 char			**ft_does_it_matche(char *str);
 int				ft_is_there(char *str);
 int				ft_is_there_in_the_dir(char *pat, char *text);
