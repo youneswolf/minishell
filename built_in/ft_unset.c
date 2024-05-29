@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:49:59 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 11:20:58 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 11:47:41 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,26 @@ void	print_error_unset(char *str)
 	ft_putstr_fd(" not a valid identifier\n", 2);
 }
 
+void	unset_loop(t_unset *vars, t_env **mini_env)
+{
+	while (vars->tmp)
+	{
+		if (!ft_strncmp(vars->value, vars->tmp->env, ft_strlen(vars->value)))
+		{
+			if (vars->tmp->deleted == 1)
+			{
+				vars->tmp = vars->tmp->next;
+				continue ;
+			}
+			free(vars->value);
+			remove_node(mini_env, vars->i);
+			break ;
+		}
+		vars->tmp = vars->tmp->next;
+		vars->i++;
+	}
+}
+
 void	exec_unset(t_env **mini_env, t_holder *holder)
 {
 	t_unset	vars;
@@ -86,22 +106,7 @@ void	exec_unset(t_env **mini_env, t_holder *holder)
 		}
 		vars.value = ft_strjoin(holder->args_built_in[vars.ind], "=", 0);
 		vars.i = 0;
-		while (vars.tmp)
-		{
-			if (!ft_strncmp(vars.value, vars.tmp->env, ft_strlen(vars.value)))
-			{
-				if (vars.tmp->deleted == 1)
-				{
-					vars.tmp = vars.tmp->next;
-					continue ;
-				}
-				free(vars.value);
-				remove_node(mini_env, vars.i);
-				break ;
-			}
-			vars.tmp = vars.tmp->next;
-			vars.i++;
-		}
+		unset_loop(&vars, mini_env);
 		vars.ind++;
 	}
 }
