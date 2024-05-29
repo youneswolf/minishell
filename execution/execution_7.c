@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:50:51 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 09:48:09 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 11:07:58 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	check_which_built_in(t_execution *vars, t_env *env, t_holder *holder)
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "unset"))
 		exec_unset(&env, vars->tmp);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "env"))
-		exec_env(&env);
+		exec_env(&env, holder);
 	else if (!ft_strcmp_asd(vars->tmp->args_built_in[0], "exit")
 		&& vars->exit == 1)
 		ft_exit(vars->tmp, vars->exit);

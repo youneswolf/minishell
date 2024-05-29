@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/29 10:42:20 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 11:08:12 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,7 +317,7 @@ char			*ft_remove3(char *line);
 char			*find_path(t_env *env);
 char			*ft_remove_utils4(char *line, char *str, int j, int i);
 int				ft_remove_utils3(char *str);
-void			exec_env(t_env **mini_env);
+void			exec_env(t_env **mini_env, t_holder *holder);
 void			exec_unset(t_env **mini_env, t_holder *holder);
 void			exec_echo(t_holder *holder);
 int				f_strcmp(char *str1, char *str2);

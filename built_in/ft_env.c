@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:46:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 09:57:23 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 11:07:23 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_equal(char *str)
 	return (0);
 }
 
-void	exec_env(t_env **mini_env)
+void	exec_env(t_env **mini_env, t_holder *holder)
 {
 	t_env	*tmp;
 
