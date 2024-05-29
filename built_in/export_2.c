@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:33:43 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/27 23:39:48 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 12:35:22 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	exec_fcts(t_env *head, t_env *node)
 	ft_sort_list(&head);
 	ft_print_export(head);
 	ft_free_env(&node);
+	ft_status(1, 0);
 }
 
 void	set_node_things(t_env **node, t_env *tmp)
