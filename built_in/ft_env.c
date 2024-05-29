@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:46:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 11:53:22 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 12:50:45 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,5 @@ void	exec_env(t_env **mini_env, t_holder *holder)
 			printf("%s\n", tmp->env);
 		tmp = tmp->next;
 	}
+	ft_status(1, 0);
 }

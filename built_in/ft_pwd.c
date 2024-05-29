@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:39:00 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/26 13:39:55 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:50:14 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,5 @@ void	ft_pwd(t_env *mini_env)
 			tmp = tmp->next;
 		}
 	}
+	ft_status(1 ,0);
 }

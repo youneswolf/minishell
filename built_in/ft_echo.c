@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:41:23 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/27 23:44:41 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/05/29 12:52:54 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,7 @@ void	exec_echo(t_holder *holder)
 		echo_new_line(holder, j);
 		write(1, "\n", 1);
 	}
+	if (!holder->args_built_in[1])
+		write(1, "\n", 1);
+	ft_status(1, 0);
 }
