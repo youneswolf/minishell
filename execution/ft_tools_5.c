@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:27 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/01 23:31:40 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 13:18:45 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	join_exp_1dollar(t_exp *vars, t_env **env, char *str, int arr_i)
 	// else if (quotes == 34)
 	// 	quotes = 2;
 	vars->join = ft_strjoin(vars->join,
-			expand(vars->split->str, env, 1,1), 2);
+			expand(vars->split->str, env, 1,arr_i), 2);
 	if (vars->split->next)
 	{
 		vars->join = ft_strjoin(vars->join, " ", 1);
@@ -45,7 +45,13 @@ char	*handle_expand(char *line_str, t_env **env, int *arr)
 		if (count_dollar(vars.split->str) > 1)
 			join_exp(&vars, env, arr, arr_i);
 		else
-			join_exp_1dollar(&vars, env, line_str, arr_i);
+		{
+			join_exp_1dollar(&vars, env, line_str, arr[arr_i]);
+			if (if_dollar(vars.split->str))
+			{
+				arr_i++;
+			}
+		}
 		vars.split = vars.split->next;
 	}
 	ft_free_list2(&vars.node);

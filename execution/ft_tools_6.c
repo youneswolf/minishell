@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:53:11 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/01 23:28:56 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 13:16:43 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,9 @@ char	*expand(char *str, t_env **env, int last,int arr)
 	if (!if_dollar(str))
 		return (ft_strdup(str));
 	if (ft_strnstr(str, "$?", ft_strlen(str)))
-	{
 		return (ft_strdup(str));
-	}
 	if (arr == 0 || !is_only_special(str))
-	{
 		return (ft_strdup(str));
-	}
 	// if ((is_sgl_quote_ex(str, last) && is_char(str) && quotes != 2) 
 	// 	|| (quotes == 1))
 	// 	return (ft_strdup(str));
