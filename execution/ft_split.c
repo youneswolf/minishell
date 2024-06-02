@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:37:04 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/29 21:41:07 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 20:44:13 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ static int	count1(const char *s, char c)
 	count = 0;
 	while (s[i] && s[i] != '\0')
 	{
-		while (s[i] == c && s[i] != '\0')
+		while ((s[i] == c || s[i] == '\t') && s[i] != '\0')
 			i++;
-		if (s[i] != c && s[i] != '\0')
+		if (s[i] != c && s[i] != '\t' && s[i] != '\0')
 		{
 			count++;
-			while (s[i] != c && s[i] != '\0')
+			while (s[i] != c && s[i] != '\t' && s[i] != '\0')
 				i++;
 		}
 	}
@@ -39,13 +39,13 @@ static char	*word1(const char *str, char c)
 	char	*p;
 
 	i = 0;
-	while (str[i] && str[i] != c)
+	while (str[i] && str[i] != '\t' && str[i] != c)
 		i++;
 	p = (char *)malloc(i + 1);
 	if (!p)
 		return (NULL);
 	i = 0;
-	while (str[i] != c && str[i] != '\0')
+	while (str[i] != c && str[i] != '\t' && str[i] != '\0')
 	{
 		p[i] = str[i];
 		i++;
@@ -72,10 +72,10 @@ static int	ft_free(char **array, const char *str, char c, int a)
 		return (0);
 	}
 	else if (a == 0)
-		while (*(str + j) == c && *(str + j))
+		while ((*(str + j) == c || *(str + j) == '\t') && *(str + j))
 			j++;
 	else if (a == 1)
-		while (*(str + j) != c && *(str + j))
+		while (*(str + j) != c && *(str + j) != '\t' && *(str + j))
 			j++;
 	return (j);
 }
@@ -106,7 +106,7 @@ char	**ft_split1(const char *str, char c)
 	while (j < l)
 	{
 		str += ft_free(array, str, c, 0);
-		if (*str != c && *str)
+		if (*str != c && *str != '\t' && *str)
 		{
 			array[j] = word1(str, c);
 			if (!array[j] && !ft_free(array, str, c, 3))

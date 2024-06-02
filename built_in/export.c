@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 22:32:00 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/27 23:39:37 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 20:33:10 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,21 @@
 
 int	check_first_is_nbr(char *str)
 {
-	if (str[0] && str[0] >= '0' && str[0] <= '9')
+	int	i;
+	int j;
+
+	j = 0;
+	i = 0;
+	if (str && str[0] && str[0] >= '0' && str[0] <= '9')
 		return (0);
-	if (str[0] && (str[0] == '=' || str[0] == '+'))
-		return (0);
+	while (str && str[i] && str[i] != '=')
+	{
+		if (str[i] == '+')
+			j++;
+		if (j && str[i] == '+')
+			return (0);
+		i++;
+	}                                
 	return (1);
 }
 

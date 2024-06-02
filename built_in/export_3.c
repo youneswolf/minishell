@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:29:15 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 11:47:55 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 20:43:32 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ void	check_validity(t_export *vars, t_env **env)
 					|| vars->line_tmp->args_built_in[vars->j][vars->i] == ','
 					|| vars->line_tmp->args_built_in[vars->j][vars->i] == '/'
 					|| vars->line_tmp->args_built_in[vars->j][vars->i] == '-'
-					|| vars->line_tmp->args_built_in[vars->j][vars->i] == ':')
+					|| vars->line_tmp->args_built_in[vars->j][vars->i] == ':'
+					|| vars->line_tmp->args_built_in[vars->j][vars->i] == '*'
+					|| vars->line_tmp->args_built_in[vars->j][vars->i] == '\\')
 			{
 				print_error(vars);
 				break ;

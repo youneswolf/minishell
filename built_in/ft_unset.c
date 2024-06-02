@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:49:59 by asedoun           #+#    #+#             */
-/*   Updated: 2024/05/29 19:32:49 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 14:00:24 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,19 @@ void	unset_loop(t_unset *vars, t_env **mini_env)
 		vars->i++;
 	}
 }
+int check_is_equal(char *str, t_env **env)
+{
+	t_env	*tmp;
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (!ft_strncmp(str, tmp->env, ft_strlen(tmp->env)))
+			return (0);
+		tmp = tmp->next;
+	}
+	return (1);
+}
 
 void	exec_unset(t_env **mini_env, t_holder *holder)
 {
@@ -105,7 +118,10 @@ void	exec_unset(t_env **mini_env, t_holder *holder)
 			print_error_unset(holder->args_built_in[vars.ind++]);
 			continue ;
 		}
-		vars.value = ft_strjoin(holder->args_built_in[vars.ind], "=", 0);
+		if (check_is_equal(holder->args_built_in[vars.ind], mini_env))
+			vars.value = ft_strjoin(holder->args_built_in[vars.ind], "=", 0);
+		else
+			vars.value = ft_strdup(holder->args_built_in[vars.ind]);
 		vars.tmp = *mini_env;
 		vars.i = 0;
 		unset_loop(&vars, mini_env);
