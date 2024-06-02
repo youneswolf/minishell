@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/01 23:29:42 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 22:16:15 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,14 @@ typedef struct s_expan
 	char	*sub ;
 	char	*pre_var;
 }	t_expan;
+
+typedef struct s_exec
+{
+    int    *a;
+    int    quote;
+    int    i;
+    int    k;
+}    t_exec;
 
 typedef struct s_execution
 {
