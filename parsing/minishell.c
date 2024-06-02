@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/02 12:31:12 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 13:45:50 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char	*split_space_str(char *str)
 	}
 	free(str);
 	ft_free_2d(new_str);
+	if (!no_space_str)
+		return (ft_strdup(""));
 	return (no_space_str);
 }
 int	ft_size_dollar(char *str)
@@ -116,17 +118,12 @@ void	main_utils1(t_line *str, t_env *mini_env)
 		{
 			arr = ft_exe(str->str);
 			int i = 0;
-			// while (i < count_dollar(str->str))
-			// {
-			// 	printf("%d\n",arr[i]);
-			// 	i++;
-			// }
 			str->str = handle_expand(str->str, &mini_env, arr);
 			str->flag = 1;
-			// printf("%d\n",str->str[0]);
 			if (is_between_quotes(str->str))
 				str->is_between_quote = 1;
 			str->str = split_space_str(str->str);
+			free(arr);
 		}
 		if (ft_strnstr(str->str, "$?", ft_strlen(str->str)))
 		{
@@ -148,15 +145,15 @@ void	main_utils(t_line *str, t_last *t, t_status *status, t_env *mini_env)
 		return (ft_free_list(&str, status));
 	old = str;
 	main_utils1(str, mini_env);
-	str = old;
-	while (str)
-	{
-		if (!str->str)
-		{
-			str->str = ft_strdup("");
-		}
-		str = str->next;
-	}
+	// str = old;
+	// while (str)
+	// {
+	// 	if (!str->str)
+	// 	{
+	// 		str->str = ft_strdup("");
+	// 	}
+	// 	str = str->next;
+	// }
 	str = old;
 	ft_skip_empty_expand(&str);
 	ft_set_token_to_none(str);

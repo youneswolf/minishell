@@ -6,11 +6,11 @@
 #    By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 09:42:56 by ybellakr          #+#    #+#              #
-#    Updated: 2024/06/02 11:48:03 by asedoun          ###   ########.fr        #
+#    Updated: 2024/06/02 13:44:13 by asedoun          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC += -fsanitize=address -g
+# CC += -fsanitize=address -g
 RM = rm -f
 NAME = minishell
 
