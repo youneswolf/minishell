@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/01 23:38:30 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 22:04:26 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	check_for_first_elem(char *str)
 		return (0);
 	while (str && str[i] && str[i] != '$')
 	{
-		if (str[i] != '.' || str[i] != ',' || str[i] != '/' 
+		if (str[i] != '.' || str[i] != ',' || str[i] != '/'
 			|| str[i] != '-' || str[i] != ':')
 			return (1);
 		i++;
@@ -95,7 +95,7 @@ void	expanding(t_exp *vars, t_env **env, int *arr, int arr_i)
 		else
 			vars->dollar_str_space = ft_strjoin("$", vars->dollar_str_space, 3);
 		vars->join = ft_strjoin(vars->join,
-			expand(vars->dollar_str_space, env, 0, arr[arr_i]), 2);
+				expand(vars->dollar_str_space, env, 0, arr[arr_i]), 2);
 		while (vars->dollar_str[vars->i] && vars->dollar_str[vars->i][vars->j]
 			&& vars->dollar_str[vars->i][vars->j] == ' ')
 		{
@@ -111,7 +111,7 @@ void	expanding(t_exp *vars, t_env **env, int *arr, int arr_i)
 	}
 }
 
-int last_dollar_str(char *str)
+int	last_dollar_str(char *str)
 {
 	int i;
 
@@ -120,12 +120,12 @@ int last_dollar_str(char *str)
 	{
 		i++;
 	}
-	if (str[i-1] == '$')
+	if (str[i -1] == '$')
 		return (1);
 	return (0);
 }
 
-void	join_exp(t_exp *vars, t_env **env,int *arr, int arr_i)
+void	join_exp(t_exp *vars, t_env **env, int *arr, int arr_i)
 {
 	vars->i = 0;
 	vars->dollar_str = ft_split(vars->split->str, '$');
