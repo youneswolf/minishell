@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/02 11:50:45 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 12:31:12 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,15 @@ void	main_utils(t_line *str, t_last *t, t_status *status, t_env *mini_env)
 		return (ft_free_list(&str, status));
 	old = str;
 	main_utils1(str, mini_env);
+	str = old;
+	while (str)
+	{
+		if (!str->str)
+		{
+			str->str = ft_strdup("");
+		}
+		str = str->next;
+	}
 	str = old;
 	ft_skip_empty_expand(&str);
 	ft_set_token_to_none(str);
