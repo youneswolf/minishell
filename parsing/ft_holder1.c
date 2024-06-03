@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_holder1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 14:37:18 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/29 18:42:50 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/06/03 13:21:44 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdlib.h>
 
 void	ft_lstnew_holder_utils(t_holder *new_)
 {

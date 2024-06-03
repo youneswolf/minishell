@@ -6,21 +6,17 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/03 13:19:25 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:21:09 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include <stdio.h>
-# include <string.h>
-# include <sys/_types/_size_t.h>
 # include <termios.h>
-# include <Kernel/sys/syslimits.h>
 # include <signal.h>
 # include <fcntl.h>
 # include <unistd.h>
-# include <string.h>
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <dirent.h>
