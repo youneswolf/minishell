@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/02 22:16:15 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 10:18:16 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,11 +232,11 @@ typedef struct s_expan
 
 typedef struct s_exec
 {
-    int    *a;
-    int    quote;
-    int    i;
-    int    k;
-}    t_exec;
+	int	*a;
+	int	quote;
+	int	i;
+	int	k;
+}	t_exec;
 
 typedef struct s_execution
 {
@@ -345,7 +345,8 @@ void			built_in_exec(t_execution *vars, t_env *env, t_holder *holder);
 void			piping(t_execution *vars);
 t_holder		*ft_create_holder_node(t_line *node, char *line);
 int				ft_count_pipe(t_line *head);
-char			*put_status_in_str(char *str, int status_int, t_env **env, int *arr);
+char			*put_status_in_str(char *str, int status_int, t_env **env, 
+					int *arr);
 int				*ft_exe(char *str);
 void			ft_execute_cmd(t_line *head);
 int				ft_isalpha(int c);
@@ -447,8 +448,10 @@ int				ft_search_back(char *pattern, char *text, int l, int ll);
 int				ft_str(char *str);
 int				ft_status(int a, int status);
 char			*handle_expand(char *line_str, t_env **env, int *arr);
-void			join_exp(t_exp *vars, t_env **env, int *arr, int arr_i);
-void			join_exp_1dollar(t_exp *vars, t_env **env, char *str, int arr_i);
+void			join_exp(t_exp *vars, t_env **env, int *arr, 
+					int arr_i);
+void			join_exp_1dollar(t_exp *vars, t_env **env, char *str, 
+					int arr_i);
 void			initialize_vars(t_expan *vars, t_env **env);
 t_line			*get_exp_node(char *line_str);
 void			join_exp_here(t_exp *vars, t_env **env);
@@ -522,4 +525,7 @@ void			ft_free_ut(t_holder *new_, int a);
 void			ft_free_ut2(t_holder *new_, int a);
 void			ft_uttt(t_does_match *t, char *pat, char *text, int a);
 void			ft_free_2dd(char **array);
+int				*ft_exe(char *str);
+int				ft_exec_util(char *str, t_exec *t);
+int				ft_size_dollar(char *str);
 #endif

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+         #
+#    By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 09:42:56 by ybellakr          #+#    #+#              #
-#    Updated: 2024/06/02 13:44:13 by asedoun          ###   ########.fr        #
+#    Updated: 2024/06/03 10:10:46 by ybellakr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ SRC_FILE =	parsing/minishell.c execution/ft_utlils.c parsing/ft_give_token.c par
 			 built_in/export_1.c built_in/export_2.c built_in/export_3.c built_in/export_4.c execution/ft_her_expand_1.c execution/ft_her_expand_2.c \
 			 execution/ft_tools_1.c execution/ft_tools_2.c execution/ft_tools_3.c execution/ft_tools_4.c execution/ft_tools_5.c execution/ft_tools_6.c execution/ft_tools_7.c \
 			 execution/execution_1.c execution/execution_2.c execution/execution_3.c execution/execution_4.c execution/execution_5.c \
-			 execution/execution_6.c execution/execution_7.c execution/execution_8.c built_in/ft_exit_utils.c parsing/ft_free_holder_check.c parsing/ft_norm_does_match.c
+			 execution/execution_6.c execution/execution_7.c execution/execution_8.c built_in/ft_exit_utils.c parsing/ft_free_holder_check.c parsing/ft_norm_does_match.c\
+			 parsing/ft_exec.c
 
 SRC_HEADER = minishell.h
 

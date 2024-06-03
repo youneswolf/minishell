@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/06/02 22:43:42 by asedoun          ###   ########.fr       */
+=======
+/*   Updated: 2024/06/03 10:13:27 by ybellakr         ###   ########.fr       */
+>>>>>>> e1100d6db07ecf82bdb57974a65db1e5b6d42b7c
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +27,7 @@ char	*split_space_str(char *str)
 	new_str = ft_split(str, ' ');
 	if (!str)
 		return (NULL);
-	while(new_str[i])
+	while (new_str[i])
 	{
 		no_space_str = ft_strjoin(no_space_str, new_str[i], 1);
 		no_space_str = ft_strjoin(no_space_str, " ", 1);
@@ -35,6 +39,7 @@ char	*split_space_str(char *str)
 		return (ft_strdup(""));
 	return (no_space_str);
 }
+<<<<<<< HEAD
 int	ft_size_dollar(char *str)
 {
 	int	i;
@@ -98,17 +103,21 @@ int    *ft_exe(char *str)
 	}
 	return (t.a);
 }
+=======
+>>>>>>> e1100d6db07ecf82bdb57974a65db1e5b6d42b7c
 
 void	main_utils1(t_line *str, t_env *mini_env)
 {
-	int *arr;
+	int	*arr;
+	int	i;
+
+	(1) && (arr = NULL, i = 0);
 	while (str)
 	{
 		if (if_dollar(str->str) && str->token != DELIMITER
 			&& !ft_strnstr(str->str, "$?", ft_strlen(str->str)))
 		{
 			arr = ft_exe(str->str);
-			int i = 0;
 			str->str = handle_expand(str->str, &mini_env, arr);
 			str->flag = 1;
 			if (is_between_quotes(str->str))
