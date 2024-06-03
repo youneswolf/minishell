@@ -6,7 +6,11 @@
 /*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:01 by asedoun           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/06/03 12:31:25 by ybellakr         ###   ########.fr       */
+=======
+/*   Updated: 2024/06/03 12:30:57 by asedoun          ###   ########.fr       */
+>>>>>>> 2a6a7fc4b805fd65c3b9a0416631857c12322acc
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +110,7 @@ void	expanding(t_exp *vars, t_env **env, int *arr, int arr_i)
 		if (if_dollar(vars->dollar_str_space))
 			arr_i++;
 		free(vars->dollar_str_space);
-		if (vars->last_dollar)
+		if (vars->last_dollar && vars->dollar_str[vars->i + 1])
 			vars->join = ft_strjoin(vars->join, "$", 1);
 	}
 }
