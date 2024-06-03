@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tools_6.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:53:11 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/02 13:16:43 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 12:33:37 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,27 +51,29 @@ void	get_var(t_expan *vars)
 	vars->var = ft_strjoin(vars->pre_var, "=", 1);
 	free(vars->sub);
 }
-int is_only_special(char *str)
+
+int	is_only_special(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str && str[0] && str[0] == '$')
 		i++;
 	if (!str[i])
 		return (0);
-	 while (str && str[i])
+	while (str && str[i])
 	{
 		if (str[i] != '.' && str[i] != ',' && str[i] != '/' 
 			&& str[i] != '-' && str[i] != ':')
-			{
+		{
 			return (1);
-			}
+		}
 		i++;
 	}
 	return (0);
 }
-char	*expand(char *str, t_env **env, int last,int arr)
+
+char	*expand(char *str, t_env **env, int last, int arr)
 {
 	t_expan	vars;
 
@@ -82,9 +84,6 @@ char	*expand(char *str, t_env **env, int last,int arr)
 		return (ft_strdup(str));
 	if (arr == 0 || !is_only_special(str))
 		return (ft_strdup(str));
-	// if ((is_sgl_quote_ex(str, last) && is_char(str) && quotes != 2) 
-	// 	|| (quotes == 1))
-	// 	return (ft_strdup(str));
 	if (is_number(str))
 		return (expand_nbr(str));
 	while (str && str[vars.i] && str[vars.i] != '$')

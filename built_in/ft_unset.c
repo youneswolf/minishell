@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:49:59 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/02 14:00:24 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 12:29:54 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ void	unset_loop(t_unset *vars, t_env **mini_env)
 		vars->i++;
 	}
 }
-int check_is_equal(char *str, t_env **env)
+
+int	check_is_equal(char *str, t_env **env)
 {
 	t_env	*tmp;
 

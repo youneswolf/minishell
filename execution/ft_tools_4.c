@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tools_4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/02 22:04:26 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 12:31:25 by ybellakr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	expanding(t_exp *vars, t_env **env, int *arr, int arr_i)
 
 int	last_dollar_str(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str && str[i])
