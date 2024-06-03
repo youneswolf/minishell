@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+         #
+#    By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 09:42:56 by ybellakr          #+#    #+#              #
-#    Updated: 2024/06/03 10:10:46 by ybellakr         ###   ########.fr        #
+#    Updated: 2024/06/03 13:08:57 by asedoun          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# CC += -fsanitize=address -g
+CC += -fsanitize=address -g
 RM = rm -f
 NAME = minishell
 
@@ -30,7 +30,7 @@ SRC_FILE =	parsing/minishell.c execution/ft_utlils.c parsing/ft_give_token.c par
 			 execution/ft_tools_1.c execution/ft_tools_2.c execution/ft_tools_3.c execution/ft_tools_4.c execution/ft_tools_5.c execution/ft_tools_6.c execution/ft_tools_7.c \
 			 execution/execution_1.c execution/execution_2.c execution/execution_3.c execution/execution_4.c execution/execution_5.c \
 			 execution/execution_6.c execution/execution_7.c execution/execution_8.c built_in/ft_exit_utils.c parsing/ft_free_holder_check.c parsing/ft_norm_does_match.c\
-			 parsing/ft_exec.c
+			 parsing/ft_exec.c execution/utils.c
 
 SRC_HEADER = minishell.h
 

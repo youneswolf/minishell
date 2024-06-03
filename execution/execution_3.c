@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execution_3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:49:33 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/03 12:30:52 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/06/03 12:39:41 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	is_dir(char *path)
-{
-	struct stat	path_stat;
-
-	if (stat(path, &path_stat) == 0)
-	{
-		if (S_ISDIR(path_stat.st_mode))
-		{
-			return (1);
-		}
-	}
-	return (0);
-}
 
 void	no_such_file_or_dir_error(char *str)
 {

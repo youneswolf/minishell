@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/03 10:18:16 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/06/03 13:19:25 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,6 +394,8 @@ void			declare_export(t_env *env);
 void			if_not_in_env(t_export *vars, t_env **env);
 void			ft_free_list(t_line **str, t_status *status);
 void			redirect_append(int fd);
+void			print_error_unset(char *str);
+int				is_dir(char *path);
 void			if_not_in_env1(t_export *vars, t_env **env);
 void			redirect_output(int fd);
 void			redirect_input(int fd);

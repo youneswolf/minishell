@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_signals.c                                       :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/04 11:42:21 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/03 13:17:07 by asedoun          ###   ########.fr       */
+/*   Created: 2024/06/03 12:38:42 by asedoun           #+#    #+#             */
+/*   Updated: 2024/06/03 12:42:17 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_putstr(char *str)
+void	print_error_unset(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		write(1, &str[i], 1);
-		i++;
-	}
+	ft_putstr_fd("bash: unset: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(" not a valid identifier\n", 2);
 }
 
-void	ft_ctr_c(int sig)
+int	is_dir(char *path)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	ft_putstr("minishell$ ");
-	signal(SIGINT, ft_ctr_c);
+	struct stat	path_stat;
+
+	if (stat(path, &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+		{
+			return (1);
+		}
+	}
+	return (0);
 }

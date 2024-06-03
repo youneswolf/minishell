@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 23:49:59 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/03 12:29:54 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/06/03 12:39:18 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,6 @@ int	check_unset_syntax(char *str)
 		return (0);
 	}
 	return (1);
-}
-
-void	print_error_unset(char *str)
-{
-	ft_putstr_fd("bash: unset: ", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd(" not a valid identifier\n", 2);
 }
 
 void	unset_loop(t_unset *vars, t_env **mini_env)
