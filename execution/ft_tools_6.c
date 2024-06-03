@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:53:11 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/03 13:18:55 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:31:04 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,35 +52,12 @@ void	get_var(t_expan *vars)
 	free(vars->sub);
 }
 
-int	is_only_special(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (str && str[0] && str[0] == '$')
-		i++;
-	if (!str[i])
-		return (0);
-	while (str && str[i])
-	{
-		if (str[i] != '.' && str[i] != ',' && str[i] != '/' 
-			&& str[i] != '-' && str[i] != ':')
-		{
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
 char	*expand(char *str, t_env **env, int last, int arr)
 {
 	t_expan	vars;
 
 	initialize_vars(&vars, env);
-	if (!if_dollar(str))
-		return (ft_strdup(str));
-	if (ft_strnstr(str, "$?", ft_strlen(str)))
+	if (ft_strnstr(str, "$?", ft_strlen(str) || !if_dollar(str)))
 		return (ft_strdup(str));
 	if (arr == 0 || !is_only_special(str))
 		return (ft_strdup(str));

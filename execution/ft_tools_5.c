@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:27 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/03 13:01:00 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:30:35 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,6 @@ char	*handle_expand(char *line_str, t_env **env, int *arr)
 	if (!vars.join)
 		return (ft_strdup(""));
 	return (vars.join);
-}
-
-int	is_number(char *str)
-{
-	if (str[1] && str[1] >= '0' && str[1] <= '9')
-		return (1);
-	return (0);
 }
 
 char	*expand_nbr(char *str)

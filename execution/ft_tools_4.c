@@ -6,10 +6,9 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/03 12:53:01 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:30:13 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell.h"
 
@@ -40,23 +39,6 @@ t_line	*get_exp_node(char *line_str)
 		vars.i++;
 	}
 	return (vars.split);
-}
-
-int	check_for_first_elem(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (str && str[0] && str[0] == '$')
-		return (0);
-	while (str && str[i] && str[i] != '$')
-	{
-		if (str[i] != '.' || str[i] != ',' || str[i] != '/'
-			|| str[i] != '-' || str[i] != ':')
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 int	check_quotes(char *str)
@@ -107,23 +89,9 @@ void	expanding(t_exp *vars, t_env **env, int *arr, int arr_i)
 		if (if_dollar(vars->dollar_str_space))
 			arr_i++;
 		free(vars->dollar_str_space);
-		if (vars->last_dollar) //0&& vars->dollar_str[vars->i + 1])
+		if (vars->last_dollar && vars->dollar_str[vars->i + 1])
 			vars->join = ft_strjoin(vars->join, "$", 1);
 	}
-}
-
-int	last_dollar_str(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		i++;
-	}
-	if (str[i -1] == '$')
-		return (1);
-	return (0);
 }
 
 void	join_exp(t_exp *vars, t_env **env, int *arr, int arr_i)

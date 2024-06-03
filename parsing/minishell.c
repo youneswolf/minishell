@@ -6,10 +6,9 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/03 13:18:30 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:26:25 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell.h"
 
@@ -40,9 +39,8 @@ char	*split_space_str(char *str)
 void	main_utils1(t_line *str, t_env *mini_env)
 {
 	int	*arr;
-	int	i;
 
-	(1) && (arr = NULL, i = 0);
+	arr = NULL;
 	while (str)
 	{
 		if (if_dollar(str->str) && str->token != DELIMITER
@@ -58,11 +56,9 @@ void	main_utils1(t_line *str, t_env *mini_env)
 		}
 		else if (ft_strnstr(str->str, "$?", ft_strlen(str->str)))
 		{
-			arr = ft_exe(str->str);
-			printf("%d\n",arr[0]);
+			(1) && (arr = ft_exe(str->str), str->flag = 1);
 			str->str = put_status_in_str(str->str, 1337, &mini_env, arr);
 			str->str = split_space_str(str->str);
-			str->flag = 1;
 			free(arr);
 		}
 		str = str->next;

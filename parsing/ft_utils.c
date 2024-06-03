@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:54:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/29 16:02:36 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:29:34 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,18 @@ char	*ft_itoa(int n)
 
 	str = conv(n);
 	return (str);
+}
+
+int	last_dollar_str(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		i++;
+	}
+	if (str[i -1] == '$')
+		return (1);
+	return (0);
 }

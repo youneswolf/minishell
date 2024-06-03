@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 15:05:12 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/03 13:21:09 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:32:42 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,6 +345,8 @@ char			*put_status_in_str(char *str, int status_int, t_env **env,
 					int *arr);
 int				*ft_exe(char *str);
 void			ft_execute_cmd(t_line *head);
+int				last_dollar_str(char *str);
+int				is_only_special(char *str);
 int				ft_isalpha(int c);
 char			*ft_sub_str(char *s, unsigned int start, \
 				size_t len, int is_free);

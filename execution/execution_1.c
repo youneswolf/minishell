@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 03:48:36 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/03 13:19:53 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:28:13 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*get_status_str(char *str, int i, int status_int)
 	free(str);
 	return (status);
 }
+
 char	*put_status_in_str(char *str, int status_int, t_env **env, int *arr)
 {
 	int	i;
@@ -50,7 +51,7 @@ char	*put_status_in_str(char *str, int status_int, t_env **env, int *arr)
 		if (str[i] == '$' && str[i + 1] && str[i + 1] == '?')
 		{
 			i++;
-				str = get_status_str(str, i, status_int);
+			str = get_status_str(str, i, status_int);
 			i--;
 		}
 		i++;
