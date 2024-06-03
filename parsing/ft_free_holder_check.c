@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_holder_check.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybellakr <ybellakr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:24:09 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/05/29 18:13:38 by ybellakr         ###   ########.fr       */
+/*   Updated: 2024/06/02 22:44:16 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 void	ft_free_ut2(t_holder *new, int a)
 {
 	if (a == 11)
-		return (ft_free_2dd(new->args_built_in), 
-			ft_free_2dd(new->file_in), 
+		return (ft_free_2dd(new->args_built_in),
+			ft_free_2dd(new->file_in),
 			ft_free_2dd(new->file_out), ft_free_2dd(new->append),
-			free(new->ap), free(new->out), free(new->outfile_index), 
+			free(new->ap), free(new->out), free(new->outfile_index),
 			free(new->infile_index), free(new->append_index), free(new));
 	else if (a == 12)
-		return (ft_free_2dd(new->args_built_in), 
-			ft_free_2dd(new->file_in), 
+		return (ft_free_2dd(new->args_built_in),
+			ft_free_2dd(new->file_in),
 			ft_free_2dd(new->file_out), ft_free_2dd(new->append),
-			free(new->ap), free(new->out), free(new->outfile_index), 
+			free(new->ap), free(new->out), free(new->outfile_index),
 			free(new->infile_index), free(new->append_index), free(new->in), 
 			free(new));
 }

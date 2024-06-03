@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 01:52:01 by asedoun           #+#    #+#             */
-/*   Updated: 2024/06/02 22:04:26 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/03 12:30:57 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	expanding(t_exp *vars, t_env **env, int *arr, int arr_i)
 		if (if_dollar(vars->dollar_str_space))
 			arr_i++;
 		free(vars->dollar_str_space);
-		if (vars->last_dollar)
+		if (vars->last_dollar && vars->dollar_str[vars->i + 1])
 			vars->join = ft_strjoin(vars->join, "$", 1);
 	}
 }

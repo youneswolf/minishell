@@ -6,7 +6,7 @@
 /*   By: asedoun <asedoun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:51:57 by ybellakr          #+#    #+#             */
-/*   Updated: 2024/06/02 22:15:50 by asedoun          ###   ########.fr       */
+/*   Updated: 2024/06/02 22:43:42 by asedoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,50 +53,50 @@ int	ft_size_dollar(char *str)
 
 int    ft_exec_util(char *str, t_exec *t)
 {
-    (1) && (t->quote = str[t->i], t->i++);
-    if (str[t->i] == '\0')
-        return (0);
-    while (str[t->i] && str[t->i] != t->quote)
-    {
-        if (str[t->i] == '$' && t->quote == '\"')
-            (1) && (t->a[t->k] = 1, t->k++);
-        else if (str[t->i] == '$' && t->quote == '\'')
-            (1) && (t->a[t->k] = 0, t->k++);
-        t->i++;
-    }
-    if (str[t->i + 1] && (str[t->i + 1] == '\"' || str[t->i + 1] == '\''))
-        t->quote = str[t->i];
-    else
-        (1) && (t->quote = 0, t->i++);
-    return (1);
+	(1) && (t->quote = str[t->i], t->i++);
+	if (str[t->i] == '\0')
+		return (0);
+	while (str[t->i] && str[t->i] != t->quote)
+	{
+		if (str[t->i] == '$' && t->quote == '\"')
+			(1) && (t->a[t->k] = 1, t->k++);
+		else if (str[t->i] == '$' && t->quote == '\'')
+			(1) && (t->a[t->k] = 0, t->k++);
+		t->i++;
+	}
+	if (str[t->i + 1] && (str[t->i + 1] == '\"' || str[t->i + 1] == '\''))
+		t->quote = str[t->i];
+	else
+		(1) && (t->quote = 0, t->i++);
+	return (1);
 }
 
 int    *ft_exe(char *str)
 {
-    t_exec    t;
+	t_exec    t;
 
-    t.a = malloc((ft_size_dollar(str)) * sizeof(int));
-    if (!t.a)
-        return (NULL);
-    (1) && (t.quote = 0, t.i = 0, t.k = 0);
-    while (str && str[t.i])
-    {
-        if (str[t.i] == '\'' || str[t.i] == '\"')
-        {
-            if (!ft_exec_util(str, &t))
-                break ;
-        }
-        if (str[t.i] == '\0')
-            break ;
-        else if (t.quote == 0)
-        {
-            if (str[t.i] == '$')
-                (1) && (t.a[t.k] = 1, t.k++);
-        }
-        if (str[t.i])
-             t.i++;
-    }
-    return (t.a);
+	t.a = malloc((ft_size_dollar(str)) * sizeof(int));
+	if (!t.a)
+		return (NULL);
+	(1) && (t.quote = 0, t.i = 0, t.k = 0);
+	while (str && str[t.i])
+	{
+		if (str[t.i] == '\'' || str[t.i] == '\"')
+		{
+			if (!ft_exec_util(str, &t))
+				break ;
+		}
+		if (str[t.i] == '\0')
+			break ;
+		else if (t.quote == 0)
+		{
+			if (str[t.i] == '$')
+				(1) && (t.a[t.k] = 1, t.k++);
+		}
+		if (str[t.i])
+			 t.i++;
+	}
+	return (t.a);
 }
 
 void	main_utils1(t_line *str, t_env *mini_env)
